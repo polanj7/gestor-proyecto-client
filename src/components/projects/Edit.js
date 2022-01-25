@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import  { addProject, getProject }  from '../../services/projects'
 import Moment from 'react-moment';
-import {useParams}  from 'react-router-dom';
+import {useParams, Link}  from 'react-router-dom';
 
 export default function Edit() {
 
@@ -42,13 +42,12 @@ export default function Edit() {
         setDescipcion(resp.descripcion);
         setFechaInicio(resp.fechaInicio);        
       });
-    }       
-       
+    } 
   }
 
   useEffect(() => {
     project();
-  })        
+  }, []);    
  
 
   return (
@@ -70,16 +69,16 @@ export default function Edit() {
 
       <div className="form-group">
           <label htmlFor="inputName">Codigo</label>
-          <input type="text" id="inputName" className="form-control" value={codigo} onChange={(e) => { setCodigo(e.target.value) }} />
+          <input type="text" id="inputName" className="form-control" value={codigo} onChange={(e) => { setCodigo(e?.target?.value) }} />
         </div>
 
         <div className="form-group">
           <label htmlFor="inputName">Project Name</label>
-          <input type="text" id="inputName" value={nombre} className="form-control" onChange={(e) => { setNombre(e.target.value) }}  />
+          <input type="text" id="inputName" value={nombre} className="form-control" onChange={(e) => { setNombre(e?.target?.value) }}  />
         </div>
         <div className="form-group">
           <label htmlFor="inputDescription">Project Description</label>
-          <textarea id="inputDescription" className="form-control" value={descripcion} rows={4} onChange={(e) => { setDescipcion(e.target.value) }} />
+          <textarea id="inputDescription" className="form-control" value={descripcion} rows={4} onChange={(e) => { setDescipcion(e?.target?.value) }} />
         </div>
         <div className="form-group">
           <label htmlFor="inputStatus">Status</label>
@@ -102,9 +101,12 @@ export default function Edit() {
           <label htmlFor="inputProjectLeader">Project Leader</label>
           <input type="text" id="inputProjectLeader" className="form-control" />
         </div>
-
+        
         <div className="form-group">
           <input type="submit" className="btn btn-primary" />
+          <Link to= "/project" className='fas fa-times pull-right'>
+                <i className=""> Cancelar</i>       
+          </Link>  
         </div>
       </div>
       {/* /.card-body */}

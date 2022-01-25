@@ -26,3 +26,9 @@ export const getProject = async (id) => {
 
     return project.data.data[0];
  }
+
+ export const deleteProject = async (id) => {
+    const project = await authAxios.delete(`${API_URL}/Proyectos?idProyecto=${id}`);    
+
+    return project.data.data[0];
+ }

@@ -1,10 +1,18 @@
-import React from "react";
+import React, {useState} from "react";
 import Moment from 'react-moment';
 import { Link } from "react-router-dom";
+import './index.css'
+import { deleteProject } from '../../services/projects'
+
+
 
 export default function Table({projects}) {
 
-  console.log(projects, '000');
+  const deleteProject = (id) => {
+    deleteProject(id).then(resp => {
+      console.log(resp)
+    })
+  }
 
   return (
     <div className="card">
@@ -38,7 +46,7 @@ export default function Table({projects}) {
               {/* <th style={{ width: "8%" }} className="text-center">
                 Estado
               </th> */}
-              <th style={{ width: "10%" }}></th>
+              <th style={{ width: "15%" }}></th>
             </tr>
           </thead>
           <tbody>
@@ -63,20 +71,19 @@ export default function Table({projects}) {
                         <a className="btn btn-primary btn-sm" href="#">
                           <i className="fas fa-tasks"></i>                  
                         </a>
-                        <a className="btn btn-info btn-sm" href="#">
+                        <a className="btn btn-warning btn-sm" href="#">
                           <Link to= {`/project/edit/${resp.idProyecto}` }>
                             <i className="fas fa-pencil-alt"></i>       
                           </Link>           
                         </a>
-                        <a className="btn btn-danger btn-sm" href="#">
-                          <i className="fas fa-trash"></i>                  
+                        <a className="btn btn-danger btn-sm">                        
+                            <i className="fas fa-trash" onClick={() => { deleteProject(resp.idProyecto) }}></i>                                         
                         </a>
                       </td>
                     
                     </tr>
                   );
                 })
-
               }
 
             {/* <tr>
@@ -118,6 +125,11 @@ export default function Table({projects}) {
             </tr>          */}
           </tbody>
         </table>
+
+
+   
+
+
       </div>
       {/* /.card-body */}
     </div>

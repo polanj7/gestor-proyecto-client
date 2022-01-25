@@ -1,48 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import Index from './projects/Index';
 import Edit from './projects/Edit';
-import SelectEstados from '../components/controls/SelectEstados'
+import SelectEstados from './controls/SelectEstados'
 import {getEstados} from '../services/estados'
 import Login from './login/Login.js';
-import { getAccessToken } from '../services/accessToken'
-
-
-
+import NotFount404 from './NotFount404';
+import Delete from './projects/Delete';
 
 import {
   BrowserRouter,
   Routes,
-  Route
+  Route,
+  Outlet 
 } from "react-router-dom";
-
- 
-
 
 export default function Content() {
 
-  const [estados, setEstados] = useState([]);
-
-  useEffect(() =>{
-    
-    if(!!getAccessToken){    
-        getEstados().then(x => {     
-        setEstados(x.data);
-      }); 
-    }
-  
-  }, []); 
-
   return (
     <div className='content-wrapper'>
-
-      <Login />    
-
-      <BrowserRouter>
+        <BrowserRouter>
           <Routes>
-          <Route path="/" element={<h1>Hola</h1>} />
+          <Route path="/" element={< Index />} />
           <Route path="/project" element={<Index />} />         
           <Route path="/project/new" element={<Edit />} />         
           <Route path="/project/edit/:id" element={<Edit />} />         
+          <Route path="/project/delete/:id" element={<Delete />} />         
+          <Route path="*" element={<NotFount404 />} />         
         
             {/* <Route path="/" element={<App />}>
               <Route index element={<Home />} />
@@ -53,12 +36,9 @@ export default function Content() {
               </Route>
             </Route> */}
           </Routes>
-        </BrowserRouter>
-
-
-            
-        {/* <SelectEstados Estados = {estados} /> */}
-        {/* <Index /> */}
+        </BrowserRouter>   
+        
+        <Outlet />           
     </div>
   )
 }
