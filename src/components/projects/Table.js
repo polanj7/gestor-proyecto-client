@@ -1,18 +1,35 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Moment from 'react-moment';
 import { Link } from "react-router-dom";
 import './index.css'
-import { deleteProject } from '../../services/projects'
+import { getProjects, deleteProject } from '../../services/projectsServices';
 
 
+export default function Table() {
 
-export default function Table({projects}) {
+  const [projects, setProjects] = useState([]);
+  const [refreshAfterDelete, setRefreshAfterDelete] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
 
-  const deleteProject = (id) => {
-    deleteProject(id).then(resp => {
-      console.log(resp)
+  const removeProject = (id) => {
+   
+    if(!window.confirm('Deseas elminar el registro?')){
+      return;
+    }  
+
+    deleteProject(id).then(resp => {      
+      setRefreshAfterDelete(x => !x);        
     })
+    
   }
+
+  
+  useEffect(() => {
+    getProjects().then(resp =>{
+      setProjects(resp);
+    })    
+  }, [refreshAfterDelete])
+
 
   return (
     <div className="card">
@@ -49,9 +66,9 @@ export default function Table({projects}) {
               <th style={{ width: "15%" }}></th>
             </tr>
           </thead>
-          <tbody>
+          <tbody>             
 
-              {
+              {               
                 projects.map((resp, idx) => {
                   return(
                     <tr key={idx}>
@@ -77,7 +94,7 @@ export default function Table({projects}) {
                           </Link>           
                         </a>
                         <a className="btn btn-danger btn-sm">                        
-                            <i className="fas fa-trash" onClick={() => { deleteProject(resp.idProyecto) }}></i>                                         
+                            <i className="fas fa-trash" onClick={() => { removeProject(resp.idProyecto) }}></i>                                         
                         </a>
                       </td>
                     

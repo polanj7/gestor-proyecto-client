@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from 'react-router-dom'
 
 
 export default function Aside() {
@@ -101,10 +102,10 @@ export default function Aside() {
             <li className="nav-item">
               <a href="#" className="nav-link">
                 <i className="fas fa-circle nav-icon" />
-                {/* <Link to="/projects">Listado</Link> */}
+                <Link to="/project">Listado</Link>
               </a>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <a href="#" className="nav-link">
                 <i className="nav-icon fas fa-circle" />
                 <p>
@@ -155,13 +156,13 @@ export default function Aside() {
                   </a>
                 </li>
               </ul>
-            </li>
-            <li className="nav-item">
+            </li> */}
+            {/* <li className="nav-item">
               <a href="#" className="nav-link">
                 <i className="fas fa-circle nav-icon" />
                 <p>Level 1</p>
               </a>
-            </li>
+            </li> */}
            
           
           </ul>

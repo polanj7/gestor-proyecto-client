@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Table from './Table';
 
-import { getProjects } from '../../services/projects'
+import { getProjects } from '../../services/projectsServices';
 import { Button, Modal } from 'react-bootstrap';
 import Edit from './Edit' 
 import Login from '../login/Login';
@@ -13,12 +13,9 @@ export default function Index() {
   
   /*modal*/
   const [show, setShow] = useState(false);
-  const handleModalState = () => setShow(x => !x);
-
- 
+  const handleModalState = () => setShow(x => !x); 
 
   useEffect(() => {
-
     getProjects().then(resp =>{
       setProjects(resp);
     })
@@ -32,7 +29,7 @@ export default function Index() {
 
     <Login/>
 
-      <Table projects={projects} />
+      <Table />
 
       <>
         {/* <Button variant="danger" onClick={handleModalState}>

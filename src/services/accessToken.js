@@ -11,4 +11,6 @@ export const verifity = () =>{
     return getAccessToken() ?? false;
 }
 
-export const urlApi = 'https://netzer.somee.com/api';
+//export const urlApi = 'https://netzer.somee.com/api';
+export const urlApi = 'https://gestorproyectosapi20220125225929.azurewebsites.net/api';
+

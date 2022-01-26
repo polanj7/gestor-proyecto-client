@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import  { addProject, getProject }  from '../../services/projects'
+import  { addProject, getProject }  from '../../services/projectsServices';
 import Moment from 'react-moment';
 import {useParams, Link}  from 'react-router-dom';
 
