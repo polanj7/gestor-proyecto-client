@@ -1,14 +1,11 @@
-import {useState} from "react";
-import axios from "axios";
-import { urlApi } from './accessToken';
+import { singin } from '../repositories/axiosRepository'
 
-const API_URL = urlApi;
 
 export const getToken = async (user, pass) => {
-    const token  = await axios.post(`${API_URL}/Token`, {
+    const token  = await singin(`Token`, {
         usuario: user,
         clave: pass
     });
 
-    return token.data.token;
+    return token.token;
 }

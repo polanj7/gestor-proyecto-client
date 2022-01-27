@@ -13,7 +13,7 @@ const authAxios = axios.create({
 });
 
 export const get = async (endPoint) => {
-    const resp = await authAxios.get(`${urlApi}/${endPoint}`);
+    const resp = await authAxios.get(`${urlApi}/${endPoint}`);    
     return resp.data.data;
 }
 
@@ -27,17 +27,8 @@ export const remove = async (endPoint) => {
     return resp;
 }
 
-// export const put = async (endPoint) => {
-//     const data = await authAxios.get(`${urlApi}/${endPoint}`);
-//     return data;
-// }
 
-
-/*
-export const getProject = async (id) => {
-    const project = await authAxios.get(`${API_URL}/Proyectos?idProyecto=${id}`);    
-
-    return project.data.data[0];
- }
-
-*/
+export const singin = async (endPoint, data) => {
+    const resp = await axios.post(`${urlApi}/${endPoint}`, data);
+    return resp.data;
+}

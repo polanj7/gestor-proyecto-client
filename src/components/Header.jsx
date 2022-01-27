@@ -1,4 +1,5 @@
 import React from "react";
+import Login from './login/Login';
 
 export default function Header() {
   return (
@@ -10,15 +11,8 @@ export default function Header() {
             <i className="fas fa-bars" />
           </a>
         </li>
-        <li className="nav-item d-none d-sm-inline-block">
-          <a href="index3.html" className="nav-link">
-            Home
-          </a>
-        </li>
-        <li className="nav-item d-none d-sm-inline-block">
-          <a href="#" className="nav-link">
-            Contact
-          </a>
+        <li className="nav-item d-none d-sm-inline-block">          
+          {/* <Login/>          */}
         </li>
       </ul>
       {/* Right navbar links */}
