@@ -10,9 +10,12 @@ export default function Login() {
 
   const[isLogin, SetIsLogin] = useState(false);
   const navigate = useNavigate();
+
+  const [user, setUser] = useState('jortiz');
+  const [pass, setPass] = useState('123456');
     
   const singin = () =>{
-      getToken('jortiz', '123456789').then(resp =>{
+      getToken(user, pass).then(resp =>{
           setAccessToken(resp);
           SetIsLogin(true);
       });

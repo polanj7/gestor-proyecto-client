@@ -11,7 +11,7 @@ export const getMunicipios= async (idProvincia) => {
     return data;
 } 
 
- export const getProvincias= async () => {
+ export const getProvince= async () => {
     const data = await get(`Provincias`);
     return data;
  } 

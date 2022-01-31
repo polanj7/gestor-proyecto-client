@@ -1,12 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {useNavigate} from 'react-router-dom'
 
 import Aside from '../Aside';
 import Content from '../Content';
 import Header from '../Header';
-import Login from '../login/Login';
 
-import { setAccessToken, deleteToken, verifity } from '../../services/accessToken';
+import { verifity } from '../../services/accessToken';
+import { UserContext } from '../../context/UserContext';
 
 
 export default function Main({children}) {
@@ -20,18 +20,17 @@ export default function Main({children}) {
     }, [isLogin]);
 
     if(!isLogin){
-        navigate('login', { replace: true });
+        navigate('sign-in', { replace: true });
     }
 
     return (
-        <>
+      <>
         <Header />
         <Aside />
-        <Content>
-            {children}
-        </Content>
+        <Content>{children}</Content>
+
         {/* <Footer />      */}
-        </>
+      </>
     );
 }
 

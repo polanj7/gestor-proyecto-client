@@ -3,7 +3,9 @@ import React from 'react';
 export default function BudgetForm() {
   return (
     <>
-      <h3 className="text-success"><i className='fa fa-credit-card'></i> Presupuesto</h3>
+      <h4 className="text-primary">
+        <i className='fa fa-credit-card'></i> Presupuesto
+      </h4>
       <br />
       <div className="w-75">
         <div className="form-group">

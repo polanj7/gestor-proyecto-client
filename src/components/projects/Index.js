@@ -4,7 +4,7 @@ import Table from './Table';
 import { getProjects } from '../../services/projectsServices';
 import { Button, Modal } from 'react-bootstrap';
 
-import { getProvincias } from '../../services/territoriesServices'
+// import { getProvincias } from '../../services/territoriesServices'
 
 import { Outlet, useNavigate } from 'react-router-dom';
 
@@ -30,7 +30,7 @@ export default function Index() {
       setProjects(resp);
     })
 
-   getProvincias().then(resp => resp);
+  //  getProvincias().then(resp => resp);
 
   }, [])
 

@@ -1,11 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getProvince } from '../../services/territoriesServices'
+import SelectProvinces from '../controls/SelectProvinces';
+
 
 export default function ProjectForm() {
+
+  const[municipality, setMunicipality] = useState([]);
+  const[neighborhood, setNeighborhood] = useState([]);
+
+  const[provinces, setProvinces] = useState([]); 
+
+  useEffect(() =>{
+      getProvinced();
+  }, [])
+
+  const getProvinced = async () =>{
+    const resp = await getProvince();   
+    setProvinces(resp);   
+  }
+
   return (
     <>
-      <h3 className="text-primary">
-        <i className="fa fa-credit-card"></i> Proyecto
-      </h3>
+      <h4 className="text-info">
+        <i className="fa fa-object-ungroup"></i> Proyecto
+      </h4>
       <br />
 
       <div className="row">
@@ -13,11 +31,12 @@ export default function ProjectForm() {
           <div className="w-75">
               
             <div className="form-group">
-              <label htmlFor="nombre">Nombre</label>
+              <label htmlFor="nombres">Nombre</label>
               <input
                 type="text"
                 className="form-control form-control-border w-100"
-                id="nombre"
+                id="nombres"
+                name ="nombre"
                 placeholder="mombre del proyecto"
               />
             </div>
@@ -56,21 +75,19 @@ export default function ProjectForm() {
               <input
                 type="number"
                 className="form-control form-control-border w-100"
-                id="nombre"
+                id="beneficiarios"
                 placeholder="# beneficiarios"
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="provincia">Tipo de Beneficiario</label>
-              <select
-                className="custom-select form-control-border"
-                id="provincia"
-              >
-                <option>Value 1</option>
-                <option>Value 2</option>
-                <option>Value 3</option>
-              </select>
+             <select className="custom-select form-control-border select2" multiple="multiple"  data-placeholder="Select a State" style={{width: '100%'}}>
+              <option>Value 1</option>
+              <option>Value 2</option>
+              <option>Value 3</option>
+            </select>
+
             </div>
           </div>
         </div>
@@ -78,26 +95,12 @@ export default function ProjectForm() {
           <div className="w-100">
             <div className="form-group">
               <label htmlFor="provincia">Lugar Implementación</label>
-              <select
-                className="custom-select form-control-border"
-                id="provincia"
-              >
-                <option>Value 1</option>
-                <option>Value 2</option>
-                <option>Value 3</option>
-              </select>
+              <SelectProvinces provinces = {provinces} />
             </div>
 
             <div className="form-group">
               <label htmlFor="barrios">Territoios Impactados</label>
-              <select
-                className="custom-select form-control-border"
-                id="barrios"
-              >
-                <option>Value 1</option>
-                <option>Value 2</option>
-                <option>Value 3</option>
-              </select>
+              <SelectProvinces  provinces = {provinces} />
             </div>
 
             <div className="form-group">

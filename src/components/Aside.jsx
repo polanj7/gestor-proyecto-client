@@ -1,8 +1,14 @@
-import React from "react";
+import React, {useContext} from "react";
 import {Link} from 'react-router-dom'
+import { UserContext } from "../context/UserContext";
+
 
 
 export default function Aside() {
+
+  const {user} = useContext(UserContext);
+
+
   return (
     <aside className="main-sidebar sidebar-dark-primary elevation-4">
       {/* Brand Logo */}
@@ -28,7 +34,7 @@ export default function Aside() {
           </div>
           <div className="info">
             <a href="#" className="d-block">
-              José Ortiz
+              {user}
             </a>
           </div>
         </div>

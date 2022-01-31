@@ -9,7 +9,6 @@ export default function Table() {
 
   const [projects, setProjects] = useState([]);
   const [refreshAfterDelete, setRefreshAfterDelete] = useState(false);
-  const [isDelete, setIsDelete] = useState(false);
 
   const removeProject = (id) => {
    
@@ -44,7 +43,7 @@ export default function Table() {
             </tr>
           </thead>
           <tbody>
-            {projects.length == 0 ? (
+            {projects.length === 0 ? (
               <tr>
                 <td colSpan={10} style={{ textAlign: "center", color: "red" }}>
                   No hay datos!
