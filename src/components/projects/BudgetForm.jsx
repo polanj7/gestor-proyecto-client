@@ -7,7 +7,9 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import Divider from "@mui/material/Divider";
+import TextField from '@mui/material/TextField';
+import NumberFormat from 'react-number-format';
+
 
 
 //context
@@ -23,8 +25,28 @@ const moneyType = [
   {text: 'USD', value: 'USD', title: 'Dolares Estadounidenses' }
 ]
 
-export default function BudgetForm() {
+const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(props, ref) {
+  const { onChange, ...other } = props;
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={ref}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      isNumericString
+      prefix="$ "
+    />
+  );
+});
 
+export default function BudgetForm(props) {
   const {projectData, setProjectData} = useContext(ProjectContext);  
   
   return (
@@ -36,7 +58,7 @@ export default function BudgetForm() {
       <div className="w-75">
         <div className="row">
           <div className="w-50">
-            <FormControl style={{ marginBottom: 20 }}>
+            <FormControl style={{ marginBottom: 20 }} {...props}>
               <FormLabel id="demo-radio-buttons-group-label">Moneda</FormLabel>
               <RadioGroup
                 row
@@ -61,17 +83,19 @@ export default function BudgetForm() {
                   );
                 })}
               </RadioGroup>
-            </FormControl> 
+            </FormControl>
           </div>
 
           <div className="w-50">
-            <FormControl style={{ marginBottom: 20 }}>
-              <FormLabel id="demo-radio-buttons-group-label">Tipo de Aporte</FormLabel>
+            <FormControl style={{ marginBottom: 20 }} {...props}>
+              <FormLabel id="demo-radio-buttons-group-label">
+                Tipo de Aporte
+              </FormLabel>
               <RadioGroup
                 row
                 aria-labelledby="demo-form-control-label-placement"
                 name="position"
-                defaultValue={projectData.idTipoPresupuesto }
+                defaultValue={projectData.idTipoPresupuesto}
               >
                 {tipoPresupuesto.map((x) => {
                   return (
@@ -95,34 +119,35 @@ export default function BudgetForm() {
         </div>
 
         <div className="form-group">
-          <FormLabel id="demo-radio-buttons-group-label">
-            Monto Presupuestado
-          </FormLabel>
-          <input
-            type="number"
-            className="form-control form-control-border w-100"
-            id="nombre"
-            placeholder="Monto $$$"
+          <TextField
+            {...props}
+            label="Monto Presupuestado"
             value={projectData.rangoPresupuestado}
+            sx={{ width: "100%", marginBottom: "16px" }}
             onChange={({ target }) =>
               setProjectData({
                 ...projectData,
                 rangoPresupuestado: target.value,
               })
             }
+            name="numberformat"
+            id="formatted-numberformat-input"
+            InputProps={{
+              inputComponent: NumberFormatCustom,
+            }}
+            variant="standard"
           />
         </div>
 
         {projectData.idTipoPresupuesto === "E" ? (
           <div className="form-group">
-            <FormLabel id="demo-radio-buttons-group-label">
-              Descripción
-            </FormLabel>
-            <textarea
-              className="form-control form-control-border w-100"
+            <TextField
+              {...props}
               id="descripcion"
-              placeholder="Descripción Presupuesto"
-              rows={4}
+              label="Descripción"
+              variant="standard"
+              placeholder="Descipción Proyecto"
+              sx={{ width: "100%", marginBottom: "16px" }}
               value={projectData.descripcionEspecie}
               onChange={({ target }) =>
                 setProjectData({
@@ -130,6 +155,8 @@ export default function BudgetForm() {
                   descripcionEspecie: target.value,
                 })
               }
+              multiline
+              rows={3}
             />
           </div>
         ) : (

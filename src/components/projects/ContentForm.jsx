@@ -1,4 +1,4 @@
-import React, {useState,useMemo, useEffect} from 'react';
+import React, {useState,useMemo, useEffect, useContext} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 //services
@@ -11,8 +11,7 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import { Paper } from '@mui/material';
-import Typography from "@mui/material/Typography";
-import Chip from '@mui/material/Chip';
+import ChipControl from '../controls/Chip';
 
 //icons
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
@@ -20,6 +19,8 @@ import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import CloseIcon from '@mui/icons-material/Close';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import EditICon from '@mui/icons-material/Edit';
+
 
 //components
 import ProjectForm from './ProjectForm'
@@ -29,6 +30,8 @@ import FileForm from './FileForm'
 
 //context
 import { ProjectContext } from '../../context/ProjectContext'
+import { ParameterContext } from '../../context/ParameterContext'
+
 
 //sweet alert
 import swal from 'sweetalert';
@@ -41,21 +44,22 @@ const steps = [
 ];
 
 const countSteps = steps.length - 1;
-
  
 export default function ContentForm() {
+  const { id, mode } = JSON.parse(sessionStorage.getItem("parameterProject"));
+
+  const {parameterProject, setParameterProject} = useContext(ParameterContext); 
 
   const params = useParams();
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = React.useState(0);
-
   const[projectData, setProjectData] = useState({
     idProyecto: 0,
     codigo: "",
     nombre: "",
     descripcion: "",
-    fechaInicio: null,
-    fechaFinal: null,
+    fechaInicio: new Date(),
+    fechaFinal: new Date() + 1,
     idTipoBeneficiario: "",
     datosBeneficiario: "",
     tipoMoneda: "DOP",
@@ -68,6 +72,8 @@ export default function ContentForm() {
     tareas: [],   
     territoriosImpactados: []
   });
+  
+  const[disabled, setDisabled] = useState(true)
 
   const providerProject = useMemo(
     () => ({ projectData, setProjectData }),
@@ -79,10 +85,9 @@ export default function ContentForm() {
       title: `Deseas guardar los cambios realizados?`,
       text: "Los datos serán guardado de manera bacana!",
       icon: "info",
-      buttons: true,
-      dangerMode: true,
+      buttons: true      
     }).then((willSave) => {
-      if (willSave) {    
+      if (willSave) { 
         
         if(params.id > 0){
           //update
@@ -113,65 +118,89 @@ export default function ContentForm() {
       navigate("/project", { replace: true });
   };
 
-  const project = async() => {    
-    if(params.id > 0)  {  
-      const data = await getProjectByID(params.id);      
+  const project = async() => {  
+
+    if(id > 0)  {  
+      const data = await getProjectByID(id);      
       setProjectData(data);
     } 
   }
 
-  useEffect(() => {    
-    project();
+  useEffect(async() => {    
+    await project();
+    if(id > 0 && mode === 'read-only'){
+      setDisabled(true);
+    }else{
+      setDisabled(false);
+    }
   }, [])
-
 
 
   return (
     <>
       <ProjectContext.Provider value={providerProject}>
-        <Paper style={{ margin: 10, padding: 20 }} elevation={3}>
-          <Box
-            sx={{
-              color: "azure",
-              textAlign: "center",
-              width: "140px",
-              marginLeft: "8px",
-              marginBottom: "12px"
-            }}
-          >
-            <Chip icon={<RemoveRedEyeOutlinedIcon />} label="MODO LECTURA" color="warning"  variant="outlined" />
-          </Box>
+        <Paper style={{ margin: 1, padding: 20 }} elevation={3}>
+          {id > 0 && mode === "read-only" ? (
+            <ChipControl
+              icon={<RemoveRedEyeOutlinedIcon />}
+              label="MODO LECTURA"
+              color="warning"
+              variant="outlined"
+            />
+          ) : id > 0 && mode === "read-write" ? (
+            <ChipControl
+              icon={<EditICon />}
+              label="MODO EDICION"
+              color="success"
+              variant="outlined"
+            />
+          ) : (
+            id === 0 &&
+            mode ===
+              "write" ? (
+                <ChipControl
+                  icon={<EditICon />}
+                  label="MODO DIGITACION"
+                  color="primary"
+                  variant="outlined"
+                />
+              ) :<>
+              
+              </>
+          )}
 
           <Stepper activeStep={activeStep}>
             {steps.map((label, index) => {
-              const stepProps = {};
-              const labelProps = {};
               return (
-                <Step style={{ fontSize: "20px" }} key={label} {...stepProps}>
-                  <StepLabel {...labelProps}>{label}</StepLabel>
+                <Step
+                  style={{ fontSize: "20px" }}
+                  key={label}
+                  onClick={() => setActiveStep(index)}
+                >
+                  <StepLabel style={{ cursor: "pointer" }}>{label}</StepLabel>
                 </Step>
               );
             })}
           </Stepper>
 
           <React.Fragment>
-            <Box style={{ mb: 20, padding: 20 }}>
+            <Box style={{ mb: 20, padding: 20, height: "60vh" }}>
               {activeStep === 0 ? (
-                <ProjectForm />
+                <ProjectForm disabled={disabled} />
               ) : activeStep === 1 ? (
-                <BudgetForm />
+                <BudgetForm disabled={disabled} />
               ) : activeStep === 2 ? (
-                <TaksForm />
+                <TaksForm disabled={disabled} />
               ) : activeStep === 3 ? (
-                <FileForm />
+                <FileForm disabled={disabled} />
               ) : (
                 <h3>Listo, proceso finalizado</h3>
               )}
             </Box>
             <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
               <Button
-                variant="outlined"
-                color="error"
+                variant="contained"
+                color="warning"
                 onClick={handleClose}
                 endIcon={<CloseIcon />}
                 sx={{ mr: 1 }}
@@ -181,7 +210,7 @@ export default function ContentForm() {
 
               <Box sx={{ flex: "1 1 auto" }} />
               <Button
-                variant="outlined"
+                variant="contained"
                 color="primary"
                 disabled={activeStep === 0}
                 onClick={handleBack}
@@ -193,7 +222,7 @@ export default function ContentForm() {
 
               {activeStep === countSteps ? (
                 <Button
-                  variant="outlined"
+                  variant="contained"
                   color="primary"
                   onClick={handleFinish}
                   endIcon={<DoneAllIcon />}
@@ -202,7 +231,7 @@ export default function ContentForm() {
                 </Button>
               ) : (
                 <Button
-                  variant="outlined"
+                  variant="contained"
                   color="primary"
                   onClick={handleNext}
                   endIcon={<ArrowCircleRightIcon />}
@@ -213,99 +242,6 @@ export default function ContentForm() {
             </Box>
           </React.Fragment>
         </Paper>
-        {/* <form onSubmit={handledSubmit}>
-        <section className="content pt-3 w-100">
-          <div className="container-fluid">
-            <div className="card card-info card-outline">
-              <div className="card-header">
-                <div className="row">
-                  <button
-                    type="button"
-                    className="btn btn-sm col-sm btn-outline-link w-100 border-right btn-tab"
-                    onClick={() => {
-                      switchDisplay(1);
-                    }}
-                  >
-                    <i
-                      className="fa fa-object-ungroup"
-                      aria-hidden="true"
-                      style={styleFa}
-                    >
-                      &nbsp;&nbsp;
-                    </i>
-                    Datos Generales
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-sm col-sm btn-outline-link w-100 border-right btn-tab"
-                    onClick={() => {
-                      switchDisplay(2);
-                    }}
-                  >
-                    <i
-                      className="fa fa-credit-card"
-                      aria-hidden="true"
-                      style={styleFa}
-                    >
-                      &nbsp;&nbsp;
-                    </i>
-                    Propuesta Ecónomica
-                  </button>
-
-                  <button
-                    type="button"
-                    className="btn btn-sm col-sm btn-outline-link w-100 border-right btn-tab"
-                    onClick={() => {
-                      switchDisplay(3);
-                    }}
-                  >
-                    <i
-                      className="fa fa-list-alt"
-                      aria-hidden="true"
-                      style={styleFa}
-                    >
-                      &nbsp;&nbsp;
-                    </i>
-                    Tareas
-                  </button>
-
-                  <button
-                    type="button"
-                    className="btn btn-sm col-sm btn-outline-link w-100 btn-tab"
-                    onClick={() => {
-                      switchDisplay(4);
-                    }}
-                  >
-                    <i
-                      className="fa fa-file-alt"
-                      aria-hidden="true"
-                      style={styleFa}
-                    >
-                      &nbsp;&nbsp;
-                    </i>
-                    Documentos
-                  </button>
-                </div>
-              </div>
-
-              <div className="card-body">
-              
-              </div>
-
-              <div className="card-footer">
-                <button type="button" className="btn btn-outline-danger mr-2">
-                  <i className="fa fa-times"></i>
-                  &nbsp;&nbsp;Cancelar
-                </button>
-                <button type="submit" className="btn btn-outline-info">
-                  <i className="fa fa-save"></i>
-                  &nbsp;&nbsp;Enviar
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-      </form> */}
       </ProjectContext.Provider>
     </>
   );

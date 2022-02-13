@@ -1,3 +1,4 @@
+
 import React, { useContext } from 'react';
 
 import { useTheme } from '@mui/material/styles';
@@ -23,7 +24,7 @@ const MenuProps = {
   },
 };
 
-export default function SelectProvinces({provinces, disabled}) { 
+export default function SelectMunicipality({municipality, disabled}) { 
 
   const {projectData, setProjectData} = useContext(ProjectContext);
   const [personName, setPersonName] = React.useState([]);
@@ -46,15 +47,13 @@ export default function SelectProvinces({provinces, disabled}) {
     //setProjectData({...projectData, tareas: [...projectData.tareas, tareass]})
 
   };
-
-  console.log('data',projectData)
     
   return (
     <>
       <FormControl  variant="standard" style={{ width: "100%", marginBottom: "20px" }}>
-        <InputLabel id="selectImplementacion">Lugar Implementación</InputLabel>
+        <InputLabel id="selectImplementacion">Territorios Impactados</InputLabel>
         <Select
-             disabled={disabled}
+          disabled={disabled}
           required      
           label ="Lugar Implementación"          
           multiple
@@ -63,8 +62,8 @@ export default function SelectProvinces({provinces, disabled}) {
           renderValue={(selected) => selected.join(", ")}
           MenuProps={MenuProps}
         >
-          {provinces.map(({ idProvincia, nombre }) => (
-            <MenuItem key={idProvincia} value={nombre}>
+          {municipality.map(({ idMunicipio, nombre }) => (
+            <MenuItem key={idMunicipio} value={nombre}>
               <Checkbox checked={personName.indexOf(nombre) > -1} />
               <ListItemText primary={nombre} />
             </MenuItem>

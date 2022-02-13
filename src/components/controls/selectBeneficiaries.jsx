@@ -1,23 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+
+//mui
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
 
 
-export default function SelectBeneficiaries(props) {
+
+export default function SelectBeneficiaries({beneficiaries, disabled}) {
+
     
   return (
     <>
-        <select
-            className="custom-select form-control-border"
-            id="beneficiarios"
-        >         
-          
-        {
-            props.beneficiaries.length == 0 ?  <option value="0">No data</option> 
-            : props.beneficiaries.map(({IdBeneficiario, Nombre}) =>{
-                return <option key={IdBeneficiario} value={IdBeneficiario}>{Nombre}</option>
+      <FormControl variant="standard" sx={{ width: "49%" }}>
+        <InputLabel id="demo-simple-select-standard-label">
+          Tipo de Beneficiario
+        </InputLabel>
+        <Select
+          disabled={disabled}
+          // value={age}
+          // onChange={handleChange}
+          label="Tipo de Beneficiario"
+          variant="standard"
+        >
+          {beneficiaries.length == 0 ? (
+            beneficiaries.map(({ IdBeneficiario, Nombre }) => {
+              return <MenuItem value={IdBeneficiario}>{Nombre}</MenuItem>;
             })
-        }            
-            
-        </select>
+          ) : (
+            <></>
+          )}
+        </Select>
+      </FormControl>      
     </>
   );
 }

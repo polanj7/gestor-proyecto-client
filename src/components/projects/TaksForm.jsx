@@ -4,6 +4,12 @@ import React, { useState, useContext } from 'react';
 import Button from '@mui/material/Button';
 import Typography from "@mui/material/Typography";
 import { makeStyles } from '@mui/styles';
+import TextField from '@mui/material/TextField';
+import DatePicker from '@mui/lab/DatePicker';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { Divider } from '@mui/material';
+
 
 //icons
 import AddIcon from '@mui/icons-material/Add';
@@ -19,28 +25,6 @@ import TableTask from './TableTask';
 //modal
 import  Modal  from 'react-bootstrap/Modal';
 
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     flexGrow: 1,
-//     backgroundColor: theme.palette.background.default,
-//   },
-//   menuButton: {
-//     marginRight: theme.spacing(2),
-//   },
-//   title: {
-//     flexGrow: 1,
-//   },
-//   toolbar: {
-//     display: "flex",
-//     justifyContent: "space-between",
-//     marginTop: theme.spacing(3),
-//     marginBottom: theme.spacing(2),
-//   },
-//   content: {
-//     margin: theme.spacing(1),
-//     padding: theme.spacing(1),
-//   },
-// }));
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -51,7 +35,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function TaksForm() {
+export default function TaksForm(props) {
+
+  console.log("props.disabled", props.disabled)
   const classes = useStyles();
 
   //states
@@ -61,7 +47,16 @@ export default function TaksForm() {
   const[descripcionTarea, setDescripcionTarea] = useState('');
   const[inicioTarea, setInicioTarea] = useState('');
   const[finTarea, setFinTarea] = useState('');
+  const[minDateFinal, setMinDateFinal] = useState(new Date());
 
+  const[dataTaks, setDataTaks] = useState({
+    idTarea: 0,
+    descripcion: '',
+    idProyecto: 0,
+    fechaInicio: new Date(),
+    fechaFinal: new Date(),
+    idEstado: 1
+  });     
 
   //hendles
   const handleClose = () =>{
@@ -73,10 +68,10 @@ export default function TaksForm() {
     setFinTarea(new Date());
     setIsModalOpen(prev => !prev);
   }  
+  
   const handleAddTaks = () => {
     let tareass = {
-      idTarea: (taksList.length + 1) * -1,
-      idTarea: 0,
+      idTarea: (taksList.length + 1) * -1, 
       idProyecto: 0,
       descripcion: descripcionTarea,
       fechaInicio: inicioTarea,
@@ -84,8 +79,6 @@ export default function TaksForm() {
       idEstado: 1
     }
 
-    /*Seguir buscando como hacerle push a las tareas desde aqui */
-     
     setTaksList(prev => [...prev, tareass])    
     setProjectData({...projectData, tareas: [...projectData.tareas, tareass]})
     
@@ -97,16 +90,20 @@ export default function TaksForm() {
       <div className={classes.toolbar}>
         <Typography variant="h5" component="h2" color="primary">
           Tareas / Metas
+          <h1>{props.disabled}</h1>
         </Typography>
-
-        <Button
-          onClick={handleOpen}
-          variant="outlined"
-          color="primary"
-          startIcon={<AddIcon />}
-        >
-          NUEVO TAREA
-        </Button>
+        {!props.disabled ? (
+          <Button
+            onClick={handleOpen}
+            variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
+          >
+            NUEVO TAREA
+          </Button>
+        ) : (
+          <></>
+        )}
       </div>
 
       <div style={{ height: "50vh", width: "100%" }}>
@@ -131,56 +128,74 @@ export default function TaksForm() {
               <div className="col-sm-12">
                 <div className="w-100">
                   <div className="form-group">
-                    <label htmlFor="descripcion">Descripción</label>
-                    <textarea
-                      className="form-control form-control-border w-100"
-                      id="descripcion"
-                      placeholder="Descripción de la Tarea"
+                    <TextField
+                      required
+                      label="Descripción"
+                      variant="standard"
+                      placeholder="Descipción"
+                      sx={{ width: "100%", marginBottom: "16px" }}
+                      multiline
+                      rows={3}
                       value={descripcionTarea}
-                      rows={4}
                       onChange={({ target }) =>
                         setDescripcionTarea(target.value)
                       }
                     />
                   </div>
 
-                  <div className="row">
-                    <div className="form-group col-sm-6">
-                      <label htmlFor="fechaInicio">Inicio</label>
-                      <input
-                        type="date"
-                        className="form-control form-control-border w-100"
-                        id="fechaInicio"
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <div className={classes.toolbar}>
+                      <DatePicker
+                        minDate={new Date()}
+                        openTo="day"
+                        views={["year", "month", "day"]}
+                        label="Year, month and date"
+                        inputFormat="dd/MM/yyyy"
                         value={inicioTarea}
-                        onChange={({ target }) =>
-                          setInicioTarea(target.value)
-                        }
+                        onChange={({ target }) => setInicioTarea(target.value)}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Inicio"
+                            variant="standard"
+                            sx={{ width: "50%", marginBottom: "16px" }}
+                          />
+                        )}
                       />
-                    </div>
 
-                    <div className="form-group col-sm-6">
-                      <label htmlFor="fechafin">Fin</label>
-                      <input
-                        type="date"
-                        className="form-control form-control-border w-100"
-                        id="fechaFin"
+                      <DatePicker
+                        minDate={minDateFinal}
+                        openTo="day"
+                        views={["year", "month", "day"]}
+                        label="Year, month and date"
+                        inputFormat="dd/MM/yyyy"
                         value={finTarea}
-                        onChange={({ target }) =>
-                          setFinTarea(target.value)
-                        }
+                        onChange={({ target }) => setFinTarea(target.value)}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Fin"
+                            variant="standard"
+                            sx={{
+                              width: "49%",
+                              marginBottom: "16px",
+                              marginLeft: "16px",
+                            }}
+                          />
+                        )}
                       />
                     </div>
-                  </div>
+                  </LocalizationProvider>
 
                   <div className="form-group">
-                      <label htmlFor="responsable">Responsable</label>
-                      <input
-                        type="text"
-                        className="form-control form-control-border w-100"
-                        id="responsable"
-                        placeholder='Responsable de la tarea'                       
-                      />
-                    </div>
+                    <TextField
+                      required
+                      label="Responsable"
+                      variant="standard"
+                      placeholder="-Select-"
+                      sx={{ width: "100%", marginBottom: "16px" }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -188,8 +203,8 @@ export default function TaksForm() {
         </Modal.Body>
         <Modal.Footer>
           <Button
-            variant="outlined"
-            color="error"
+            variant="contained"
+            color="warning"
             onClick={handleClose}
             endIcon={<CloseIcon />}
             sx={{ mr: 1 }}
@@ -197,7 +212,7 @@ export default function TaksForm() {
             Cancelar
           </Button>
           <Button
-            variant="outlined"
+            variant="contained"
             color="primary"
             onClick={handleAddTaks}
             endIcon={<DoneAllIcon />}

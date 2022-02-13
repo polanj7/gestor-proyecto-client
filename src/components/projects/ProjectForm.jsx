@@ -2,15 +2,24 @@ import React, { useEffect, useState, useContext } from 'react';
 import Moment from 'react-moment';
 
 //Services
-import { getProvince } from '../../services/territoriesServices'
+import { getProvince, getMunicipality } from '../../services/territoriesServices'
 import { getBeneficiarios } from '../../services/beneficiariosServices'
 import SelectProvinces from '../controls/SelectProvinces';
+import SelectMunicipality from '../controls/SelectMunicipality';
+import SelectChallenges from '../controls/SelectChallenges';
 
 //mui
 import Typography from "@mui/material/Typography";
+import TextField from '@mui/material/TextField';
+import DatePicker from '@mui/lab/DatePicker';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { makeStyles } from '@mui/styles';
 
 //context
 import { ProjectContext } from '../../context/ProjectContext';
+
+import SelectBeneficiaries from '../controls/SelectBeneficiaries';
 
 const challengesImpacted = [
   {text: 'Educación', value: 'Educación'},
@@ -20,162 +29,226 @@ const challengesImpacted = [
   {text: 'Otros', value: 'Otros'}
 ]
 
-export default function ProjectForm() {
-
+const useStyles = makeStyles((theme) => ({
+  toolbar: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginTop: "16px",
+    marginBottom: "8px"
+  }
+}));
+export default function ProjectForm(props) {  
+  
+  const classes = useStyles();
   const {projectData, setProjectData} = useContext(ProjectContext); 
  
   //territories
-  const[municipality, setMunicipality] = useState([]);
+  const[municipality, setMunicipality] = useState([]); 
   const[neighborhood, setNeighborhood] = useState([]);
   const[provinces, setProvinces] = useState([]); 
+  const[beneficiarieType, setBeneficiarieType] = useState([]);
 
-  const[beneficiarieType, setBeneficiarieType] = useState(0);
   const[countBeneficiare, setCountBeneficiare] = useState(0);
-
-
-  useEffect(() =>{
-      getProvinced();    
-  }, [])
+  const[minDateFinal, setMinDateFinal] = useState(new Date());
 
   const getProvinced = async () =>{
     const resp = await getProvince();   
     setProvinces(resp);   
   }
 
-
-  const handleAddProject = (e) =>{
-    e.preventDefauld();
+  const getMunicipalityd = async () =>{
+    const resp = await getMunicipality(14);   
+    setMunicipality(resp);   
   }
 
-  return (   
-    <>    
+  const getBeneficiaries = async () =>{
+    const resp = await getBeneficiarios();   
+    setBeneficiarieType(resp);   
+  }
+
+  useEffect(() =>{
+      getProvinced();    
+      getMunicipalityd();
+      getBeneficiaries();
+  }, [])
+
+
+  return (
+    <>
       <Typography mt={2} mb={3} variant="h5" component="h1" color="primary">
         Datos Generales del Proyecto
       </Typography>
 
-      <form onSubmit={handleAddProject}>
+      <form>
         <div className="row">
           <div className="col-sm-8">
             <div className="w-75">
-              <div className="form-group">
-                <label htmlFor="nombres">Nombre</label>
-                <input
-                  autoComplete='false'
-                  type="text"
-                  className="form-control form-control-border w-100"
-                  id="nombres"
-                  name="nombre"
-                  placeholder="Nombre Proyecto"
-                  value={projectData.nombre}
-                  onChange={({ target }) => setProjectData({...projectData, nombre: target.value})}
-                />
-              </div>
+              <TextField
+                {...props}
+                autoComplete="false"
+                required
+                id="nombre"
+                label="Nombre"
+                variant="standard"
+                placeholder="Nombre del Proyecto"
+                sx={{ width: "100%", marginBottom: "16px" }}
+                value={projectData.nombre}
+                onChange={({ target }) =>
+                  setProjectData({ ...projectData, nombre: target.value })
+                }
+              />
 
-              <div className="form-group">
-                <label htmlFor="descripcion">Descripción</label>
-                <textarea
-                  className="form-control form-control-border w-100"
-                  id="descripcion"
-                  placeholder="Descipción Proyecto"
-                  value={projectData.descripcion}
-                  onChange={({ target }) => setProjectData({...projectData, descripcion: target.value})}
-                  rows={4}
-                />
-              </div>
+              <TextField
+                {...props}
+                required
+                id="descripcion"
+                label="Descripción"
+                variant="standard"
+                placeholder="Descipción Proyecto"
+                sx={{ width: "100%", marginBottom: "16px" }}
+                value={projectData.descripcion}
+                onChange={({ target }) =>
+                  setProjectData({ ...projectData, descripcion: target.value })
+                }
+                multiline
+                rows={3}
+              />
 
-              <div className="row">
-                <div className="form-group col-sm-6">
-                  <label htmlFor="fechaInicio">Inicio</label>
-                  <input
-                    type="date"
-                    className="form-control form-control-border w-100"
-                    id="fechaInicio"
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <div className={classes.toolbar}>
+                  <DatePicker
+                    {...props}                   
+                    openTo="day"
+                    views={["year", "month", "day"]}
+                    label="Year, month and date"
                     value={projectData.fechaInicio}
-                    onChange={({ target }) => setProjectData({...projectData, fechaInicio: target.value})}
-                  />
-                </div>
+                    onChange={(newValue) => {
+                      setProjectData({
+                        ...projectData,
+                        fechaInicio: newValue,
+                      });
 
-                <div className="form-group col-sm-6">
-                  <label htmlFor="fechafin">Fin</label>
-                  <input
-                    type="date"
-                    className="form-control form-control-border w-100"
-                    id="fechaFin"
+                      setMinDateFinal(newValue);
+                    }}
+                    inputFormat="dd/MM/yyyy"
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Inicio"
+                        variant="standard"
+                        sx={{ width: "50%", marginBottom: "16px" }}
+                      />
+                    )}
+                  />
+
+                  <DatePicker
+                    {...props}
+                    minDate={minDateFinal}
+                    openTo="day"
+                    views={["year", "month", "day"]}
+                    label="Year, month and date"
                     value={projectData.fechaFinal}
-                    onChange={({ target }) => setProjectData({...projectData, fechaFinal: target.value})}
+                    onChange={(newValue) =>
+                      setProjectData({
+                        ...projectData,
+                        fechaFinal: newValue,
+                      })
+                    }
+                    inputFormat="dd/MM/yyyy"
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Fin"
+                        variant="standard"
+                        sx={{
+                          width: "49%",
+                          marginBottom: "16px",
+                          marginLeft: "16px",
+                        }}
+                      />
+                    )}
                   />
                 </div>
-              </div>
+              </LocalizationProvider>
 
-              <div className="row mt-2">
-                <div className="form-group col-sm-6">
-                  <label htmlFor="tipoBeneficiario">Tipo de Beneficiario</label>
-                  <select
-                    className="custom-select form-control-border"
-                    data-placeholder="Select a State"
-                    style={{ width: "100%" }}
-                    value={beneficiarieType}
-                    onChange={({ target }) => setBeneficiarieType(target.value)}
-                  >
-                    <option>Sin definir</option>
-                    <option>Sin definir</option>
-                  </select>
-                </div>
-                <div className="form-group col-sm-6">
-                  <label htmlFor="cantidadBeneficiarios">
-                    Cantidad de Beneficiarios
-                  </label>
-                  <input
-                    type="number"
-                    className="form-control form-control-border w-100"
-                    id="beneficiarios"
-                    placeholder="Cantidad Beneficiarios"
-                    value={countBeneficiare}
-                    onChange={({ target }) => setCountBeneficiare(target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="descripcion">Beneficiario(s)</label>
-                <textarea
-                  className="form-control form-control-border w-100"
-                  id="descripcion"
-                  placeholder="Detalles los beneficiarios"
-                  value={projectData.datosBeneficiario}
-                  onChange={({ target }) => setProjectData({...projectData, datosBeneficiario: target.value})}
-                  rows={4}
+              <div className={classes.toolbar}>
+                <SelectBeneficiaries
+                  beneficiaries={beneficiarieType}
+                  disabled={props.disabled}
+                />
+                <TextField
+                  {...props}
+                  required
+                  id="outlined-required"
+                  label="Cantidad de Beneficiarios"
+                  variant="standard"
+                  placeholder="Cantidad de Beneficiarios"
+                  type="number"
+                  sx={{
+                    width: "50%",
+                    marginBottom: "16px",
+                    marginLeft: "16px",
+                  }}
+                  value={countBeneficiare}
+                  onChange={({ target }) => setCountBeneficiare(target.value)}
                 />
               </div>
 
-
+              <TextField
+                {...props}
+                required
+                id="outlined-required"
+                label="Detalles los beneficiarios"
+                variant="standard"
+                placeholder="Detalles los beneficiarios"
+                sx={{ width: "100%", marginBottom: "16px" }}
+                value={projectData.descripcion}
+                value={projectData.datosBeneficiario}
+                onChange={({ target }) =>
+                  setProjectData({
+                    ...projectData,
+                    datosBeneficiario: target.value,
+                  })
+                }
+                multiline
+                rows={4}
+              />
             </div>
           </div>
           <div className="col-sm-4">
             <div className="w-100">
               <div className="form-group">
-                <label htmlFor="provincia">Lugar Implementación</label>
-                <SelectProvinces provinces={provinces} />
+                {/* <label htmlFor="provincia">Lugar Implementación</label> */}
+                <SelectProvinces
+                  provinces={provinces}
+                  disabled={props.disabled}
+                />
+              </div>
+              <div className="form-group">
+                <SelectMunicipality
+                  municipality={municipality}
+                  disabled={props.disabled}
+                />
               </div>
 
               <div className="form-group">
-                <label htmlFor="barrios">Territorios Impactados</label>
-                <SelectProvinces provinces={provinces} />
+                <SelectChallenges
+                  challenges={challengesImpacted}
+                  disabled={props.disabled}
+                />
               </div>
 
-              <div className="form-group">
+              {/* <div className="form-group">
                 <label htmlFor="desafio">Desafío Impactado</label>
                 <select
                   className="custom-select form-control-border"
                   id="desafio"
                 >
-                  {
-                    challengesImpacted.map(x =>{
-                      return <option value={x.value}>{x.text}</option>
-                    })
-                  }
+                  {challengesImpacted.map((x) => {
+                    return <option value={x.value}>{x.text}</option>;
+                  })}
                 </select>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

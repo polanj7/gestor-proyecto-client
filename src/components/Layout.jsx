@@ -23,8 +23,6 @@ import MenuItem from "@mui/material/MenuItem";
 // icons
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { Menu } from "@mui/icons-material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
@@ -65,9 +63,12 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 const menuLinks = [
-  { text: "Proyectos", to: "/project", icon: "project" },
-  { text: "Usuarios", to: "www.google.com", icon: "project" },
-  { text: "Adminstración", to: "www.google.com", icon: "project" },
+  { text: "Proyectos", to: "/project", icon: <AutoAwesomeMosaicIcon /> },
+  { text: "...", to: "/www.google.com", icon: "..." },
+  { text: "...", to: "/www.google.com", icon: "..." },
+  { text: "...", to: "/www.google.com", icon: "..." },
+  { text: "...", to: "/www.google.com", icon: "..." },
+  { text: "...", to: "/www.google.com", icon: "..." }
 ];
 
 const openedMixin = (theme) => ({
@@ -246,8 +247,8 @@ export default function Layout({ children }) {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting.text} onClick={setting.action}>
+              {settings.map((setting, idx) => (
+                <MenuItem key={idx} onClick={setting.action}>
                   <ListItemIcon>{setting.icon}</ListItemIcon>
                   <ListItemText>{setting.text}</ListItemText>
                 </MenuItem>
@@ -278,11 +279,11 @@ export default function Layout({ children }) {
         </DrawerHeader>
         <Divider />
         <List>
-          {menuLinks.map(({ text, to }, index) => (
-            <Tooltip title={text} placement="right">
+          {menuLinks.map(({ text, to, icon }, idx) => (
+            <Tooltip key={idx} title={text} placement="right">
               <ListItem button key={text} component={Link} to={to}>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {icon}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
@@ -292,7 +293,7 @@ export default function Layout({ children }) {
       </Drawer>
 
       {/*Content*/}
-      <Box component="main" sx={{ flexGrow: 1, p: 2, m: 1 }}>
+      <Box component="main" sx={{ flexGrow: 1, m: 2}}>
         <DrawerHeader />
         {children}
       </Box>

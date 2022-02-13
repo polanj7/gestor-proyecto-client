@@ -6,7 +6,7 @@ export const getBarrios= async (idMunicipio) => {
    return data;
 } 
 
-export const getMunicipios= async (idProvincia) => {
+export const getMunicipality= async (idProvincia) => {
     const data = await get(`Municipios?idProvincia=${idProvincia}`);
     return data;
 } 

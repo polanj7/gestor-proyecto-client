@@ -1,107 +1,103 @@
-import React, {useState, useEffect} from "react";
+ import React, {useState, useEffect, useContext} from "react";
 import { useNavigate }  from 'react-router-dom';
 import Moment from 'react-moment';
 import './index.css'
 
+//components
+import ModalTaks from '../taks/ModalTaks'
+
 //services
-import { getProjects, deleteProject } from '../../services/projectsServices';
-import { getTaksByProject } from '../../services/taksServices';
+import { deleteProject } from '../../services/projectsServices';
+import { deleteTaks } from '../../services/taksServices';
 //mui
 import Paper from '@mui/material/Paper';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from "@mui/material/Typography";
-import Chip from '@mui/material/Chip';
-import { Divider } from "@mui/material";
 import { makeStyles } from '@mui/styles';
-import Box from '@mui/material/Box';
 
 //icons
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import ListAltIcon from '@mui/icons-material/ListAlt';
-import CheckBoxIcon from '@mui/icons-material/Done';
-import BorderColorIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import FilePresentIcon from '@mui/icons-material/FilePresent';
+
+//context
+import { ParameterContext } from '../../context/ParameterContext';
 
 //sweet alert
 import swal from 'sweetalert';
-//modal
-import  Modal  from 'react-bootstrap/Modal';
 
-const useStyles = makeStyles((theme) => ({
-  toolbar: {
-    display: "flex",
-    justifyContent: "space-between",
-    marginBottom: "8px"
-  },
-  subToolbar:{
-    display: "flex",
-    justifyContent: "space-between"
-  }
-}));
+export default function Table({projects}) {
 
-export default function Table() {
+  const navigate = useNavigate(); 
+  const [isOpen, setIsOpen] = useState(false);
+  const [id, setId] = useState(0);
+  const {parameterProject, setParameterProject} = useContext(ParameterContext); 
 
-  const classes = useStyles();
-  const navigate = useNavigate();
-  const [projects, setProjects] = useState([]);
-  const [refreshAfterDelete, setRefreshAfterDelete] = useState(false); 
+  const handleEditProject = (id) => {   
+    //setParameterProject({...parameterProject, id: id, mode: 'read-write'});
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [taksLista, setTaksLista] = useState([]);
+    let dataParameter ={
+      id: id, 
+      mode: 'read-write'
+    }
 
-
-  const handleCloseModal = () =>{
-    setIsModalOpen(false);
+    sessionStorage.setItem('parameterProject', JSON.stringify(dataParameter))
+    navigate(`/project/new2/${id}`);
   }
 
-  const handleEditProject = (id) => {
-    navigate(`/project/new2/${id}`)
+  const handleDetailProject = (id) => {    
+    let dataParameter ={
+      id: id, 
+      mode: 'read-only'
+    }
+
+    sessionStorage.setItem('parameterProject', JSON.stringify(dataParameter))
+
+    navigate(`/project/new2/${id}/readonly`)
   }
 
-  const handleOpenModalTaks = async (id) =>{
-    const dataTaks = await getTaksByProject(id);
-    setTaksLista(dataTaks);   
-    
-    if(dataTaks.length > 0){
-      setIsModalOpen(true);
-    }    
+  const handleOpenModalTaks = async (id) =>{ 
+    setId(id);
+    setIsOpen(true);
   }
 
-  const removeProject = (id, codigo) => {   
+  const handleRemoveProject = (id, codigo) => {   
     swal({
       title: `Deseas eliminar el proyecto ${codigo}?`,
-      text: "Despues de elminar el registro, el mimso no podrá ser recuperado!",
+      text: "Despues de elminar el registro, el mismo no podrá ser recuperado!",
       icon: "warning",
-      buttons: true,
-      dangerMode: true,
+      buttons: true,     
     }).then((willDelete) => {
       if (willDelete) {
         deleteProject(id).then((resp) => {
-          setRefreshAfterDelete((x) => !x);
+          //mensaje de confirmación
+          swal(`El proyecto ${codigo} fue eliminado!`, {
+            icon: "success",
+          });          
         });    
-        //mensaje de confirmación
-        swal(`El proyecto ${codigo} fue eliminado!`, {
-          icon: "success",
-        });
       }
     });    
-  }
-  
-  useEffect(() => {
-    getProjects().then(resp =>{
-      setProjects(resp);
-    })
+  } 
 
-  }, [refreshAfterDelete])
+  const handleRemoveTaks = (id, descripcion) => {   
+    swal({
+      title: `Deseas eliminar la tarea ${descripcion}?`,
+      text: "Despues de elminar el registro, el mismo no podrá ser recuperado!",
+      icon: "warning",
+      buttons: true,     
+    }).then((willDelete) => {
+      if (willDelete) {        
+        deleteTaks(id).then((resp) => {
+          //mensaje de confirmación
+          swal(`La tarea ${descripcion} fue eliminada!`, {
+            icon: "success",
+          });          
+        });    
+      }
+    });    
+  } 
 
   const columns = [
     { field: "idProyecto", headerName: "ID", width: 1, headerClassName: "super-app-theme--header"},
@@ -161,7 +157,6 @@ export default function Table() {
         </strong>
       ),
     },
-
     {
       field: "actions",
       type: "actions",
@@ -169,13 +164,12 @@ export default function Table() {
       width: 150,
       cellClassName: "actions",
       getActions: ({id, row}) => {
-        console.log(id)
         return [
           <GridActionsCellItem
             title="Detalle"
             icon={<VisibilityOutlinedIcon />}
             label="Detalle"
-            onClick={() => alert(id)}
+            onClick={() => handleDetailProject(id)}
             color="primary"
           />,
           <GridActionsCellItem
@@ -196,18 +190,18 @@ export default function Table() {
             title="Eliminar"
             icon={<DeleteIcon />}
             label="Eliminar"
-            onClick={() => removeProject(id, row.codigo)}
+            onClick={() => handleRemoveProject(id, row.codigo)}
             color="error"
-          />,
-
-          
+          />,          
         ];
       },
     },
-  ];  
+  ];
 
+  useEffect(() => {
+    sessionStorage.removeItem('parameterProject')
+  }, []);
   
-
   return (
     <>
       <DataGrid
@@ -219,106 +213,42 @@ export default function Table() {
         sx={{
           boxShadow: 3,
           border: 1,
-          borderColor: 'primary.light',
+          borderColor: "primary.light",
           "& .MuiDataGrid-cell:hover": {
-              color: 'secundary.light',
+            color: "secundary.light",
           },
         }}
       />
 
-      <Modal show={isModalOpen} onHide={handleCloseModal} style={{ marginTop: 55 }}>
+      <ModalTaks id={id} isOpen={isOpen} setIsOpen={setIsOpen} view = {"list"}  />
+
+      {/* Listados de tareas, pasar a un compornte */}
+      {/* <Modal
+        show={isModalOpen}
+        onHide={handleCloseModal}
+        style={{ marginTop: 55 }}
+      >
         <Modal.Header closeButton>
           <Modal.Title>
             <Typography variant="h6" component="h2" color="primary">
-              <ListAltIcon /> Listado de Tareas
+              <ListAltIcon /> Tareas
             </Typography>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          
-          <List
-            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-          >
-            {
-              taksLista.map(x=>{
-                return (
-                  <>
-                    <ListItem sx={{ width: 470 }}>
-                      <ListItemText
-                        primary={
-                          <div className={classes.toolbar}>
-                            <Typography
-                              variant="body1"
-                              component="h1"
-                              sx={{ color: "#ed6c02" }}
-                            >
-                              {x.descripcion}
-                            </Typography>
-                            <Box className={classes.subToolbar} >
-                              <BorderColorIcon 
-                                title="Editar" 
-                                color="primary" 
-                                sx={{marginRight: 1}}
-                              />
-                              <HighlightOffIcon
-                                title="Eliminar"
-                                color="error"
-                              />
-                            </Box>
-                          </div>
-                        }
-                        secondary={
-                          <>
-                            <Typography variant="subtitle2" component="h2">
-                              Responsable: José Ortiz
-                            </Typography>
-
-                            <Typography variant="subtitle2" component="h2">
-                              {"Desde "}
-                              <Moment format="DD/MM/YYYY">
-                                {x.fechaInicio}
-                              </Moment>
-                              {" hasta "}
-                              <Moment format="DD/MM/YYYY">
-                                {x.fechaFinal}
-                              </Moment>
-                            </Typography>
-
-                            <Typography variant="subtitle2" component="h2">
-                              Estado:{" "}
-                              <Chip
-                                icon={<CheckBoxIcon />}
-                                label="Activo"
-                                color="success"
-                                variant="outlined"
-                              />
-                            </Typography>
-                          </>
-                        }
-                      />
-                    </ListItem>
-                  </>
-                );
-              })
-            }
-     
-          </List>
+      
         </Modal.Body>
         <Modal.Footer>
-         
           <Button
             variant="outlined"
             color="primary"
             onClick={handleCloseModal}
-            //endIcon={<DoneAllIcon />}
             sx={{ mr: 1 }}
           >
             OK
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
     </>
   );
 }
-
-

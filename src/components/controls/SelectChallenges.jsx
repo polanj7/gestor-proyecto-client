@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-
+import React, {useContext} from 'react'
 import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import MenuItem from '@mui/material/MenuItem';
@@ -23,54 +22,55 @@ const MenuProps = {
   },
 };
 
-export default function SelectProvinces({provinces, disabled}) { 
-
-  const {projectData, setProjectData} = useContext(ProjectContext);
+export default function SelectChallenges({challenges, disabled}) {
+  const { projectData, setProjectData } = useContext(ProjectContext);
   const [personName, setPersonName] = React.useState([]);
 
   const handleChange = (event) => {
-    console.log(event)
-    console.log(event.target)
+    console.log(event);
+    console.log(event.target);
     const {
       target: { value },
     } = event;
 
-    setPersonName(typeof value === 'string' ? value.split(',') : value);
+    setPersonName(typeof value === "string" ? value.split(",") : value);
 
     let data = {
-      nombre: typeof value === "string" ? value.split(",") : value,
+        text: typeof value === "string" ? value.split(",") : value,
       id: 123,
     };
 
-    setProjectData({...projectData, lugaresImplementaciones: data})
+    setProjectData({ ...projectData, lugaresImplementaciones: data });
     //setProjectData({...projectData, tareas: [...projectData.tareas, tareass]})
-
   };
 
-  console.log('data',projectData)
-    
   return (
     <>
-      <FormControl  variant="standard" style={{ width: "100%", marginBottom: "20px" }}>
-        <InputLabel id="selectImplementacion">Lugar Implementación</InputLabel>
+      <FormControl
+        variant="standard"
+        style={{ width: "100%", marginBottom: "20px" }}
+      >
+        <InputLabel id="selectImplementacion">
+          Desafío(s) Impactado(s)
+        </InputLabel>
         <Select
-             disabled={disabled}
-          required      
-          label ="Lugar Implementación"          
+          disabled={disabled}
+          required
+          label="Lugar Implementación"
           multiple
           value={personName}
           onChange={handleChange}
           renderValue={(selected) => selected.join(", ")}
           MenuProps={MenuProps}
         >
-          {provinces.map(({ idProvincia, nombre }) => (
-            <MenuItem key={idProvincia} value={nombre}>
-              <Checkbox checked={personName.indexOf(nombre) > -1} />
-              <ListItemText primary={nombre} />
+          {challenges.map(({ text, value }) => (
+            <MenuItem key={value} value={value}>
+              <Checkbox checked={personName.indexOf(text) > -1} />
+              <ListItemText primary={text} />
             </MenuItem>
           ))}
         </Select>
-      </FormControl>      
+      </FormControl>
     </>
   );
 }

@@ -59,7 +59,9 @@ export default function SignIn() {
 
   const {setUser} = useContext(UserContext);
   const [isOpenAlert, setIsOpenAlert] = useState(false);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [usern, setUsern] = useState('');
+  const [pass, setPass] = useState('');
 
   const navigate = useNavigate();
 
@@ -70,35 +72,31 @@ export default function SignIn() {
     setIsOpenAlert(false);
   };
 
-  const [usern, setUsern] = useState('');
-  const [pass, setPass] = useState('');
-
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-
     
     if(usern.length === 0 || pass.length === 0){
       setIsOpenAlert(true);
     }else{
-      setIsLoading(true)
-      signIn(usern, pass).then((resp) => { 
 
-        if(!resp){
+        setIsLoading(true)
+        const dataUser = await signIn(usern, pass);
+
+        if(!dataUser){
+          setPass('');
           setIsOpenAlert(true);
           setIsLoading(false);
-          setPass('');
           return;
         }
-        setUserProfile(resp);
-
-        setAccessToken(resp.token);
-        setUser(resp.nombre);        
-
-        Cookies.set('userName', resp.nombre, { expires: 1, path: '/' })
-        Cookies.set('userProfile', JSON.stringify(resp), { expires: 1, path: '/' })  
         
-        navigate('/', { replace: true });
-      });
+        setUserProfile(dataUser);
+        setAccessToken(dataUser.token);
+        setUser(dataUser.nombre);        
+
+        Cookies.set('userName', dataUser.nombre, { expires: 1, path: '/' })
+        Cookies.set('userProfile', JSON.stringify(dataUser), { expires: 1, path: '/' });
+        
+        navigate('/', { replace: true });      
     } 
     
   };  
@@ -106,7 +104,12 @@ export default function SignIn() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Container component="main" maxWidth="xs" maxWidth="sm" sx={{ bgColor: "primary.main" }} >
+        <Container
+          component="main"
+          maxWidth="xs"
+          maxWidth="sm"
+          sx={{ bgColor: "primary.main" }}
+        >
           <CssBaseline />
           <Box
             sx={{
@@ -123,7 +126,7 @@ export default function SignIn() {
                 color: "secundary.light",
               },
             }}
-          >            
+          >
             <Box
               sx={{
                 marginBottom: 0,
@@ -149,7 +152,7 @@ export default function SignIn() {
                 name="user"
                 autoComplete="user"
                 required
-                autoFocus                
+                autoFocus
                 onChange={({ target }) => setUsern(target.value)}
               />
               <TextField
@@ -200,7 +203,7 @@ export default function SignIn() {
           sx={{ width: "100%" }}
         >
           <AlertTitle>Datos incorrectos</AlertTitle>
-          Usuario y Contraseña son requeridos!
+          El usuario y/o contraseña son incorrectos! 
         </Alert>
       </Snackbar>
     </>
