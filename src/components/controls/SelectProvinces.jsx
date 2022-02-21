@@ -1,7 +1,5 @@
 import React, { useContext } from 'react';
-
-import { useTheme } from '@mui/material/styles';
-import OutlinedInput from '@mui/material/OutlinedInput';
+//mui
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -29,8 +27,6 @@ export default function SelectProvinces({provinces, disabled}) {
   const [personName, setPersonName] = React.useState([]);
 
   const handleChange = (event) => {
-    console.log(event)
-    console.log(event.target)
     const {
       target: { value },
     } = event;
@@ -47,8 +43,6 @@ export default function SelectProvinces({provinces, disabled}) {
 
   };
 
-  console.log('data',projectData)
-    
   return (
     <>
       <FormControl  variant="standard" style={{ width: "100%", marginBottom: "20px" }}>

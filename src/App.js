@@ -4,16 +4,11 @@ import NotFount404 from './components/NotFount404';
 import Index from './components/projects/Index';
 import Edit from './components/projects/Edit';
 import Delete from './components/projects/Delete';
-import ProjectForm from './components/projects/ProjectForm';
 import ContentForm from './components/projects/ContentForm';
-import BudgetForm from './components/projects/BudgetForm';
-import TaksForm from './components/projects/TaksForm';
-import FileForm from './components/projects/FileForm';
-
 import SignIn from './components/login/Signin';
 import Main from './components/main/Main';
 import Dashboard from './components/Dashboard';
-import {getUserCookies, getUserProfileCookies} from './services/auth'
+import {getUserCookies} from './services/auth'
 
 import {
   BrowserRouter,
@@ -78,8 +73,8 @@ export default function App() {
                 <Route path=":id/readonly" element={<ContentForm />} />
               </Route>
 
-              <Route path="sign-in" element={<SignIn />} />
-              <Route path="Dashboard" element={<Dashboard />} />
+              <Route path="/sign-in" element={<SignIn />} />
+              <Route path="/Dashboard" element={<Dashboard />} />
               <Route path="/" element={<SignIn />} />
               <Route
                 path="*"

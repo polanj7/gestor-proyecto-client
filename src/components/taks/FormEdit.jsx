@@ -5,7 +5,6 @@ import { getProjects, deleteProject } from '../../services/projectsServices';
 import { getTaksByID, addTaks, updateTaks } from '../../services/taksServices';
 
 //mui
-import Typography from "@mui/material/Typography";
 import TextField from '@mui/material/TextField';
 import DatePicker from '@mui/lab/DatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -19,8 +18,11 @@ import Button from '@mui/material/Button';
 //icons
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
-import CancelIcon from '@mui/icons-material/Cancel';
+import CloseIcon from '@mui/icons-material/Close';
 import { Divider } from '@mui/material';
+
+//alert
+import swal from 'sweetalert';
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -32,30 +34,45 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function FormEdit({idTarea, idProyecto, setIsOpen, setReloadData, data, setData }) {
-  console.log('aqui', data)
+export default function FormEdit({idTarea, idProyecto, setReloadData, expanded , setExpanded }) {
   const classes = useStyles();
-  const[minDateFinal, setMinDateFinal] = useState(new Date());
+  const [minDateFinal, setMinDateFinal] = useState(new Date());
 
-  useEffect(() =>{   
-    if (idTarea > 0) {
-      getTaksByID(idTarea).then((resp) => {
-        console.log(resp)
-      });
-    }     
-  }, [])
+  const [data, setData] = useState({
+    idTarea: 0,
+    descripcion: "",
+    idProyecto: idProyecto,
+    fechaInicio: new Date(),
+    fechaFinal: new Date(),
+    idEstado: 1,
+  });
 
-  const handleAddTaks = async () =>{
-    const resp = await addTaks(data);
-    setIsOpen(false);
+  if (idTarea > 0) {
+    getTaksByID(idTarea).then((resp) => {
+      setData(resp);
+    });
+  }
+
+  const handleAddTaks = async () => {
+    swal({
+      title: `Registro de Tarea`,
+      text: "Deseas guardar los datos digitados?",
+      icon: "info",
+      buttons: true      
+    }).then((willSave) => {
+      if (willSave) {         
+        addTaks(data);
+        setReloadData((prev) => !prev);
+        setExpanded(false);   
+      }
+    });
+  };
+
+  const handleUpdateTaks = async () => {
+    await updateTaks(idTarea, data);
     setReloadData((prev) => !prev);
-  }
-
-  const handleUpdateTaks = async () =>{
-     const resp = await updateTaks(idTarea, data);
-     setIsOpen(false);
-     setReloadData(prev => !prev);
-  }
+    setExpanded(false);
+  };
 
   return (
     <>
@@ -73,7 +90,9 @@ export default function FormEdit({idTarea, idProyecto, setIsOpen, setReloadData,
                   multiline
                   rows={3}
                   value={data.descripcion}
-                  onChange={({ target }) => setData({...data, descripcion: target?.value})}
+                  onChange={({ target }) =>
+                    setData({ ...data, descripcion: target?.value })
+                  }
                 />
               </div>
 
@@ -86,7 +105,9 @@ export default function FormEdit({idTarea, idProyecto, setIsOpen, setReloadData,
                     label="Year, month and date"
                     inputFormat="dd/MM/yyyy"
                     value={data.fechaInicio}
-                    onChange={({ target }) => setData({...data, fechaInicio: target?.value})}
+                    onChange={({ target }) =>
+                      setData({ ...data, fechaInicio: target?.value })
+                    }
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -104,7 +125,9 @@ export default function FormEdit({idTarea, idProyecto, setIsOpen, setReloadData,
                     label="Year, month and date"
                     inputFormat="dd/MM/yyyy"
                     value={data.fechaFinal}
-                    onChange={({ target }) => setData({...data, fechaFinal: target?.value})}
+                    onChange={({ target }) =>
+                      setData({ ...data, fechaFinal: target?.value })
+                    }
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -130,15 +153,23 @@ export default function FormEdit({idTarea, idProyecto, setIsOpen, setReloadData,
                   sx={{ width: "100%", marginBottom: "16px" }}
                 />
               </div>
-              <Divider />
+    
               <div style={{ marginTop: "16px" }}>
-          
                 <Button
-                  variant="outlined"
+                  variant="contained"
+                  color="warning"
+                  sx={{ mr: 1 }}
+                  endIcon={<CloseIcon />}
+                  onClick={() => setExpanded(false)}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  variant="contained"
                   color="primary"
                   sx={{ mr: 1 }}
-                  endIcon={<DoneAllIcon />}  
-                  onClick={idTarea > 0 ? handleUpdateTaks : handleAddTaks}                
+                  endIcon={<DoneAllIcon />}
+                  onClick={idTarea > 0 ? handleUpdateTaks : handleAddTaks}
                 >
                   Guardar
                 </Button>

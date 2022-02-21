@@ -19,7 +19,6 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuUser from '@mui/material/Menu';
 import MenuItem from "@mui/material/MenuItem";
 
-
 // icons
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -63,12 +62,7 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 const menuLinks = [
-  { text: "Proyectos", to: "/project", icon: <AutoAwesomeMosaicIcon /> },
-  { text: "...", to: "/www.google.com", icon: "..." },
-  { text: "...", to: "/www.google.com", icon: "..." },
-  { text: "...", to: "/www.google.com", icon: "..." },
-  { text: "...", to: "/www.google.com", icon: "..." },
-  { text: "...", to: "/www.google.com", icon: "..." }
+  { text: "Proyectos", to: "/project", icon: <AutoAwesomeMosaicIcon /> }
 ];
 
 const openedMixin = (theme) => ({
@@ -215,7 +209,7 @@ export default function Layout({ children }) {
 
           {/* Logo */}
           <Typography
-            color="primary"
+            color="primary.dark"
             variant="h5"
             noWrap
             component="h1"

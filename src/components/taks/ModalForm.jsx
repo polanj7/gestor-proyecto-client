@@ -19,7 +19,7 @@ export default function ModalForm(props) {
       <Modal
         show={props.isOpen}
         onHide={props.setIsOpen(false)}
-        style={{ marginTop: 55 }}  
+        style={{ marginTop: 55, minHeight: "300px" }}  
       >
         <Modal.Header closeButton>
           <Modal.Title>

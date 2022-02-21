@@ -69,8 +69,8 @@ export default function Index() {
   return (
     <>
       <div className={classes.toolbar}>
-        <Typography variant="h5" component="h2" color="primary">
-          Listado de Proyectos
+        <Typography variant="h5" component="h2" color="primary.dark">
+          Proyectos
         </Typography>
         <Button
           onClick={() => {

@@ -30,8 +30,6 @@ export default function SelectMunicipality({municipality, disabled}) {
   const [personName, setPersonName] = React.useState([]);
 
   const handleChange = (event) => {
-    console.log(event)
-    console.log(event.target)
     const {
       target: { value },
     } = event;

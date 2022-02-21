@@ -82,8 +82,8 @@ export default function ContentForm() {
 
   const handleFinish = async () => {
     swal({
-      title: `Deseas guardar los cambios realizados?`,
-      text: "Los datos serán guardado de manera bacana!",
+      title: `Registro de Proyetos`,
+      text: "Deseas guardar los datos digitados?",
       icon: "info",
       buttons: true      
     }).then((willSave) => {
@@ -134,7 +134,6 @@ export default function ContentForm() {
       setDisabled(false);
     }
   }, [])
-
 
   return (
     <>

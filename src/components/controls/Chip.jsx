@@ -1,11 +1,7 @@
 import React from 'react'
-
-
 //mui
 import Box from '@mui/material/Box';
 import ChipMui from '@mui/material/Chip';
-//icons
-
 
 export default function Chip(props) {
   return (

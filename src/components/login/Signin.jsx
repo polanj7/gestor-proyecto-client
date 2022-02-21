@@ -1,22 +1,22 @@
 import React, {useState, useContext} from 'react';
 import {useNavigate} from 'react-router-dom'
 
-import Button from '@mui/material/Button';
+//mui
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-
 import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
+
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import CloseIcon from '@mui/icons-material/Close';
+
 /*alert*/
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import Avatar from '@mui/material/Avatar';
 
 import LoadingButton from '@mui/lab/LoadingButton';
 /*services*/
@@ -30,6 +30,7 @@ import { UserContext } from "../../context/UserContext";
 import Cookies from 'js-cookie'
 
 import logo from "../../image/logo.png";
+import ForgotDialog from './ForgotDialog';
 
 function Copyright(props) {
   return (
@@ -40,7 +41,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="#">
+      <Link color="inherit" href="https://www.grupoasaic.org" target="_blank" >
         www.grupoasaic.org
       </Link>{" "}
       {new Date().getFullYear()}
@@ -48,12 +49,6 @@ function Copyright(props) {
     </Typography>
   );
 }
-
-const theme = createTheme();
-
-const Alert = React.forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 
 export default function SignIn() {
 
@@ -64,13 +59,6 @@ export default function SignIn() {
   const [pass, setPass] = useState('');
 
   const navigate = useNavigate();
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setIsOpenAlert(false);
-  };
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -96,116 +84,114 @@ export default function SignIn() {
         Cookies.set('userName', dataUser.nombre, { expires: 1, path: '/' })
         Cookies.set('userProfile', JSON.stringify(dataUser), { expires: 1, path: '/' });
         
-        navigate('/', { replace: true });      
+        navigate('/project', { replace: true });      
     } 
     
   };  
   
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <Container
-          component="main"
-          maxWidth="xs"
-          maxWidth="sm"
-          sx={{ bgColor: "primary.main" }}
+      <Container
+        component="main"
+        maxWidth="xs"
+        maxWidth="sm"
+        sx={{ bgColor: "primary.main", width: "500px", height: "400px" }}
+      >
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 12,
+            marginBottom: 12,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: 3,
+            boxShadow: 3,
+            bgcolor: "#FCFDFF",
+            borderColor: "primary.main",
+            "& .MuiDataGrid-cell:hover": {
+              color: "secundary.light",
+            },
+          }}
         >
-          <CssBaseline />
           <Box
             sx={{
-              marginTop: 12,
-              marginBottom: 12,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              padding: 6,
-              boxShadow: 3,
-              bgcolor: "#FCFDFF",
-              borderColor: "primary.main",
-              "& .MuiDataGrid-cell:hover": {
-                color: "secundary.light",
-              },
+              marginBottom: 0,
             }}
           >
-            <Box
+            <img width="200px" src={logo} alt="logo asic" loading="lazy" />
+          </Box>
+          <Typography
+            component="h3"
+            variant="h6"
+            sx={{ color: "primary.dark", textAlign: "center" }}
+          >
+            <strong>TORRE DE CONTROL</strong>
+          </Typography>
+
+          <Box component="form" onSubmit={handleLogin} noValidate>
+            <Box sx={{ width: "100%" }}>
+              <Collapse in={isOpenAlert}>
+                <MuiAlert
+                  severity="warning"
+                  action={
+                    <IconButton
+                      aria-label="close"
+                      color="inherit"
+                      size="small"
+                      onClick={() => {
+                        setIsOpenAlert(false);
+                      }}
+                    >
+                      <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                  }
+                  sx={{ mb: 2 }}
+                >
+                  El usuario y/o contraseña son incorrectos!
+                </MuiAlert>
+              </Collapse>
+            </Box>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="user"
+              label="Usuario"
+              name="user"
+              autoComplete="user"
+              autoFocus
+              variant="outlined"
+              onChange={({ target }) => setUsern(target.value)}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Contraseña"
+              type="password"
+              id="password"
+              onChange={({ target }) => setPass(target.value)}
+            />
+            <LoadingButton
+              bgcolor="warning.main"
+              type="submit"
+              fullWidth
+              loading={isLoading}
+              variant="contained"
               sx={{
-                marginBottom: 0,
+                marginTop: 2,
               }}
             >
-              <img width="250px" src={logo} alt="logo asic" loading="lazy" />
-            </Box>
-            <Typography
-              component="h1"
-              variant="h5"
-              sx={{ color: "primary.dark", textAlign: "center" }}
-            >
-              <strong>TORRE DE CONTROL</strong>
-            </Typography>
-
-            <Box component="form" onSubmit={handleLogin} noValidate>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="user"
-                label="Usuario"
-                name="user"
-                autoComplete="user"
-                required
-                autoFocus
-                onChange={({ target }) => setUsern(target.value)}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Contraseña"
-                type="password"
-                id="password"
-                onChange={({ target }) => setPass(target.value)}
-              />
-
-              <LoadingButton
-                bgcolor="warning.main"
-                type="submit"
-                fullWidth
-                loading={isLoading}
-                variant="outlined"
-                sx={{
-                  marginTop: 2,
-                }}
-              >
-                Iniciar sesión
-              </LoadingButton>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Has olvidado tu contraseña?
-                  </Link>
-                </Grid>
-              </Grid>
-            </Box>
+              Iniciar sesión
+            </LoadingButton>{" "}
+            <ForgotDialog />
           </Box>
-          <Copyright sx={{ mt: 8, mb: 4 }} />
-        </Container>
-      </ThemeProvider>
+        </Box>
 
-      <Snackbar
-        open={isOpenAlert}
-        autoHideDuration={5000}
-        onClose={handleClose}
-      >
-        <Alert
-          onClose={handleClose}
-          variant="outlined"
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          <AlertTitle>Datos incorrectos</AlertTitle>
-          El usuario y/o contraseña son incorrectos! 
-        </Alert>
-      </Snackbar>
+        <Copyright sx={{ mt: 8, mb: 4 }} />
+      </Container>
     </>
   );
 }

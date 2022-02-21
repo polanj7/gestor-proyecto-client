@@ -16,7 +16,7 @@ export const signIn = async (user, pass) => {
         clave: pass
     });    
     return resp;
-}
+}  
 
 
 export const getUserCookies =()=>{

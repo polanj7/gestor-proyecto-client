@@ -21,10 +21,10 @@ export default function ModalTaks({id, isOpen, setIsOpen}) {
       <Modal
         show={isOpen}
         onHide={() => setIsOpen(false)}
-        style={{ marginTop: 55, height: "85vh" }}
+        style={{ marginTop: "55px", height: "85vh" }}
         size="lg"
-        scrollable= {isScrollable}
-        centered="true"      
+        scrollable={isScrollable}
+        centered="true"
       >
         <Modal.Header closeButton>
           <Modal.Title>
@@ -33,8 +33,8 @@ export default function ModalTaks({id, isOpen, setIsOpen}) {
             </Typography>
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body >  
-          <ListTaks idProyecto={id} setIsOpen1 ={setIsOpen} />
+        <Modal.Body>
+          <ListTaks idProyecto={id} setIsOpen1={setIsOpen} />
         </Modal.Body>
       </Modal>
     </>
