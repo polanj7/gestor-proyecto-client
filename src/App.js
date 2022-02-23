@@ -13,7 +13,8 @@ import {getUserCookies} from './services/auth'
 import {
   BrowserRouter,
   Routes,
-  Route   
+  Route,
+  HashRouter   
 } from "react-router-dom";
 
 //context
@@ -41,15 +42,15 @@ export default function App() {
     () => ({ parameterProject, setParameterProject }),
     [parameterProject, setParameterProject]
   ); 
-
+  // "homepage": "https://torre-control.netlify.app/",
   return (
     <>
       <UserContext.Provider value={providerUser}>
         <ParameterContext.Provider value={providerParameter}>
-          <BrowserRouter>
+          <HashRouter>
             <Routes>
               <Route
-                path="project"
+                path="/project"
                 element={
                   <Main>
                     {" "}
@@ -85,7 +86,7 @@ export default function App() {
                 }
               />
             </Routes>
-          </BrowserRouter>
+          </HashRouter>
         </ParameterContext.Provider>
       </UserContext.Provider>
     </>
