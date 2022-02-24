@@ -35,12 +35,14 @@ import { ParameterContext } from '../../context/ParameterContext'
 
 //sweet alert
 import swal from 'sweetalert';
+import ValidationForm from './ValidationForm';
 
 const steps = [
   "Datos Generales",
   "Propuesta Economica",
   "Propuesta operativa",
   "Gestion Interna",
+  "Confirmación",
 ];
 
 const countSteps = steps.length - 1;
@@ -83,7 +85,7 @@ export default function ContentForm() {
   const handleFinish = async () => {
     swal({
       title: `Registro de Proyetos`,
-      text: "Deseas guardar los datos digitados?",
+      text: "¿Deseas guardar los datos digitados?",
       icon: "info",
       buttons: true      
     }).then((willSave) => {
@@ -192,6 +194,8 @@ export default function ContentForm() {
                 <TaksForm disabled={disabled} />
               ) : activeStep === 3 ? (
                 <FileForm disabled={disabled} />
+              ): activeStep === 4 ? (
+                <ValidationForm />
               ) : (
                 <h3>Listo, proceso finalizado</h3>
               )}

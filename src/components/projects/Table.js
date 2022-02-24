@@ -21,6 +21,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import FilePresentIcon from '@mui/icons-material/FilePresent';
+import DesignServicesIcon from '@mui/icons-material/DesignServices';
 
 //context
 import { ParameterContext } from '../../context/ParameterContext';
@@ -161,7 +162,7 @@ export default function Table({projects}) {
       field: "actions",
       type: "actions",
       headerName: "Acciones",
-      width: 150,
+      width: 200,
       cellClassName: "actions",
       getActions: ({id, row}) => {
         return [
@@ -180,6 +181,13 @@ export default function Table({projects}) {
             color="primary"
           />,
           <GridActionsCellItem
+            title="Fase de Diseño"
+            icon={<DesignServicesIcon />}
+            label="Fase de Diseño"
+            onClick={() => handleEditProject(id)} 
+            color="primary"
+          />,
+          <GridActionsCellItem
             title="Documentos"
             icon={<FilePresentIcon />}
             label="Eliminar"
@@ -192,7 +200,7 @@ export default function Table({projects}) {
             label="Eliminar"
             onClick={() => handleRemoveProject(id, row.codigo)}
             color="error"
-          />,          
+          />,
         ];
       },
     },
