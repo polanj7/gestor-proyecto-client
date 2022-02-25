@@ -5,7 +5,7 @@ import Moment from 'react-moment';
 import { getProvince, getMunicipality } from '../../services/territoriesServices'
 import { getBeneficiarios } from '../../services/beneficiariosServices'
 
-//componts
+//components
 import SelectBeneficiaries from '../controls/SelectBeneficiaries';
 import SelectProvinces from '../controls/SelectProvinces';
 import SelectMunicipality from '../controls/SelectMunicipality';

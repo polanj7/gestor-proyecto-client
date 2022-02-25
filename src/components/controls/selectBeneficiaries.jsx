@@ -7,9 +7,7 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 
 
-
 export default function SelectBeneficiaries({beneficiaries, disabled}) {
-
     
   return (
     <>

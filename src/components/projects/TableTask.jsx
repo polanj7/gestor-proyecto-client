@@ -2,15 +2,9 @@ import React, {useEffect, useState} from 'react'
 import Moment from 'react-moment';
 
 //mui
-import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
-
-//icons
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 
 function NoRowsOverlay() {
   return (

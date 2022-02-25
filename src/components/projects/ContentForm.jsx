@@ -185,7 +185,7 @@ export default function ContentForm() {
           </Stepper>
 
           <React.Fragment>
-            <Box style={{ mb: 20, padding: 20, height: "60vh" }}>
+            <Box style={{ mb: 20, padding: 20, height: "65vh" }}>
               {activeStep === 0 ? (
                 <ProjectForm disabled={disabled} />
               ) : activeStep === 1 ? (

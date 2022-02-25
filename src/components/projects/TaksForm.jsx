@@ -8,8 +8,6 @@ import TextField from '@mui/material/TextField';
 import DatePicker from '@mui/lab/DatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { Divider } from '@mui/material';
-
 
 //icons
 import AddIcon from '@mui/icons-material/Add';
@@ -17,7 +15,7 @@ import DoneAllIcon from '@mui/icons-material/DoneAll';
 import CloseIcon from '@mui/icons-material/Close';
 
 //context
-import { ProjectContext } from '../../context/ProjectContext'
+import { ProjectContext } from '../../context/ProjectContext';
 
 //componets
 import TableTask from './TableTask';
