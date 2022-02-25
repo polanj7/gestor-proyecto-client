@@ -4,6 +4,9 @@ import Moment from 'react-moment';
 //Services
 import { getProvince, getMunicipality } from '../../services/territoriesServices'
 import { getBeneficiarios } from '../../services/beneficiariosServices'
+
+//componts
+import SelectBeneficiaries from '../controls/SelectBeneficiaries';
 import SelectProvinces from '../controls/SelectProvinces';
 import SelectMunicipality from '../controls/SelectMunicipality';
 import SelectChallenges from '../controls/SelectChallenges';
@@ -19,7 +22,6 @@ import { makeStyles } from '@mui/styles';
 //context
 import { ProjectContext } from '../../context/ProjectContext';
 
-import SelectBeneficiaries from '../controls/SelectBeneficiaries';
 
 const challengesImpacted = [
   {text: 'Educación', value: 'Educación'},
