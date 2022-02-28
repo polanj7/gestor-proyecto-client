@@ -12,19 +12,8 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import FileCopy from '@mui/icons-material/AttachFile';
 import DeleteIcon from '@mui/icons-material/Delete';
-import DoneAllIcon from '@mui/icons-material/DoneAll';
-
-//context
-import { ProjectContext } from '../context/ProjectContext';
 
 export default function FilesList(props) {
-  //context project
-  const {projectData, setProjectData} = useContext(ProjectContext); 
-
-  // useEffect(() =>{
-  //   console.log('entro...',props.file.name)
-  //   setProjectData({...projectData, documentosProyectos: [...projectData.documentosProyectos, props.file.name]})
-  // }, [])
   
   const convertSizeFile =(size) =>{
     if (size >= 1 && size < 1000000) {
@@ -44,7 +33,7 @@ export default function FilesList(props) {
             <IconButton
               edge="end"
               aria-label="delete"
-              onClick={(e) => {props.removeFile(props.file.name)}}
+              onClick={(e) => {props.removeFile(props.file)}}
             >
               <DeleteIcon color="error" />
             </IconButton>

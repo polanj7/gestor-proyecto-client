@@ -5,6 +5,7 @@ import './index.css'
 
 //components
 import ModalTaks from '../taks/ModalTaks'
+import ModalFiles from "../files/ModalFiles";
 
 //services
 import { deleteProject } from '../../services/projectsServices';
@@ -33,8 +34,8 @@ export default function Table({projects}) {
 
   const navigate = useNavigate(); 
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenFiles, setIsOpenFiles] = useState(false);
   const [id, setId] = useState(0);
-  const {parameterProject, setParameterProject} = useContext(ParameterContext); 
 
   const handleEditProject = (id) => {   
     //setParameterProject({...parameterProject, id: id, mode: 'read-write'});
@@ -55,7 +56,6 @@ export default function Table({projects}) {
     }
 
     sessionStorage.setItem('parameterProject', JSON.stringify(dataParameter))
-
     navigate(`/project/new2/${id}/readonly`)
   }
 
@@ -81,6 +81,12 @@ export default function Table({projects}) {
       }
     });    
   } 
+
+  const handleOpenModalFiles = async (id) =>{
+    setId(id);
+    setIsOpenFiles(true);
+    console.log('ok')
+  }
 
   const handleRemoveTaks = (id, descripcion) => {   
     swal({
@@ -187,13 +193,13 @@ export default function Table({projects}) {
             onClick={() => handleEditProject(id)} 
             color="primary"
           />,
-          <GridActionsCellItem
-            title="Documentos"
-            icon={<FilePresentIcon />}
-            label="Eliminar"
-            onClick={() => alert(id)}
-            color="primary"
-          />,
+          // <GridActionsCellItem
+          //   title="Documentos"
+          //   icon={<FilePresentIcon />}
+          //   label="Eliminar"
+          //   onClick={() => handleOpenModalFiles(id)}
+          //   color="primary"
+          // />,
           <GridActionsCellItem
             title="Eliminar"
             icon={<DeleteIcon />}
@@ -229,6 +235,7 @@ export default function Table({projects}) {
       />
 
       <ModalTaks id={id} isOpen={isOpen} setIsOpen={setIsOpen} view = {"list"}  />
+      <ModalFiles id={id} isOpenFiles={isOpenFiles} setIsOpenFiles={setIsOpenFiles}  />
 
       {/* Listados de tareas, pasar a un compornte */}
       {/* <Modal

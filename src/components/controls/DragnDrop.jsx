@@ -29,7 +29,7 @@ export default function DragnDrop({getRootProps, getInputProps}) {
             sx={{ display: "inline" }}
             component="h2"
             variant="body1"
-            color="text.primary"
+            color="warning.main"
           >
             Arrastre y suelte los documentos aquí, o haga clic para seleccionar
             documentos

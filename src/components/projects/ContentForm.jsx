@@ -61,7 +61,7 @@ export default function ContentForm() {
     nombre: "",
     descripcion: "",
     fechaInicio: new Date(),
-    fechaFinal: new Date() + 1,
+    fechaFinal: new Date(),
     idTipoBeneficiario: "",
     datosBeneficiario: "",
     tipoMoneda: "DOP",
@@ -72,8 +72,70 @@ export default function ContentForm() {
     documentosProyectos: [],
     lugaresImplementaciones: [], 
     tareas: [],   
-    territoriosImpactados: []
+    territoriosImpactados: [],
+    iDocumentosProyectos:[]
   });
+
+  /*
+  {
+  "idProyecto": 0,
+  "codigo": "string",
+  "nombre": "string",
+  "descripcion": "string",
+  "fechaInicio": "2022-02-25T19:07:24.703Z",
+  "fechaFinal": "2022-02-25T19:07:24.703Z",
+  "idTipoBeneficiario": "string",
+  "datosBeneficiario": "string",
+  "idTipoPresupuesto": "string",
+  "rangoPresupuestado": 0,
+  "descripcionEspecie": "string",
+  "desafiosProyectos": [
+    {
+      "idDesafioProyecto": 0,
+      "idProyecto": 0,
+      "idDesafio": 0
+    }
+  ],
+  "documentosProyectos": [
+    {
+      "idDocumento": 0,
+      "idProyecto": 0,
+      "idTarea": 0,
+      "contenido": "string",
+      "fecha": "2022-02-25T19:07:24.703Z",
+      "nombreArchivo": "string",
+      "ext": "string",
+      "url": "string"
+    }
+  ],
+  "lugaresImplementaciones": [
+    {
+      "idImplementacion": 0,
+      "idProyecto": 0,
+      "idProvincia": 0
+    }
+  ],
+  "tareas": [
+    {
+      "idTarea": 0,
+      "descripcion": "string",
+      "idProyecto": 0,
+      "fechaInicio": "2022-02-25T19:07:24.703Z",
+      "fechaFinal": "2022-02-25T19:07:24.703Z",
+      "idEstado": 0
+    }
+  ],
+  "territoriosImpactados": [
+    {
+      "idImpacto": 0,
+      "idProyecto": 0,
+      "idMunicipio": 0,
+      "idBarrio": 0
+    }
+  ]
+}
+  
+  */
   
   const[disabled, setDisabled] = useState(true)
 
@@ -185,7 +247,7 @@ export default function ContentForm() {
           </Stepper>
 
           <React.Fragment>
-            <Box style={{ mb: 20, padding: 20, height: "65vh" }}>
+            <Box style={{ mb: 20, padding: 20, minHeight: "65vh" }} className="container" >
               {activeStep === 0 ? (
                 <ProjectForm disabled={disabled} />
               ) : activeStep === 1 ? (

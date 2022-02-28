@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 
 //mui
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 import Typography from "@mui/material/Typography";
 import { makeStyles } from '@mui/styles';
 import TextField from '@mui/material/TextField';
@@ -60,6 +61,7 @@ export default function TaksForm(props) {
   const handleClose = () =>{
     setIsModalOpen(false);
   }
+
   const handleOpen = () =>{
     setDescripcionTarea('');
     setInicioTarea(new Date());
@@ -69,7 +71,7 @@ export default function TaksForm(props) {
   
   const handleAddTaks = () => {
     let tareass = {
-      idTarea: (taksList.length + 1) * -1, 
+      idTarea: 0, 
       idProyecto: 0,
       descripcion: descripcionTarea,
       fechaInicio: inicioTarea,
@@ -81,6 +83,10 @@ export default function TaksForm(props) {
     setProjectData({...projectData, tareas: [...projectData.tareas, tareass]})
     
     handleClose();
+  }
+
+  const handleRemoveTask = (row) =>{
+    console.log(row)
   }
 
   return (
@@ -103,14 +109,22 @@ export default function TaksForm(props) {
           <></>
         )}
       </div>
-
-      <div style={{ height: "50vh", width: "100%" }}>
+      <Grid container spacing={1}>
+          <Grid item xs={12} md={12}>
+            {
+              taksList.map((row, idx) => (
+                <TableTask key={idx} row={row} handleRemoveTask={handleRemoveTask} />
+              ))
+            }
+          </Grid>
+      </Grid>
+      {/* <div style={{ height: "50vh", width: "100%" }}>
         <div style={{ display: "flex", height: "100%" }}>
           <div style={{ flexGrow: 1 }}>
-            <TableTask lista={taksList} />
+            <TableTask lista={taksList} handleRemoveTask={handleRemoveTask} />
           </div>
         </div>
-      </div>
+      </div> */}
 
       <Modal show={isModalOpen} onHide={handleClose} style={{ marginTop: 100 }}>
         <Modal.Header closeButton>
