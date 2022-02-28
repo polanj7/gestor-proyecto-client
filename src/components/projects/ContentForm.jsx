@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 //services
 import  { addProject, getProjectByID, updateProject }  from '../../services/projectsServices';
+import  { addFiles }  from '../../services/filesServices';
 
 //mui
 import Box from '@mui/material/Box';
@@ -73,7 +74,7 @@ export default function ContentForm() {
     lugaresImplementaciones: [], 
     tareas: [],   
     territoriosImpactados: [],
-    iDocumentosProyectos:[]
+    documentosFisicos:[]
   });
 
   /*
@@ -144,23 +145,36 @@ export default function ContentForm() {
     [projectData, setProjectData]
   ); 
 
+  const creataFiles = (codigo) =>{
+    for(let i = 0; i < projectData.documentosFisicos.length; i++){              
+      let formData = new FormData(); 
+      formData.append('File', projectData.documentosFisicos[i].file);
+      formData.append('CodigoProyecto', codigo); 
+      addFiles(formData);
+    }
+  }
+
   const handleFinish = async () => {
+
+    console.log('projectData', projectData)
+
     swal({
       title: `Registro de Proyetos`,
       text: "¿Deseas guardar los datos digitados?",
       icon: "info",
       buttons: true      
     }).then((willSave) => {
-      if (willSave) { 
-        
+      if (willSave) {         
         if(params.id > 0){
           //update
-          updateProject(params.id, projectData).then((x) => {           
+          updateProject(params.id, projectData).then((x) => {  
+            creataFiles(x.data.data.codigo);
             navigate("/project", { raplece: true });
           });
         }else{
           //insert
-          addProject(projectData).then((x) => {            
+          addProject(projectData).then((x) => {                 
+            creataFiles(x.data.data.codigo);
             navigate("/project", { raplece: true });
           });
         }

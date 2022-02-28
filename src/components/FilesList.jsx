@@ -46,7 +46,7 @@ export default function FilesList(props) {
           </Avatar>
         </ListItemAvatar>
         <ListItemText
-          primary={props.file.name}
+          primary={props.file.nombreArchivo}
           secondary={
             <>
               <Typography

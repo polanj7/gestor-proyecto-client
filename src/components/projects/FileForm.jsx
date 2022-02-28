@@ -1,7 +1,7 @@
 import React, {useState, useContext, useEffect, useCallback} from 'react';
 
 //services
-import { getFiles, postFiles } from '../../services/filesServices'
+import { getFiles, addFiles } from '../../services/filesServices'
 
 //mui
 import Grid from '@mui/material/Grid';
@@ -34,37 +34,47 @@ export default function FileForm() {
   const {projectData, setProjectData} = useContext(ProjectContext);
 
   const onDrop = useCallback(acceptedFiles => { 
-    let formData = new FormData();
-    let newDocumentsFile = [];
+  
+    let newFiles = [];
     let newFile = {};
+    let newDocumentosFisicos = [];
+    let newDocumentoFisico = {};
+    
+    for(let i=0; i < acceptedFiles.length; i++) { 
+   
+      newDocumentoFisico = {
+        "file": acceptedFiles[i]
+      }   
 
-    for(let i=0; i < acceptedFiles.length; i++) {      
+      newDocumentosFisicos.push(newDocumentoFisico)   
+
       newFile = {
         "idDocumento": 0,
         "idProyecto": projectData.idProyecto,
-        "idTarea": 0,
-        "contenido": "string",
-        "fecha": "2022-02-25T19:07:24.703Z",
-        "nombreArchivo": "string",
+        "idTarea": null,
+        "contenido": "",
+        "fecha": new Date(),
+        "nombreArchivo": acceptedFiles[i].name,
         "ext": "string",
         "url": "string",
-        "File": acceptedFiles[i],
-        // "Files123": new FormData(acceptedFiles[i]),
+        "size": acceptedFiles[i].size
       }
-      newDocumentsFile.push(newFile);
-      formData.append("iDocumentosProyectos", acceptedFiles[i]);
+      
+      projectData.newDocumentosFisicos = newDocumentosFisicos;
+      newFiles.push(newFile);
     }
     
-    // setProjectData(prev => prev = {...prev, iDocumentosProyectos: [...prev.iDocumentosProyectos, ...acceptedFiles]});
-    setProjectData(prev => prev = {...prev, documentosProyectos: [...prev.documentosProyectos, ...newDocumentsFile]}); 
+    // setProjectData(prev => prev = {...prev, documentosProyectos: [...prev.documentosProyectos, ...acceptedFiles]});
+    setProjectData(prev => prev = {...prev, documentosFisicos: [...prev.documentosFisicos, ...newDocumentosFisicos]}); 
+    setProjectData(prev => prev = {...prev, documentosProyectos: [...prev.documentosProyectos, ...newFiles]}); 
   }, []);
 
   const {getRootProps, getInputProps} = useDropzone({onDrop});
   
   const handleRemoveFile = (file) => {   
-    const indexFile = projectData.iDocumentosProyectos.indexOf(file);    
-    projectData.iDocumentosProyectos.splice(indexFile, 1); 
-    setProjectData(prev => prev = {...prev, iDocumentosProyectos: [...prev.iDocumentosProyectos]});  
+    const indexFile = projectData.documentosProyectos.indexOf(file);    
+    projectData.documentosProyectos.splice(indexFile, 1); 
+    setProjectData(prev => prev = {...prev, documentosProyectos: [...prev.documentosProyectos]});  
   }
 
   console.log(projectData)

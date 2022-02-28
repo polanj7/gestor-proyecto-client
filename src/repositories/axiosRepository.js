@@ -41,3 +41,16 @@ export const singin = async (endPoint, data) => {
 
     return resp.data;
 }
+
+
+export const uploadFile = async (data) => {
+    console.log("uploadFile", data);
+    const resp = await axios.post(`${baeeURL}/DocumentosProyectos`, data, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+        },
+    });  
+    
+    return resp;
+}

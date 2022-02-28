@@ -35,7 +35,7 @@ export default function Table({projects}) {
   const navigate = useNavigate(); 
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenFiles, setIsOpenFiles] = useState(false);
-  const [id, setId] = useState(0);
+  const [id, setId] = useState(0); 
 
   const handleEditProject = (id) => {   
     //setParameterProject({...parameterProject, id: id, mode: 'read-write'});
