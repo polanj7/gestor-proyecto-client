@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 
 //mui
 import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
 import Typography from "@mui/material/Typography";
 import { makeStyles } from '@mui/styles';
 import TextField from '@mui/material/TextField';
@@ -35,8 +34,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TaksForm(props) {
-
-  console.log("props.disabled", props.disabled)
   const classes = useStyles();
 
   //states
@@ -44,18 +41,8 @@ export default function TaksForm(props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const[taksList, setTaksList] = useState(projectData.tareas);
   const[descripcionTarea, setDescripcionTarea] = useState('');
-  const[inicioTarea, setInicioTarea] = useState('');
-  const[finTarea, setFinTarea] = useState('');
-  const[minDateFinal, setMinDateFinal] = useState(new Date());
-
-  const[dataTaks, setDataTaks] = useState({
-    idTarea: 0,
-    descripcion: '',
-    idProyecto: 0,
-    fechaInicio: new Date(),
-    fechaFinal: new Date(),
-    idEstado: 1
-  });     
+  const[inicioTarea, setInicioTarea] = useState(null);
+  const[finTarea, setFinTarea] = useState(null);    
 
   //hendles
   const handleClose = () =>{
@@ -79,14 +66,18 @@ export default function TaksForm(props) {
       idEstado: 1
     }
 
-    setTaksList(prev => [...prev, tareass])    
-    setProjectData({...projectData, tareas: [...projectData.tareas, tareass]})
+    setTaksList(prev => [...prev, tareass]);
+
+    setProjectData({...projectData, tareas: [...projectData.tareas, tareass]});
     
     handleClose();
   }
 
-  const handleRemoveTask = (row) =>{
-    console.log(row)
+  const handleRemoveTask = (task) =>{
+    console.log(projectData)
+    const indexTask = projectData.tareas.indexOf(task);  
+    projectData.tareas.splice(indexTask, 1);
+    setProjectData(prev => prev = {...prev, tareas: [...prev.tareas]});
   }
 
   return (
@@ -109,22 +100,14 @@ export default function TaksForm(props) {
           <></>
         )}
       </div>
-      <Grid container spacing={1}>
-          <Grid item xs={12} md={12}>
-            {
-              taksList.map((row, idx) => (
-                <TableTask key={idx} row={row} handleRemoveTask={handleRemoveTask} />
-              ))
-            }
-          </Grid>
-      </Grid>
-      {/* <div style={{ height: "50vh", width: "100%" }}>
+
+      <div style={{ height: "50vh", width: "100%" }}>
         <div style={{ display: "flex", height: "100%" }}>
           <div style={{ flexGrow: 1 }}>
             <TableTask lista={taksList} handleRemoveTask={handleRemoveTask} />
           </div>
         </div>
-      </div> */}
+      </div>
 
       <Modal show={isModalOpen} onHide={handleClose} style={{ marginTop: 100 }}>
         <Modal.Header closeButton>
@@ -158,13 +141,12 @@ export default function TaksForm(props) {
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <div className={classes.toolbar}>
                       <DatePicker
-                        minDate={new Date()}
                         openTo="day"
                         views={["year", "month", "day"]}
                         label="Year, month and date"
                         inputFormat="dd/MM/yyyy"
                         value={inicioTarea}
-                        onChange={({ target }) => setInicioTarea(target.value)}
+                        onChange={(newValue) => setInicioTarea(newValue)}
                         renderInput={(params) => (
                           <TextField
                             {...params}
@@ -176,13 +158,12 @@ export default function TaksForm(props) {
                       />
 
                       <DatePicker
-                        minDate={minDateFinal}
                         openTo="day"
                         views={["year", "month", "day"]}
                         label="Year, month and date"
                         inputFormat="dd/MM/yyyy"
                         value={finTarea}
-                        onChange={({ target }) => setFinTarea(target.value)}
+                        onChange={(newValue) => setFinTarea(newValue)}
                         renderInput={(params) => (
                           <TextField
                             {...params}

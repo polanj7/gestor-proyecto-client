@@ -90,7 +90,7 @@ export default function FormEdit({idTarea, idProyecto, setReloadData, expanded ,
                   multiline
                   rows={3}
                   value={data.descripcion}
-                  onChange={({ target }) =>
+                  onChange={({target}) =>
                     setData({ ...data, descripcion: target?.value })
                   }
                 />
@@ -105,8 +105,8 @@ export default function FormEdit({idTarea, idProyecto, setReloadData, expanded ,
                     label="Year, month and date"
                     inputFormat="dd/MM/yyyy"
                     value={data.fechaInicio}
-                    onChange={({ target }) =>
-                      setData({ ...data, fechaInicio: target?.value })
+                    onChange={(newValue) =>
+                      setData({ ...data, fechaInicio: newValue })
                     }
                     renderInput={(params) => (
                       <TextField
@@ -125,8 +125,8 @@ export default function FormEdit({idTarea, idProyecto, setReloadData, expanded ,
                     label="Year, month and date"
                     inputFormat="dd/MM/yyyy"
                     value={data.fechaFinal}
-                    onChange={({ target }) =>
-                      setData({ ...data, fechaFinal: target?.value })
+                    onChange={(newValue) =>
+                      setData({ ...data, fechaFinal: newValue })
                     }
                     renderInput={(params) => (
                       <TextField

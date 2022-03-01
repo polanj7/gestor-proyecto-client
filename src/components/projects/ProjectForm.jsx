@@ -46,20 +46,18 @@ export default function ProjectForm(props) {
  
   //territories
   const[municipality, setMunicipality] = useState([]); 
-  const[neighborhood, setNeighborhood] = useState([]);
   const[provinces, setProvinces] = useState([]); 
   const[beneficiarieType, setBeneficiarieType] = useState([]);
-
   const[countBeneficiare, setCountBeneficiare] = useState(0);
-  const[minDateFinal, setMinDateFinal] = useState(new Date());
+  const[provincesIDs, setProvincesIDs] = useState([]);
 
   const getProvinced = async () =>{
     const resp = await getProvince();   
     setProvinces(resp);   
   }
 
-  const getMunicipalityd = async () =>{
-    const resp = await getMunicipality(14);   
+  const getMunicipalityd = async (ids) =>{
+    const resp = await getMunicipality(ids);   
     setMunicipality(resp);   
   }
 
@@ -69,10 +67,13 @@ export default function ProjectForm(props) {
   }
 
   useEffect(() =>{
-      getProvinced();    
-      getMunicipalityd();
+      getProvinced();  
       getBeneficiaries();
   }, [])
+
+  useEffect(() =>{
+    getMunicipalityd(provincesIDs);
+  }, [provincesIDs])
 
 
   return (
@@ -129,8 +130,6 @@ export default function ProjectForm(props) {
                         ...projectData,
                         fechaInicio: newValue,
                       });
-
-                      setMinDateFinal(newValue);
                     }}
                     inputFormat="dd/MM/yyyy"
                     renderInput={(params) => (
@@ -144,8 +143,7 @@ export default function ProjectForm(props) {
                   />
 
                   <DatePicker
-                    {...props}
-                    minDate={minDateFinal}
+                    {...props}                   
                     openTo="day"
                     views={["year", "month", "day"]}
                     label="Year, month and date"
@@ -224,6 +222,8 @@ export default function ProjectForm(props) {
                 <SelectProvinces
                   provinces={provinces}
                   disabled={props.disabled}
+                  provincesIDs={provincesIDs}
+                  setProvincesIDs={setProvincesIDs}
                 />
               </div>
               <div className="form-group">

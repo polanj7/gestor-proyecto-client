@@ -1,4 +1,5 @@
 import React, {useContext} from 'react'
+import Moment from 'react-moment';
 //context
 import { ProjectContext } from '../../context/ProjectContext'
 
@@ -9,12 +10,15 @@ export default function ValidationForm() {
       <p>Resumen</p>
       <p>Nombre del Proyecto: {projectData.nombre}</p>
       <p>Descripcion del Proyecto: {projectData.descripcion}</p>    
+      <p>Tiempo: desde {<Moment format="DD/MM/YYYY">{projectData.fechaInicio}</Moment>} hasta {<Moment format="DD/MM/YYYY">{projectData.fechaFinal}</Moment>}</p>    
+
+      <p>Monto Presupuestado: $ {projectData.rangoPresupuestado}</p>
 
       <p>Listado de Tareas</p>
       <ul>
         {
-          projectData.tareas.map(({nombre}, idx) => {
-            return <li key={idx}>{nombre}</li>;
+          projectData.tareas.map(({idTarea, descripcion}, idx) => {
+            return <li key={idx}> {idTarea < 1 && "(NEW)"} {idx + 1} - {descripcion}</li>;
           })
         }
       </ul>
@@ -22,8 +26,8 @@ export default function ValidationForm() {
       <p>Listado de Documentos</p>
       <ul>
         {
-          projectData.documentosProyectos.map(({name}, idx) => {
-            return <li key={idx}>{name}</li>;
+          projectData.documentosProyectos.map(({idDocumento, nombreArchivo}, idx) => {
+            return <li key={idx}>{idDocumento < 1 && "(NEW)"} {nombreArchivo}</li>;
           })
         }
       </ul>

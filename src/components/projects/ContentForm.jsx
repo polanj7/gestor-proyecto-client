@@ -140,13 +140,14 @@ export default function ContentForm() {
   
   const[disabled, setDisabled] = useState(true)
 
+
   const providerProject = useMemo(
     () => ({ projectData, setProjectData }),
     [projectData, setProjectData]
   ); 
 
   const creataFiles = (codigo) =>{
-    for(let i = 0; i < projectData.documentosFisicos.length; i++){              
+    for(let i = 0; i < projectData.documentosFisicos?.length; i++){              
       let formData = new FormData(); 
       formData.append('File', projectData.documentosFisicos[i].file);
       formData.append('CodigoProyecto', codigo); 
@@ -156,7 +157,6 @@ export default function ContentForm() {
 
   const handleFinish = async () => {
 
-    console.log('projectData', projectData)
 
     swal({
       title: `Registro de Proyetos`,
@@ -199,7 +199,8 @@ export default function ContentForm() {
   const project = async() => {  
 
     if(id > 0)  {  
-      const data = await getProjectByID(id);      
+      const data = await getProjectByID(id);     
+      data.documentosFisicos = [];
       setProjectData(data);
     } 
   }
@@ -261,7 +262,7 @@ export default function ContentForm() {
           </Stepper>
 
           <React.Fragment>
-            <Box style={{ mb: 20, padding: 20, minHeight: "65vh" }} className="container" >
+            <Box style={{ mb: 20, padding: 20, minHeight: "65vh" }} >
               {activeStep === 0 ? (
                 <ProjectForm disabled={disabled} />
               ) : activeStep === 1 ? (

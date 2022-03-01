@@ -6,8 +6,18 @@ export const getBarrios= async (idMunicipio) => {
    return data;
 } 
 
-export const getMunicipality= async (idProvincia) => {
-    const data = await get(`Municipios?idProvincia=${idProvincia}`);
+export const getMunicipality= async (ids) => {
+
+   let newIds = []
+
+   for(let i = 0; i < ids.length; i++){
+      newIds.push(`ids=${ids[i]}`)
+   }
+
+   let url = `Territorios?${newIds.join('&')}`
+   const data = await get(url);
+
+    console.log('terri', data)
     return data;
 } 
 

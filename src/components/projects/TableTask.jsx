@@ -15,6 +15,7 @@ import IconButton from '@mui/material/IconButton';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 
+import Paper from '@mui/material/Paper';
 
 
 function NoRowsOverlay() {
@@ -26,65 +27,81 @@ function NoRowsOverlay() {
   );
 }
 
-export default function TableTask({ row, handleRemoveTask }) {
+export default function TableTask({ lista, handleRemoveTask }) {
 
-  // const columns = [
-  //   {
-  //     field: "idTarea",
-  //     headerName: "ID",
-  //     width: 25,
-  //     renderCell: (params) => (
-  //       <>
-  //         {params.value < 1 ? (
-  //           <Chip label="N" color="secondary" />
-  //         ) : (
-  //           <>{params.value}</>
-  //         )}
-  //       </>
-  //     ),
-  //   },
-  //   { field: "descripcion", headerName: "Descripción", width: 500 },
-  //   {
-  //     field: "fechaInicio",
-  //     headerName: "Inicio",
-  //     width: 100,
-  //     type: "date",
-  //     renderCell: (params) => (
-  //       <Moment format="DD/MM/YYYY">{params.value}</Moment>
-  //     ),
-  //   },
-  //   {
-  //     field: "fechaFinal",
-  //     headerName: "Final",
-  //     width: 100,
-  //     type: "date",
-  //     renderCell: (params) => (
-  //       <Moment format="DD/MM/YYYY">{params.value}</Moment>
-  //     ),
-  //   },
-  //   {
-  //     field: "actions",
-  //     type: "actions",
-  //     headerName: "Acciones",
-  //     width: 100,
-  //     cellClassName: "actions",
-  //     getActions: (row) => {
-  //       return [
-  //         <GridActionsCellItem
-  //           title="Eliminar"
-  //           icon={<DeleteIcon />}
-  //           label="Eliminar"
-  //           onClick={() => handleRemoveTask(row)}
-  //           color="error"
-  //         />,
-  //       ];
-  //     },
-  //   },
-  // ];
+  const columns = [
+    {
+      field: "idTarea",
+      headerName: "ID",
+      width: 25,
+      renderCell: (params) => (
+        <>
+          {params.value < 1 ? (
+            <Chip label="N" color="secondary" />
+          ) : (
+            <>{params.value}</>
+          )}
+        </>
+      ),
+    },
+    { field: "descripcion", headerName: "Descripción", width: 500 },
+    {
+      field: "fechaInicio",
+      headerName: "Inicio",
+      width: 100,
+      type: "date",
+      renderCell: (params) => (
+        <Moment format="DD/MM/YYYY">{params.value}</Moment>
+      ),
+    },
+    {
+      field: "fechaFinal",
+      headerName: "Final",
+      width: 100,
+      type: "date",
+      renderCell: (params) => (
+        <Moment format="DD/MM/YYYY">{params.value}</Moment>
+      ),
+    },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Acciones",
+      width: 100,
+      cellClassName: "actions",
+      getActions: (row) => {
+        return [
+          <GridActionsCellItem
+            title="Eliminar"
+            icon={<DeleteIcon />}
+            label="Eliminar"
+            onClick={() => handleRemoveTask(row.row)}
+            color="error"
+          />,
+        ];
+      },
+    },
+  ];
 
   return (
     <>
-      <ListItem
+      <DataGrid
+        getRowId={(row) => row.idTarea}
+        component={Paper}
+        rows={lista}
+        columns={columns}
+        pageSize={10}
+        sx={{
+          boxShadow: 3,
+          border: 1,
+          borderColor: "primary.light",
+          "& .MuiDataGrid-cell:hover": {
+            color: "secundary.light",
+          },
+        }}
+      />
+
+      {/* <ListItem
         secondaryAction={
           <>
             <IconButton
@@ -117,7 +134,7 @@ export default function TableTask({ row, handleRemoveTask }) {
           }         
         />
       </ListItem>
-      <Divider variant="inset" component="li" />
+      <Divider variant="inset" component="li" /> */}
     </>
   );
 }

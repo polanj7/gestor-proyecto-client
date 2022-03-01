@@ -63,7 +63,7 @@ export default function FileForm() {
       projectData.newDocumentosFisicos = newDocumentosFisicos;
       newFiles.push(newFile);
     }
-    
+        
     // setProjectData(prev => prev = {...prev, documentosProyectos: [...prev.documentosProyectos, ...acceptedFiles]});
     setProjectData(prev => prev = {...prev, documentosFisicos: [...prev.documentosFisicos, ...newDocumentosFisicos]}); 
     setProjectData(prev => prev = {...prev, documentosProyectos: [...prev.documentosProyectos, ...newFiles]}); 
@@ -76,8 +76,6 @@ export default function FileForm() {
     projectData.documentosProyectos.splice(indexFile, 1); 
     setProjectData(prev => prev = {...prev, documentosProyectos: [...prev.documentosProyectos]});  
   }
-
-  console.log(projectData)
 
   return (
     <div className="container">

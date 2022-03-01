@@ -9,6 +9,7 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import InputLabel from '@mui/material/InputLabel';
 import ListItemText from '@mui/material/ListItemText';
+import ListSubheader from '@mui/material/ListSubheader';
 
 //context
 import { ProjectContext } from '../../context/ProjectContext'
@@ -25,11 +26,15 @@ const MenuProps = {
 };
 
 export default function SelectMunicipality({municipality, disabled}) { 
+  console.log('municipality', municipality)
 
   const {projectData, setProjectData} = useContext(ProjectContext);
   const [personName, setPersonName] = React.useState([]);
 
   const handleChange = (event) => {
+
+    console.log('event111', event)
+
     const {
       target: { value },
     } = event;
@@ -48,26 +53,56 @@ export default function SelectMunicipality({municipality, disabled}) {
     
   return (
     <>
-      <FormControl  variant="standard" style={{ width: "100%", marginBottom: "20px" }}>
-        <InputLabel id="selectImplementacion">Territorios Impactados</InputLabel>
+      <FormControl
+        variant="standard"
+        style={{ width: "100%", marginBottom: "20px" }}
+      >
+        <InputLabel id="selectImplementacion">
+          Territorios Impactados
+        </InputLabel>
         <Select
+        
           disabled={disabled}
-          required      
-          label ="Lugar Implementación"          
+          required
+          label="Lugar Implementación"
           multiple
           value={personName}
-          onChange={handleChange}
+          onSelect={handleChange}
           renderValue={(selected) => selected.join(", ")}
           MenuProps={MenuProps}
         >
-          {municipality.map(({ idMunicipio, nombre }) => (
-            <MenuItem key={idMunicipio} value={nombre}>
-              <Checkbox checked={personName.indexOf(nombre) > -1} />
-              <ListItemText primary={nombre} />
-            </MenuItem>
-          ))}
+          
+
+          {municipality.map((z) => {
+            return (
+              <div key={z.nombre}>                
+                {                  
+                  z.municipios.map((x) => {
+                    return (
+                      <div key={x.nombre}>
+                        <ListSubheader key={x.nombre}>Municipio - {x.nombre}, {z.nombre}</ListSubheader>
+                        {
+                          x.barrios.map((y, idx) =>{
+                            return (
+                              <MenuItem key={idx} value={`${y.nombre}`} >
+                                <Checkbox
+                                  checked={personName.indexOf(y.nombre) > -1}
+                                />
+                                <ListItemText primary={y.nombre} secundary={z.nombre} />
+                              </MenuItem>
+                            );
+                          })
+                        }                      
+                      </div>
+                    )
+                  })
+                }
+              </div>
+            )
+          }
+          )} 
         </Select>
-      </FormControl>      
+      </FormControl>
     </>
   );
 }

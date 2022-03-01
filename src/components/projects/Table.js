@@ -82,45 +82,21 @@ export default function Table({projects}) {
     });    
   } 
 
-  const handleOpenModalFiles = async (id) =>{
-    setId(id);
-    setIsOpenFiles(true);
-    console.log('ok')
-  }
-
-  const handleRemoveTaks = (id, descripcion) => {   
-    swal({
-      title: `Deseas eliminar la tarea ${descripcion}?`,
-      text: "Despues de elminar el registro, el mismo no podrá ser recuperado!",
-      icon: "warning",
-      buttons: true,     
-    }).then((willDelete) => {
-      if (willDelete) {        
-        deleteTaks(id).then((resp) => {
-          //mensaje de confirmación
-          swal(`La tarea ${descripcion} fue eliminada!`, {
-            icon: "success",
-          });          
-        });    
-      }
-    });    
-  } 
-
   const columns = [
     { field: "idProyecto", headerName: "ID", width: 1, headerClassName: "super-app-theme--header"},
     { field: "codigo", headerName: "Codigo", width: 200 },
-    { field: "nombre", headerName: "Nombre", width: 350 },
+    { field: "nombre", headerName: "Nombre", width: 500 },
     {
       field: "fechaInicio",
       headerName: "Inicio",
-      width: 100,
+      width: 130,
       type: "date",
       renderCell: (params) => <Moment format="DD/MM/YYYY">{params.value}</Moment>,
     },
     {
       field: "fechaFinal",
       headerName: "Final",
-      width: 100,
+      width: 130,
       type: "date",
       renderCell: (params) => <Moment format="DD/MM/YYYY">{params.value}</Moment>,
     },
