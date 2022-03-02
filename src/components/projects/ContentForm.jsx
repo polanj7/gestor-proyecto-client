@@ -43,7 +43,7 @@ const steps = [
   "Propuesta Economica",
   "Propuesta operativa",
   "Gestion Interna",
-  "Confirmación",
+  "Resumen",
 ];
 
 const countSteps = steps.length - 1;

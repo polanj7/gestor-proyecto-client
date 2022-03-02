@@ -1,4 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+//Services
+import { getResponsables } from '../../services/usersServices'
 
 //mui
 import Button from '@mui/material/Button';
@@ -19,6 +21,7 @@ import { ProjectContext } from '../../context/ProjectContext';
 
 //componets
 import TableTask from './TableTask';
+import SelectResponsable from '../controls/SelectResponsable';
 
 //modal
 import  Modal  from 'react-bootstrap/Modal';
@@ -37,12 +40,14 @@ export default function TaksForm(props) {
   const classes = useStyles();
 
   //states
-  const {projectData, setProjectData} = useContext(ProjectContext); 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const{projectData, setProjectData} = useContext(ProjectContext); 
+  const[isModalOpen, setIsModalOpen] = useState(false);
   const[taksList, setTaksList] = useState(projectData.tareas);
   const[descripcionTarea, setDescripcionTarea] = useState('');
   const[inicioTarea, setInicioTarea] = useState(null);
   const[finTarea, setFinTarea] = useState(null);    
+  const[responsables, setResponsables] = useState([]);
+  const[selectedResponsable, setSelectedResponsable] = useState([]);
 
   //hendles
   const handleClose = () =>{
@@ -59,15 +64,15 @@ export default function TaksForm(props) {
   const handleAddTaks = () => {
     let tareass = {
       idTarea: 0, 
-      idProyecto: 0,
+      idProyecto: null,
       descripcion: descripcionTarea,
       fechaInicio: inicioTarea,
       fechaFinal: finTarea,
+      idResponsable: selectedResponsable,   
       idEstado: 1
     }
 
     setTaksList(prev => [...prev, tareass]);
-
     setProjectData({...projectData, tareas: [...projectData.tareas, tareass]});
     
     handleClose();
@@ -80,12 +85,21 @@ export default function TaksForm(props) {
     setProjectData(prev => prev = {...prev, tareas: [...prev.tareas]});
   }
 
+  const getResponsablesd = async () =>{
+    const resp = await getResponsables();
+    setResponsables(resp);
+  }
+
+
+  useEffect(() =>{
+    getResponsablesd();
+  }, [])
+
   return (
     <>
       <div className={classes.toolbar}>
         <Typography variant="h5" component="h2" color="primary">
-          Tareas / Metas
-          <h1>{props.disabled}</h1>
+          Tareas / Metas       
         </Typography>
         {!props.disabled ? (
           <Button
@@ -181,13 +195,14 @@ export default function TaksForm(props) {
                   </LocalizationProvider>
 
                   <div className="form-group">
-                    <TextField
-                      required
-                      label="Responsable"
-                      variant="standard"
-                      placeholder="-Select-"
-                      sx={{ width: "100%", marginBottom: "16px" }}
+                    
+                  <SelectResponsable
+                      responsables={responsables}                   
+                      responsable={selectedResponsable}
+                      setResponsable={setSelectedResponsable}
+                      disabled={props.disabled}
                     />
+                    
                   </div>
                 </div>
               </div>

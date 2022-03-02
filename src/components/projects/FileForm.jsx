@@ -20,7 +20,7 @@ import Dropzone, {useDropzone} from 'react-dropzone'
 import { ProjectContext } from '../../context/ProjectContext';
 
 
-export default function FileForm() {
+export default function FileForm(props) {
   /*  
       "idDocumento": 0,
       "idProyecto": 0,
@@ -79,7 +79,12 @@ export default function FileForm() {
 
   return (
     <div className="container">
-      <DragnDrop getRootProps={getRootProps} getInputProps={getInputProps} />
+      
+      {
+        !props.disabled ? <DragnDrop getRootProps={getRootProps} getInputProps={getInputProps} /> : <></>
+      }
+      
+
       <Box
         sx={{ flexGrow: 1 }}
         style={{

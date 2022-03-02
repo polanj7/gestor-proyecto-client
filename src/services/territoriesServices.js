@@ -11,13 +11,11 @@ export const getMunicipality= async (ids) => {
    let newIds = []
 
    for(let i = 0; i < ids.length; i++){
-      newIds.push(`ids=${ids[i]}`)
+      newIds.push(`nombres=${ids[i]}`)
    }
 
    let url = `Territorios?${newIds.join('&')}`
-   const data = await get(url);
-
-    console.log('terri', data)
+   const data = await get(url);  
     return data;
 } 
 

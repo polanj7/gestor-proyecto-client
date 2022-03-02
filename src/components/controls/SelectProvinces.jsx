@@ -31,19 +31,20 @@ export default function SelectProvinces({provinces, disabled, provincesIDs, setP
       target: { value },
     } = event;
 
- 
-    console.log('event', event.target)
-  
-
     setPersonName(typeof value === 'string' ? value.split(',') : value);
 
     setProvincesIDs(prev => value);
-    setProjectData({...projectData, lugaresImplementaciones: value})
+    setProjectData({...projectData, lugaresImplementacionesss: value})
+
+    
+
+    var newArray = {...value}
+
+    console.log(newArray)
+
     //setProjectData({...projectData, tareas: [...projectData.tareas, tareass]})
   };
 
-
-  console.log('provincesIDs', provincesIDs)
 
   return (
     <>
@@ -62,7 +63,7 @@ export default function SelectProvinces({provinces, disabled, provincesIDs, setP
           {provinces.map(({ idProvincia ,nombre }) => (
             <MenuItem 
               key={nombre} 
-              value={idProvincia}           
+              value={nombre}           
             >
               <Checkbox checked={personName.indexOf(nombre) > -1} />
               <ListItemText 

@@ -1,5 +1,6 @@
 import React, {useContext} from 'react'
 import Moment from 'react-moment';
+import Chip from '@mui/material/Chip';
 //context
 import { ProjectContext } from '../../context/ProjectContext'
 
@@ -18,7 +19,7 @@ export default function ValidationForm() {
       <ul>
         {
           projectData.tareas.map(({idTarea, descripcion}, idx) => {
-            return <li key={idx}> {idTarea < 1 && "(NEW)"} {idx + 1} - {descripcion}</li>;
+            return <li key={idx}> {idTarea < 1 && <Chip label="nuevo" color="primary" />} {descripcion}</li>;
           })
         }
       </ul>
@@ -27,7 +28,7 @@ export default function ValidationForm() {
       <ul>
         {
           projectData.documentosProyectos.map(({idDocumento, nombreArchivo}, idx) => {
-            return <li key={idx}>{idDocumento < 1 && "(NEW)"} {nombreArchivo}</li>;
+            return <li key={idx}>{idDocumento < 1 && <Chip label="nuevo" color="primary" />} {nombreArchivo}</li>;
           })
         }
       </ul>

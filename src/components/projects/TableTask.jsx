@@ -29,6 +29,8 @@ function NoRowsOverlay() {
 
 export default function TableTask({ lista, handleRemoveTask }) {
 
+  console.log(lista);
+
   const columns = [
     {
       field: "idTarea",
@@ -45,6 +47,7 @@ export default function TableTask({ lista, handleRemoveTask }) {
       ),
     },
     { field: "descripcion", headerName: "Descripción", width: 500 },
+    // { field: "responsable.nombre", headerName: "Responsable", width: 350 },
     {
       field: "fechaInicio",
       headerName: "Inicio",

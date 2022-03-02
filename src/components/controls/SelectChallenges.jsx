@@ -38,7 +38,7 @@ export default function SelectChallenges({challenges, disabled}) {
       id: 123,
     };
 
-    setProjectData({ ...projectData, lugaresImplementaciones: data });
+    setProjectData({ ...projectData, lugaresImplementacioneSDs: data });
     //setProjectData({...projectData, tareas: [...projectData.tareas, tareass]})
   };
 

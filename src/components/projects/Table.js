@@ -85,7 +85,7 @@ export default function Table({projects}) {
   const columns = [
     { field: "idProyecto", headerName: "ID", width: 1, headerClassName: "super-app-theme--header"},
     { field: "codigo", headerName: "Codigo", width: 200 },
-    { field: "nombre", headerName: "Nombre", width: 500 },
+    { field: "nombre", headerName: "Nombre", width: 450 },
     {
       field: "fechaInicio",
       headerName: "Inicio",
@@ -168,14 +168,7 @@ export default function Table({projects}) {
             label="Fase de Diseño"
             onClick={() => handleEditProject(id)} 
             color="primary"
-          />,
-          // <GridActionsCellItem
-          //   title="Documentos"
-          //   icon={<FilePresentIcon />}
-          //   label="Eliminar"
-          //   onClick={() => handleOpenModalFiles(id)}
-          //   color="primary"
-          // />,
+          />,     
           <GridActionsCellItem
             title="Eliminar"
             icon={<DeleteIcon />}

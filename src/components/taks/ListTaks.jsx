@@ -11,6 +11,7 @@ import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
 import { makeStyles } from '@mui/styles';
 import Button from '@mui/material/Button';
+// import LoadingButton from '@mui/lab/LoadingButton';
 
 //icons
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -62,11 +63,7 @@ export default function ListTaks({idProyecto, setIsOpen1}) {
       buttons: true,     
     }).then((willDelete) => {
       if (willDelete) {        
-        deleteTaks(id).then((resp) => {
-          //mensaje de confirmación
-          // swal(`La tarea ${descripcion} fue eliminada!`, {
-          //   icon: "success",
-          // });          
+        deleteTaks(id).then((resp) => {         
           setReloadData(prev => !prev)
         });    
       }
@@ -74,6 +71,7 @@ export default function ListTaks({idProyecto, setIsOpen1}) {
   }
 
   const handleExpanded = async () =>{
+    setIdTarea(0);
     setExpanded(prev => !prev);
   }
 
@@ -93,7 +91,7 @@ export default function ListTaks({idProyecto, setIsOpen1}) {
               Cantidad de Tareas: {countTaks}
             </Typography>
             <Button
-              onClick={() => setExpanded(true)}
+              onClick={() => handleExpanded(true)}
               variant="contained"
               color="primary"
               startIcon={<AddIcon />}
@@ -104,6 +102,7 @@ export default function ListTaks({idProyecto, setIsOpen1}) {
 
           <List sx={{ width: "100%", bgcolor: "background.paper" }}>
             {taksLista.map((x, idx) => {
+              console.log(x)
               return (
                 <>
                   <ListItem key={idx} sx={{ width: "100%" }}>
@@ -139,7 +138,7 @@ export default function ListTaks({idProyecto, setIsOpen1}) {
                       secondary={
                         <>
                           <Typography variant="subtitle2" component="h2">
-                            Responsable: José Ortiz
+                            Responsable: {`${x.responsable.nombre} ${x.responsable.apellido}`}
                           </Typography>
 
                           <Typography variant="subtitle2" component="h2">
@@ -153,7 +152,7 @@ export default function ListTaks({idProyecto, setIsOpen1}) {
                             Estado:{" "}
                             <Chip
                               icon={<CheckBoxIcon />}
-                              label="Activo"
+                              label={x.estado.nombre}
                               color="success"
                               variant="outlined"
                             />

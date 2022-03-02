@@ -25,8 +25,9 @@ export const post = async (endPoint, data) => {
 }
 
 export const put = async (endPoint, data) => {
-    console.log('data', data);
     const resp = await authAxios.put(`${baeeURL}/${endPoint}`, data);
+    console.log('data', resp);
+
     return resp;
 }
 

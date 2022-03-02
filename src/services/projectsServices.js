@@ -1,7 +1,7 @@
 import { get, post, put, remove } from '../repositories/axiosRepository';
 
 export const getProjectByID = async (id) => {
-    const resp = await get(`Proyectos/${id}`);    
+    const resp = await get(`Proyectos/${id}`);   
     return resp;
 }
 
