@@ -21,6 +21,7 @@ import { makeStyles } from '@mui/styles';
 
 //context
 import { ProjectContext } from '../../context/ProjectContext';
+import TerritoriosImpactadosBarrios from '../controls/TerritoriosImpactadosBarrios';
 
 
 const challengesImpacted = [
@@ -232,6 +233,13 @@ export default function ProjectForm(props) {
                   disabled={props.disabled}
                 />
               </div>
+
+              {/* <div className="form-group">
+                <TerritoriosImpactadosBarrios
+                  municipality={municipality}
+                  disabled={props.disabled}
+                />
+              </div> */}
 
               <div className="form-group">
                 <SelectChallenges

@@ -34,7 +34,10 @@ export default function Index() {
     navigate(to);
   }
 
-  const { data: projects, isLoading } = useQuery(["projects"], getProjects);
+  const { data: projects, isLoading } = useQuery(["projects"], getProjects, {
+    refetchInterval: 2000,
+    cacheTime: 60000
+  });
 
   if(isLoading){
 
