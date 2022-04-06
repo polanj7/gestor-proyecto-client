@@ -106,9 +106,9 @@ export default function Table({projects}) {
       align: "center",
       width: 200,
       renderCell: (params) => (
-       
         <strong>          
           <Button
+            disabled={params.row.isDelete}
             variant="outlined"
             color="primary"
             size="small"
@@ -119,6 +119,7 @@ export default function Table({projects}) {
             {params.value}
           </Button>          
         </strong>
+        
       ),
     },
     {
@@ -156,6 +157,7 @@ export default function Table({projects}) {
             color="primary"
           />,
           <GridActionsCellItem
+          disabled={row.isDelete}
             title="Editar"
             icon={<EditIcon />}
             label="Editar"
@@ -170,6 +172,7 @@ export default function Table({projects}) {
             color="primary"
           />,     
           <GridActionsCellItem
+            disabled={row.isDelete}
             title="Eliminar"
             icon={<DeleteIcon />}
             label="Eliminar"

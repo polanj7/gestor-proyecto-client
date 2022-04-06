@@ -40,7 +40,7 @@ import ValidationForm from './ValidationForm';
 
 const steps = [
   "Datos Generales",
-  "Propuesta Economica",
+  "Propuesta Economica / Donante",
   "Propuesta operativa",
   "Gestion Interna",
   "Resumen",
@@ -56,26 +56,244 @@ export default function ContentForm() {
   const params = useParams();
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = React.useState(0);
-  const[projectData, setProjectData] = useState({
-    idProyecto: 0,
-    codigo: "",
-    nombre: "",
-    descripcion: "",
-    fechaInicio: new Date(),
-    fechaFinal: new Date(),
-    idTipoBeneficiario: "",
-    datosBeneficiario: "",
-    tipoMoneda: "DOP",
-    idTipoPresupuesto: "D",
-    rangoPresupuestado: 0,
-    descripcionEspecie: "",
-    desafiosProyectos: [],    
-    documentosProyectos: [],
-    lugaresImplementaciones: [], 
-    tareas: [],   
-    territoriosImpactados: [],
-    documentosFisicos:[]
+
+  const[projectData, setProjectData] = useState({    
+      idProyecto: 0,
+      codigo: null,
+      nombre: null,
+      descripcion: null,
+      objetivoGeneral: null,
+      objetivoEspecifico: null,
+      resultados: null,
+      fechaInicio: new Date(),
+      fechaFinal: new Date(),
+      idRangoBeneficiario: 0,
+      cantidadBeneficiarios: 0,
+      anos: 0,
+      meses: 0,
+      dias: 0,
+      idRangoPresupuestario: 0,
+      montoPresupuestarioDOP: 0,
+      montoPresupuestarioUSD: 0,
+      tipoMoneda: null,
+      idGerente: 0,
+      isDelete: false,
+      fechaCreacion: new Date(),
+      aliado: {
+        // idAliado: 0,
+        // nombre: string,
+        // identificacion: string,
+        // idClasificacion: 0,
+        // direccion: string,
+        // informacion: string
+      },
+      donante: {
+        // idDonante: 0,
+        // idProyecto: 0,
+        // nombre: string,
+        // identificacion: string,
+        // idClasificacion: 0,
+        // idDonacionClasificacion: 0,
+        // monto1: 0,
+        // monto2: 0,
+        // donacion: 0,
+        // direccion: string,
+        // informacion: string
+      },
+      desafiosProyectos: [
+        // {
+        //   idDesafioProyecto: 0,
+        //   idProyecto: 0,
+        //   idDesafio: 0
+        // }
+      ],
+      documentosProyectos: [
+        // {
+        //   idDocumento: 0,
+        //   idProyecto: 0,
+        //   idTarea: 0,
+        //   contenido: string,
+        //   fecha: new Date(),
+        //   nombreArchivo: string,
+        //   ext: string,
+        //   url: string,
+        //   size: 0,
+        //   file: string
+        // }
+      ],
+      lugaresImplementaciones: [
+        // {
+        //   idImplementacion: 0,
+        //   idProyecto: 0,
+        //   idProvincia: 0
+        // }
+      ],
+      actividades: [
+        // {
+        //   idActividad: 0,
+        //   descripcion: string,
+        //   idProyecto: 0,
+        //   orden: 0,
+        //   tareas: [
+        //     {
+        //       idTarea: 0,
+        //       descripcion: string,
+        //       idActividad: 0,
+        //       idResponsable: 0,
+        //       fechaInicio: new Date(),
+        //       fechaFinal: new Date(),
+        //       idEstado: 0,
+        //       fechaCreacion: new Date()
+        //     }
+        //   ]
+        // }
+      ],
+      tiposBeneficiarioProyectos: [
+        // {
+        //   idTipoBeneficiarioProyecto: 0,
+        //   idTipo: 0,
+        //   idProyecto: 0
+        // }
+      ]
+      
   });
+
+  /*
+
+  {
+  idProyecto: 0,
+  codigo: "string",
+  nombre: "string",
+  descripcion: string,
+  objetivoGeneral: string,
+  objetivoEspecifico: string,
+  resultados: string,
+  fechaInicio: 2022-04-06T03:57:34.602Z,
+  fechaFinal: 2022-04-06T03:57:34.602Z,
+  idRangoBeneficiario: 0,
+  cantidadBeneficiarios: 0,
+  anos: 0,
+  meses: 0,
+  dias: 0,
+  idRangoPresupuestario: 0,
+  montoPresupuestarioDOP: 0,
+  montoPresupuestarioUSD: 0,
+  tipoMoneda: string,
+  idGerente: 0,
+  isDelete: true,
+  fechaCreacion: 2022-04-06T03:57:34.602Z,
+  aliado: {
+    idAliado: 0,
+    nombre: string,
+    identificacion: string,
+    idClasificacion: 0,
+    direccion: string,
+    informacion: string
+  },
+  donante: {
+    idDonante: 0,
+    idProyecto: 0,
+    nombre: string,
+    identificacion: string,
+    idClasificacion: 0,
+    idDonacionClasificacion: 0,
+    monto1: 0,
+    monto2: 0,
+    donacion: 0,
+    direccion: string,
+    informacion: string
+  },
+  desafiosProyectos: [
+    {
+      idDesafioProyecto: 0,
+      idProyecto: 0,
+      idDesafio: 0
+    }
+  ],
+  documentosProyectos: [
+    {
+      idDocumento: 0,
+      idProyecto: 0,
+      idTarea: 0,
+      contenido: string,
+      fecha: 2022-04-06T03:57:34.602Z,
+      nombreArchivo: string,
+      ext: string,
+      url: string,
+      size: 0,
+      file: string
+    }
+  ],
+  lugaresImplementaciones: [
+    {
+      idImplementacion: 0,
+      idProyecto: 0,
+      idProvincia: 0
+    }
+  ],
+  actividades: [
+    {
+      idActividad: 0,
+      descripcion: string,
+      idProyecto: 0,
+      orden: 0,
+      tareas: [
+        {
+          idTarea: 0,
+          descripcion: string,
+          idActividad: 0,
+          idResponsable: 0,
+          fechaInicio: 2022-04-06T03:57:34.602Z,
+          fechaFinal: 2022-04-06T03:57:34.602Z,
+          idEstado: 0,
+          fechaCreacion: 2022-04-06T03:57:34.602Z
+        }
+      ]
+    }
+  ],
+  tiposBeneficiarioProyectos: [
+    {
+      idTipoBeneficiarioProyecto: 0,
+      idTipo: 0,
+      idProyecto: 0
+    }
+  ]
+}
+  
+  */
+
+  /*
+  
+  {
+  "idProyecto": 0,
+  "codigo": "",
+  "nombre": "",
+  "descripcion": "",
+  "objetivoGeneral": "",
+  "objetivoEspecifico": "",
+  "resultados": "",
+  "fechaInicio": "2022-03-23T03:48:29.894Z",
+  "fechaFinal": "2022-03-23T03:48:29.894Z",
+  "idRangoBeneficiario": 1, //Select
+  "cantidadBeneficiarios": 0,
+  "idDonante": 1,
+  "idAliado": 1, //Select
+  "anos": 0,
+  "meses": 0,
+  "dias": 0,
+  "idRangoPresupuestario": 0,
+  "montoPresupuestario": 0,
+  "tipoMoneda": "string",
+  "idGerente": 0,
+  "isDelete": true,
+  "fechaCreacion": "2022-03-23T03:48:29.894Z",
+  "desafiosProyectos": [],
+  "documentosProyectos": [],
+  "lugaresImplementaciones": [],
+  "actividades": [],
+  "tiposBeneficiarioProyectos": []
+}
+  */
 
   /*
   {
@@ -146,7 +364,7 @@ export default function ContentForm() {
     [projectData, setProjectData]
   ); 
 
-  const creataFiles = (codigo) =>{
+  const createFiles = (codigo) =>{
     for(let i = 0; i < projectData.documentosFisicos?.length; i++){              
       let formData = new FormData(); 
       formData.append('File', projectData.documentosFisicos[i].file);
@@ -156,8 +374,6 @@ export default function ContentForm() {
   }
 
   const handleFinish = async () => {
-
-
     swal({
       title: `Registro de Proyetos`,
       text: "¿Deseas guardar los datos digitados?",
@@ -168,17 +384,16 @@ export default function ContentForm() {
         if(params.id > 0){
           //update
           updateProject(params.id, projectData).then((x) => {  
-            creataFiles(x.data.data.codigo);
+            createFiles(x.data.data.codigo);
             navigate("/project", { raplece: true });
           });
         }else{
           //insert
           addProject(projectData).then((x) => {                 
-            creataFiles(x.data.data.codigo);
+            createFiles(x.data.data.codigo);
             navigate("/project", { raplece: true });
           });
-        }
-        
+        }        
       }
     });
   }  
@@ -262,7 +477,7 @@ export default function ContentForm() {
           </Stepper>
 
           <React.Fragment>
-            <Box style={{ mb: 20, padding: 20, minHeight: "65vh" }} >
+            <Box style={{ mb: 20, padding: 20, minHeight: "65vh" }} className="container" >
               {activeStep === 0 ? (
                 <ProjectForm disabled={disabled} />
               ) : activeStep === 1 ? (

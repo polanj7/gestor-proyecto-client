@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Table from './Table';
 import { useNavigate } from 'react-router-dom';
 
@@ -34,14 +34,26 @@ export default function Index() {
     navigate(to);
   }
 
-  const { data: projects, isLoading } = useQuery(["projects"], getProjects, {
-    retry: 10,
-    retryDelay: 1000,
-    refetchInterval: 2000
-  });
+  // const { data: projects, isLoading } = useQuery(["projects"], getProjects, {
+  //   retry: 10,   
+  // });
+
+  const [projects, setProjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const testget = async () =>{
+    let resp = await getProjects();
+    console.log('resp...123', resp)
+    setProjects(resp);
+  }
+
+  useEffect(() =>{
+    testget();
+  }, [])
+
+  console.log('projects', projects)
 
   if(isLoading){
-
     return (
       <Box
         sx={{

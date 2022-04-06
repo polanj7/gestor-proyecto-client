@@ -7,24 +7,24 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 
 
-export default function SelectBeneficiaries({beneficiaries, disabled}) {
+export default function SelectBeneficiaries({beneficiaries, disabled, handleChangeBeneficiaries}) {
     
   return (
     <>
-      <FormControl variant="standard" sx={{ width: "49%" }}>
-        <InputLabel id="demo-simple-select-standard-label">
+      <FormControl /*variant="standard"*/ sx={{ width: "49%" }}>
+        <InputLabel>
           Tipo de Beneficiario
         </InputLabel>
-        <Select
+        <Select 
           disabled={disabled}
           // value={age}
-          // onChange={handleChange}
+          onChange={handleChangeBeneficiaries}          
           label="Tipo de Beneficiario"
-          variant="standard"
+          // variant="standard"
         >
-          {beneficiaries.length == 0 ? (
-            beneficiaries.map(({ IdBeneficiario, Nombre }) => {
-              return <MenuItem value={IdBeneficiario}>{Nombre}</MenuItem>;
+          {beneficiaries.length > 0 ? (
+            beneficiaries.map(({ IdTipo, nombre }) => {
+              return <MenuItem key={IdTipo} value={IdTipo}>{nombre}</MenuItem>;
             })
           ) : (
             <></>
@@ -34,3 +34,4 @@ export default function SelectBeneficiaries({beneficiaries, disabled}) {
     </>
   );
 }
+  

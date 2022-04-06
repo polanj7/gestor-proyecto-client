@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 //mui
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -33,48 +33,37 @@ const style = {
   })
 };
 
-export default function SelectProvinces({provinces, disabled, provincesIDs, setProvincesIDs}) { 
+export default function SelectProvinces({provinces, disabled, provincesIDs, setProvincesIDs, idTest}) { 
 
   const {projectData, setProjectData} = useContext(ProjectContext);
-  const [personName, setPersonName] = React.useState([]);
 
+  const [seletedData, setSeletedData] = useState([]);
+  const [test, setTest] = useState('');
  
   const handleChange = async(event) => {
     const {
-      target: { value },
+      target: { value }, 
     } = event;
 
-    // let dataFinal = [];
-    // let ids = [];
-    // let nombres = [];
+    // console.log('nombres', nombres);
+    // setSeletedData(nombres.length > 0 ? [nombres.join(',')]: [nombres[0]]);
 
-    // await value.map((x) => {
-    //   ids.push(x.nombre);
-    //   nombres.push(x.nombre);
-    //   dataFinal.push({
+    console.log('change', value)
+
+    setProvincesIDs(value);
+    setSeletedData(typeof value === 'string' ? value.split(',') : value); 
+
+    // //Datos temporales
+    // let dataFinal = [
+    //   {
     //     idImplementacion: 0,
     //     idProyecto: 0,
-    //     idProvincia: x.idProvincia,
-    //   });
-    // })
-    // console.log('nombres', nombres);
-    // setPersonName(nombres.length > 0 ? [nombres.join(',')]: [nombres[0]]);
+    //     idProvincia: 2,
+    //   },
+    // ];
 
-    
-    setProvincesIDs(value);
-    setPersonName(typeof value === 'string' ? value.split(',') : value); 
-
-    //Datos temporales
-    let dataFinal = [
-      {
-        idImplementacion: 0,
-        idProyecto: 0,
-        idProvincia: 1,
-      },
-    ];
-    setProjectData({...projectData, lugaresImplementaciones: dataFinal})
-  };
-  
+    //setProjectData({...projectData, lugaresImplementaciones: dataFinal})
+  };  
 
   const handleChangeSelect =(prov) =>{
     let newIDs = [];
@@ -82,21 +71,25 @@ export default function SelectProvinces({provinces, disabled, provincesIDs, setP
       newIDs.push(x.nombre);
     })
     setProvincesIDs(newIDs);   
-  }
+  }  
 
-  console.log('personName', projectData)
 
-  // useEffect(() =>{
-  //   provinces.map(x=>{
-  //     x.label = x.nombre
-  //     x.value = x.idProvincia
-  //   })
-  // }, [provinces])
+   useEffect(async() =>{
+
+     if (idTest > 0) {
+       setSeletedData((prev) => (prev = ["AZUA"]));
+       //testExec();
+     }
+
+     //PROV --> AZUA
+     //BARRIO --> CERRO DE LOS CACHEOS
+   }, [projectData.idProyecto])
 
   return (
+  
     <>
       <FormControl
-        variant="standard"
+        // variant="standard"
         style={{ width: "100%", marginBottom: "20px" }}
       >
         {/* <SelectReact
@@ -104,20 +97,20 @@ export default function SelectProvinces({provinces, disabled, provincesIDs, setP
           onChange={handleChangeSelect}
           isMulti
         /> */}
-        <InputLabel id="selectImplementacion">Lugar Implementación</InputLabel>
+        <InputLabel id="selectImplementacion">Provincias</InputLabel>
         <Select
           disabled={disabled}
           required
-          label="Lugar Implementación"
+          label="Provincias"
           multiple
-          value={personName}
+          value={seletedData}
           onChange={handleChange}
           renderValue={(selected) => selected.join(", ")}
           MenuProps={MenuProps}
         >
           {provinces.map((prov) => (
             <MenuItem key={prov.nombre} value={prov.nombre}>
-              <Checkbox checked={personName.indexOf(prov.nombre) > -1} />
+              <Checkbox checked={seletedData.indexOf(prov.nombre) > -1} />
               <ListItemText primary={prov.nombre} />
             </MenuItem>
           ))}

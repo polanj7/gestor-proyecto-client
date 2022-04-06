@@ -26,6 +26,7 @@ import { useQuery } from 'react-query';
 import swal from 'sweetalert';
 import FormEdit from './FormEdit';
 
+//  const { data: projects, isLoading } = useQuery(["tasks", idProyecto], () => getTaksByProject(idProyecto));
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -73,8 +74,7 @@ export default function ListTaks({idProyecto, setIsOpen1}) {
   const handleExpanded = async () =>{
     setIdTarea(0);
     setExpanded(prev => !prev);
-  }
-
+  }  
 
   useEffect(async()=>{
     const dataTaks = await getTaksByProject(idProyecto);    

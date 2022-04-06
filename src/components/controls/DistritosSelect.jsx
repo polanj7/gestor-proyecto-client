@@ -27,7 +27,7 @@ const MenuProps = {
   },
 };
 
-export default function SelectMunicipality({municipality, disabled}) { 
+export default function DistritosSelect({districts, disabled}) { 
 
 
   const {projectData, setProjectData} = useContext(ProjectContext);
@@ -61,25 +61,6 @@ export default function SelectMunicipality({municipality, disabled}) {
     </ListSubheader>
   }
 
-  const handleChangeSelect =(prov) =>{
-    let newIDs = [];
-    // prov.map(x =>{
-    //   newIDs.push(x.nombre);
-    // })
-    // setProvincesIDs(newIDs);   
-  }
-
-  useEffect(() =>{
-    // municipality.map(x=>{
-    //   x.label = x.nombre
-    //   x.value = x.idMunicipio
-    // })
-
-    if (projectData.idProyecto > 0){
-      setPersonName(['CERRO DE LOS CACHEOS'])
-    }
-
-  }, [projectData.idProyecto])
     
   return (
     <>
@@ -87,32 +68,25 @@ export default function SelectMunicipality({municipality, disabled}) {
         // variant="standard"
         style={{ width: "100%", marginBottom: "20px" }}
       >
-        {/* <SelectReact
-          options={municipality}
-          onChange={handleChangeSelect}
-          isMulti
-        /> */}
-
         <InputLabel id="selectImplementacion">
-          Municipios
+        Distritos Municipales
         </InputLabel>
         <Select
           disabled={disabled}
           required
-          label="Municipios"
+          label="Distritos Municipales"
           multiple
           value={personName}
           onChange={handleChange}
           renderValue={(selected) => selected.join(", ")}
           MenuProps={MenuProps}
         >
-          {municipality.map(({idMunicipio, nombre}) => {           
-                return (
-                  <MenuItem key={idMunicipio} value={nombre}>
-                    <Checkbox checked={personName.indexOf(nombre) > -1} />
-                    <ListItemText primary={`${nombre}`} />
-                  </MenuItem>
-                );               
+          {districts.map(({idDistrito, nombre}) => {
+            return(
+            <MenuItem key={idDistrito} value={nombre}>
+              <Checkbox checked={personName.indexOf(nombre) > -1} />
+              <ListItemText primary={`${nombre}`} />
+            </MenuItem>)
           })}
         </Select>
       </FormControl>

@@ -4,6 +4,8 @@ import { getAccessToken } from '../services/accessToken';
 const token = getAccessToken();
 
 const baeeURL = 'https://netzer.somee.com/api';
+
+//const baeeURL = 'https://localhost:44310/api';
 // const baeeURL = 'https://10.1.0.115/GPApi/api';
 
 const authAxios = axios.create({
@@ -18,8 +20,7 @@ export const get = async (endPoint) => {
     return resp.data.data;
 }
 
-export const post = async (endPoint, data) => {
-    console.log('data', data);
+export const post = async (endPoint, data) => {  
     const resp = await authAxios.post(`${baeeURL}/${endPoint}`, data);
     return resp;
 }

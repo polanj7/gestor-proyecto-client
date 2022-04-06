@@ -1,6 +1,6 @@
-import React, {useContext} from 'react'
-import { useTheme } from '@mui/material/styles';
-import OutlinedInput from '@mui/material/OutlinedInput';
+import React, {useContext,useEffect} from 'react'
+
+//mui
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -41,11 +41,19 @@ export default function SelectChallenges({challenges, disabled}) {
     setProjectData({ ...projectData, lugaresImplementacioneSDs: data });
     //setProjectData({...projectData, tareas: [...projectData.tareas, tareass]})
   };
+ 
+  useEffect(() =>{
+
+    if (projectData.idProyecto > 0){
+      setPersonName(['Salud']);
+    }
+
+  }, [projectData.idProyecto])
 
   return (
     <>
       <FormControl
-        variant="standard"
+        // variant="standard"
         style={{ width: "100%", marginBottom: "20px" }}
       >
         <InputLabel id="selectImplementacion">

@@ -22,7 +22,7 @@ export default function SelectResponsable({responsables,responsable, setResponsa
 
   return (
     <>
-      <FormControl  variant="standard" style={{ width: "100%", marginBottom: "20px" }}>
+      <FormControl  style={{ width: "100%", marginBottom: "20px" }}>
         <InputLabel id="selectImplementacion">Responsable</InputLabel>
         <Select
           disabled={disabled}

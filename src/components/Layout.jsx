@@ -191,7 +191,7 @@ export default function Layout({ children }) {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       {/* /*Header*/}
-      <AppBar position="fixed" open={open} color="text">
+      <AppBar position="fixed" open={open} color="primary">
         <Toolbar>
           {/*Boton del menu */}
           <IconButton
@@ -209,11 +209,12 @@ export default function Layout({ children }) {
 
           {/* Logo */}
           <Typography
-            color="primary.dark"
+            color="white"
             variant="h5"
             noWrap
             component="h1"
-            sx={{ flexGrow: 1, display: { xs: "flex" } }}
+            sx={{ flexGrow: 1, display: { xs: "flex" }, letterSpacing: "0.50em",
+            wordSpacing: "0.50em" }}
           >
             Torre de Control
           </Typography>
@@ -253,7 +254,7 @@ export default function Layout({ children }) {
       </AppBar>
 
       {/*Aside*/}
-      <Drawer variant="permanent" open={open}>
+      <Drawer variant="permanent" open={open} color="primary">
         <DrawerHeader style={{ height: 48 }}>
           <Typography
             variant="h6"
@@ -271,6 +272,7 @@ export default function Layout({ children }) {
             )}
           </IconButton>
         </DrawerHeader>
+
         <Divider />
         <List>
           {menuLinks.map(({ text, to, icon }, idx) => (
@@ -284,6 +286,7 @@ export default function Layout({ children }) {
             </Tooltip>
           ))}
         </List>
+        
       </Drawer>
 
       {/*Content*/}

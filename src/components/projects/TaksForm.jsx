@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+
 //Services
 import { getResponsables } from '../../services/usersServices'
 
@@ -10,6 +11,14 @@ import TextField from '@mui/material/TextField';
 import DatePicker from '@mui/lab/DatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+//mui table
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 //icons
 import AddIcon from '@mui/icons-material/Add';
@@ -25,6 +34,9 @@ import SelectResponsable from '../controls/SelectResponsable';
 
 //modal
 import  Modal  from 'react-bootstrap/Modal';
+
+//moment js
+import Moment from 'react-moment';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -49,7 +61,65 @@ export default function TaksForm(props) {
   const[responsables, setResponsables] = useState([]);
   const[selectedResponsable, setSelectedResponsable] = useState([]);
 
-  //hendles
+  /**/
+  const[actividadIdx, setActividadIdx] = useState(-1);
+  const[actividad, setActividad] = useState('');
+  const[actividades, setActividades] = useState([]);
+
+  /*
+    actividad 1:  {
+      nombre,
+      IdActividad,
+      idx,
+      tareas: [
+        {nombre, inicio, fin},
+        {nombre, inicio, fin},
+        {nombre, inicio, fin},
+      ]
+    },
+     actividad 2:  {
+      nombre,
+      IdActividad,
+      idx,
+      tareas: [
+        {nombre, inicio, fin},
+        {nombre, inicio, fin},
+        {nombre, inicio, fin},
+      ]
+    }
+  */
+
+  const handleAddActividades = () => {     
+    setActividades(prev => [...prev, {nombre: actividad, idActividad: 0, tareas: []}]);
+  }
+
+  const handleShowModal= (idx) => {       
+    setActividadIdx(idx);
+    handleOpen();
+    //let a = actividades[idx];
+    //setActividades(prev => [...prev, {nombre: actividad, idActividad: 0, tareas: []}]);
+  }
+
+  const handleAddTareas = () => {  
+
+    let tarea = {
+      idTarea: 0, 
+      idProyecto: null,
+      descripcion: descripcionTarea,
+      fechaInicio: inicioTarea,
+      fechaFinal: finTarea,
+      idResponsable: selectedResponsable,   
+      idEstado: 1
+    }
+
+    actividades[actividadIdx].tareas.push(tarea);
+    setIsModalOpen(prev => !prev);
+    //setActividades(prev => [...prev, {nombre: actividad, idActividad: 0, tareas: []}]);
+  }
+
+  /**/
+
+  //handles
   const handleClose = () =>{
     setIsModalOpen(false);
   }
@@ -97,9 +167,9 @@ export default function TaksForm(props) {
 
   return (
     <>
-      <div className={classes.toolbar}>
+      {/* <div className={classes.toolbar}>
         <Typography variant="h5" component="h2" color="primary">
-          Tareas / Metas       
+          Actividades      
         </Typography>
         {!props.disabled ? (
           <Button
@@ -108,20 +178,98 @@ export default function TaksForm(props) {
             color="primary"
             startIcon={<AddIcon />}
           >
-            NUEVO TAREA
+            NUEVA ACTIVIDAD
           </Button>
         ) : (
           <></>
         )}
-      </div>
+      </div> */}
 
-      <div style={{ height: "50vh", width: "100%" }}>
+      {/* <div style={{ height: "50vh", width: "100%" }}>
         <div style={{ display: "flex", height: "100%" }}>
           <div style={{ flexGrow: 1 }}>
             <TableTask lista={taksList} handleRemoveTask={handleRemoveTask} />
           </div>
         </div>
-      </div>
+      </div> */}
+
+      <form>
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="w-100">
+              <div className="form-group">
+                <TextField
+                  required
+                  label="Actividad"
+                  placeholder="Actividad"
+                  sx={{ width: "50%", marginBottom: "16px" }}
+                  value={actividad}
+                  onChange={({ target }) => setActividad(target.value)}
+                />
+                <Button
+                  onClick={handleAddActividades}
+                  variant="contained"
+                  color="primary"
+                  startIcon={<AddIcon />}
+                >
+                  AGREGAR ACTIVIDAD
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <ul>
+        {
+          actividades.map(({nombre, tareas}, idx) =>{
+            return (
+              <li>
+                {nombre}{" "}
+                <Button
+                  onClick={() => {
+                    handleShowModal(idx);
+                  }}
+                  variant="contained"
+                  color="primary"
+                  startIcon={<AddIcon />}
+                >
+                  AGREGAR TAREA
+                </Button>
+
+                <TableContainer component={Paper}>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Descripción</TableCell>
+                        {/* <TableCell align="right">Responsable</TableCell> */}
+                        <TableCell align="right">Inicio</TableCell>
+                        <TableCell align="right">Fin</TableCell>                       
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {tareas.map((row, idx) => (
+                        <TableRow
+                          key={idx}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {row.descripcion}
+                          </TableCell>
+                          <TableCell align="right"><Moment format="DD/MM/YYYY">{row.fechaInicio}</Moment></TableCell>
+                          <TableCell align="right"><Moment format="DD/MM/YYYY">{row.fechaFinal}</Moment></TableCell>               
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>               
+              </li>
+            );
+          })
+        }
+      </ul>
 
       <Modal show={isModalOpen} onHide={handleClose} style={{ marginTop: 100 }}>
         <Modal.Header closeButton>
@@ -140,7 +288,6 @@ export default function TaksForm(props) {
                     <TextField
                       required
                       label="Descripción"
-                      variant="standard"
                       placeholder="Descipción"
                       sx={{ width: "100%", marginBottom: "16px" }}
                       multiline
@@ -165,7 +312,6 @@ export default function TaksForm(props) {
                           <TextField
                             {...params}
                             label="Inicio"
-                            variant="standard"
                             sx={{ width: "50%", marginBottom: "16px" }}
                           />
                         )}
@@ -182,7 +328,6 @@ export default function TaksForm(props) {
                           <TextField
                             {...params}
                             label="Fin"
-                            variant="standard"
                             sx={{
                               width: "49%",
                               marginBottom: "16px",
@@ -195,14 +340,12 @@ export default function TaksForm(props) {
                   </LocalizationProvider>
 
                   <div className="form-group">
-                    
-                  <SelectResponsable
-                      responsables={responsables}                   
+                    <SelectResponsable
+                      responsables={responsables}
                       responsable={selectedResponsable}
                       setResponsable={setSelectedResponsable}
                       disabled={props.disabled}
                     />
-                    
                   </div>
                 </div>
               </div>
@@ -222,7 +365,7 @@ export default function TaksForm(props) {
           <Button
             variant="contained"
             color="primary"
-            onClick={handleAddTaks}
+            onClick={handleAddTareas}
             endIcon={<DoneAllIcon />}
             sx={{ mr: 1 }}
           >
