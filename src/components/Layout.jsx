@@ -62,7 +62,8 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 const menuLinks = [
-  { text: "Proyectos", to: "/project", icon: <AutoAwesomeMosaicIcon /> }
+  { text: "Proyectos", to: "/project", icon: <AutoAwesomeMosaicIcon /> },
+  { text: "Mantenimiento", to: "/mantenimiento/usuario", icon: <AutoAwesomeMosaicIcon /> }
 ];
 
 const openedMixin = (theme) => ({

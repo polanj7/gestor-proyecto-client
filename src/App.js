@@ -20,6 +20,7 @@ import {
 //context
 import { UserContext } from './context/UserContext';
 import { ParameterContext } from './context/ParameterContext'
+import UsuariosForm from './components/mantenimientos/UsuariosForm';
 
 
 
@@ -73,6 +74,9 @@ export default function App() {
                 <Route path=":id" element={<ContentForm />} />
                 <Route path=":id/readonly" element={<ContentForm />} />
               </Route>
+
+              <Route path="/mantenimiento/usuario" element={<Main><UsuariosForm /></Main>} />
+
 
               <Route path="/sign-in" element={<SignIn />} />
               <Route path="/Dashboard" element={<Dashboard />} />

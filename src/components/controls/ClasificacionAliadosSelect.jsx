@@ -1,13 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 
 //mui
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
+//context
+import { ProjectContext } from "../../context/ProjectContext";
 
-export default function ClasificacionAliadosSelect({clasificacionAliados,  handleChangeClasificacionAliados}) {
-    
+export default function ClasificacionAliadosSelect({clasificacionAliados}) {
+  const { projectData, setProjectData } = useContext(ProjectContext);  
+
   return (
     <>
       <FormControl sx={{ width: "100%", marginBottom: "16px" }}>
@@ -15,7 +18,16 @@ export default function ClasificacionAliadosSelect({clasificacionAliados,  handl
           Clasificación Aliado
         </InputLabel>
         <Select      
-          onChange={handleChangeClasificacionAliados}          
+            value={projectData.aliado.idClasificacion}
+            onChange={({ target }) =>
+                  setProjectData(
+                    (prev) =>
+                      (prev = {
+                        ...prev,
+                        aliado: { ...prev.aliado, idClasificacion: target.value },
+                      })
+                  )
+                }        
           label="Clasificación Aliado"
           
         >

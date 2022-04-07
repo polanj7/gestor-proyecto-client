@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 
 //mui
 import MenuItem from '@mui/material/MenuItem';
@@ -6,9 +6,13 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 
+//context
+import { ProjectContext } from "../../context/ProjectContext";
 
-export default function SelectBeneficiaries({beneficiaries, disabled, handleChangeBeneficiaries}) {
+export default function SelectBeneficiaries({beneficiaries, disabled }) {
     
+  const { projectData, setProjectData } = useContext(ProjectContext);
+
   return (
     <>
       <FormControl /*variant="standard"*/ sx={{ width: "49%" }}>
@@ -17,10 +21,11 @@ export default function SelectBeneficiaries({beneficiaries, disabled, handleChan
         </InputLabel>
         <Select 
           disabled={disabled}
-          // value={age}
-          onChange={handleChangeBeneficiaries}          
+          value={projectData.idRangoBeneficiario}
+          onChange={({ target }) =>
+           setProjectData({ ...projectData, idRangoBeneficiario: target.value })
+          }     
           label="Tipo de Beneficiario"
-          // variant="standard"
         >
           {beneficiaries.length > 0 ? (
             beneficiaries.map(({ IdTipo, nombre }) => {

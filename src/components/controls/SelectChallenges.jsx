@@ -1,4 +1,4 @@
-import React, {useContext,useEffect} from 'react'
+import React, {useState,useContext,useEffect} from 'react'
 
 //mui
 import MenuItem from '@mui/material/MenuItem';
@@ -7,6 +7,8 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import InputLabel from '@mui/material/InputLabel';
 import ListItemText from '@mui/material/ListItemText';
+
+import Select2 from 'react-select'
 
 //context
 import { ProjectContext } from '../../context/ProjectContext'
@@ -41,6 +43,30 @@ export default function SelectChallenges({challenges, disabled}) {
     setProjectData({ ...projectData, lugaresImplementacioneSDs: data });
     //setProjectData({...projectData, tareas: [...projectData.tareas, tareass]})
   };
+
+  const handleTest =(e) => {
+    
+    let newArray = [];
+
+    e.map(({value}) => {
+      newArray.push({
+        idDesafioProyecto: 0,
+        idProyecto: 0,
+        idDesafio: value
+      }); 
+    })
+
+    setProjectData(prev => prev = {...prev, desafiosProyectos: newArray});
+    
+
+    console.log(projectData)
+
+    // //desafiosProyectos
+    // projectData.desafiosProyectos.push({
+      
+    // });
+    // setProjectData(prev =>Array.isArray(e) ? e.map(({label}) => label) : []);
+  }
  
   useEffect(() =>{
 
@@ -50,16 +76,20 @@ export default function SelectChallenges({challenges, disabled}) {
 
   }, [projectData.idProyecto])
 
+  const[test, setTest] =useState([]);
+
   return (
     <>
-      <FormControl
+      {/* <FormControl
         // variant="standard"
         style={{ width: "100%", marginBottom: "20px" }}
       >
         <InputLabel id="selectImplementacion">
           Desafío(s) Impactado(s)
         </InputLabel>
-        <Select
+
+       
+        {/* <Select
           disabled={disabled}
           required
           label="Lugar Implementación"
@@ -75,8 +105,12 @@ export default function SelectChallenges({challenges, disabled}) {
               <ListItemText primary={text} />
             </MenuItem>
           ))}
-        </Select>
-      </FormControl>
+        </Select> */}
+
+        
+      {/* </FormControl>  */}
+
+      <Select2 isMulti options={challenges} onChange={handleTest}></Select2>
     </>
   );
 }

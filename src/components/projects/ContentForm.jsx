@@ -60,45 +60,44 @@ export default function ContentForm() {
   const[projectData, setProjectData] = useState({    
       idProyecto: 0,
       codigo: null,
-      nombre: null,
-      descripcion: null,
-      objetivoGeneral: null,
-      objetivoEspecifico: null,
-      resultados: null,
+      nombre: "",
+      descripcion: "",
+      objetivoGeneral: "",
+      objetivoEspecifico: "",
+      resultados: "",
       fechaInicio: new Date(),
       fechaFinal: new Date(),
-      idRangoBeneficiario: 0,
+      idRangoBeneficiario: 1, //select --done
       cantidadBeneficiarios: 0,
       anos: 0,
       meses: 0,
       dias: 0,
-      idRangoPresupuestario: 0,
+      idRangoPresupuestario: 1, //select --done
       montoPresupuestarioDOP: 0,
-      montoPresupuestarioUSD: 0,
-      tipoMoneda: null,
+      montoPresupuestarioUSD: 0,      
       idGerente: 0,
       isDelete: false,
       fechaCreacion: new Date(),
       aliado: {
-        // idAliado: 0,
-        // nombre: string,
-        // identificacion: string,
-        // idClasificacion: 0,
-        // direccion: string,
-        // informacion: string
+        idAliado: 0,
+        nombre: "",
+        identificacion: "",
+        idClasificacion: 1, //select --done
+        direccion: "",
+        informacion: ""
       },
       donante: {
-        // idDonante: 0,
-        // idProyecto: 0,
-        // nombre: string,
-        // identificacion: string,
-        // idClasificacion: 0,
-        // idDonacionClasificacion: 0,
-        // monto1: 0,
-        // monto2: 0,
-        // donacion: 0,
-        // direccion: string,
-        // informacion: string
+        idDonante: 0,
+        idProyecto: 0,
+        nombre: "",
+        identificacion: "",
+        idClasificacion: 1, //select --done
+        idDonacionClasificacion: 1,
+        monto1: 0,
+        monto2: 0,
+        donacion: 0,
+        direccion: "",
+        informacion: ""
       },
       desafiosProyectos: [
         // {
@@ -129,22 +128,22 @@ export default function ContentForm() {
         // }
       ],
       actividades: [
-        // {
-        //   idActividad: 0,
-        //   descripcion: string,
-        //   idProyecto: 0,
-        //   orden: 0,
-        //   tareas: [
-        //     {
-        //       idTarea: 0,
-        //       descripcion: string,
-        //       idActividad: 0,
-        //       idResponsable: 0,
-        //       fechaInicio: new Date(),
-        //       fechaFinal: new Date(),
-        //       idEstado: 0,
-        //       fechaCreacion: new Date()
-        //     }
+        //{
+          // idActividad: 0,
+          // descripcion: null,
+          // idProyecto: 0,
+          // orden: 0,
+          // tareas: [
+            // {
+            //   idTarea: 0,
+            //   descripcion: null,
+            //   idActividad: 0,
+            //   idResponsable: 0,
+            //   fechaInicio: new Date(),
+            //   fechaFinal: new Date(),
+            //   idEstado: 0,
+            //   fechaCreacion: new Date()
+            // }
         //   ]
         // }
       ],

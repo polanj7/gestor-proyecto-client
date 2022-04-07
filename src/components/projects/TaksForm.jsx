@@ -38,7 +38,6 @@ import  Modal  from 'react-bootstrap/Modal';
 //moment js
 import Moment from 'react-moment';
 
-
 const useStyles = makeStyles((theme) => ({
   toolbar: {
     display: "flex",
@@ -59,64 +58,57 @@ export default function TaksForm(props) {
   const[inicioTarea, setInicioTarea] = useState(null);
   const[finTarea, setFinTarea] = useState(null);    
   const[responsables, setResponsables] = useState([]);
-  const[selectedResponsable, setSelectedResponsable] = useState([]);
+  const[selectedResponsable, setSelectedResponsable] = useState(0);
+  const[responsableLabel, setResponsableLabel] = useState('');
 
   /**/
   const[actividadIdx, setActividadIdx] = useState(-1);
   const[actividad, setActividad] = useState('');
-  const[actividades, setActividades] = useState([]);
 
-  /*
-    actividad 1:  {
-      nombre,
-      IdActividad,
-      idx,
-      tareas: [
-        {nombre, inicio, fin},
-        {nombre, inicio, fin},
-        {nombre, inicio, fin},
-      ]
-    },
-     actividad 2:  {
-      nombre,
-      IdActividad,
-      idx,
-      tareas: [
-        {nombre, inicio, fin},
-        {nombre, inicio, fin},
-        {nombre, inicio, fin},
-      ]
+  const handleAddActividades = () => {    
+
+    let newActividad = {
+      idActividad: 0,
+      descripcion: actividad,
+      idProyecto: 0,
+      orden: 0,
+      tareas: []
     }
-  */
 
-  const handleAddActividades = () => {     
-    setActividades(prev => [...prev, {nombre: actividad, idActividad: 0, tareas: []}]);
+    setProjectData((prev) =>
+        (prev = {
+          ...prev,
+          actividades: [...prev.actividades,  newActividad],
+        })
+    )
+   
   }
 
   const handleShowModal= (idx) => {       
     setActividadIdx(idx);
-    handleOpen();
-    //let a = actividades[idx];
-    //setActividades(prev => [...prev, {nombre: actividad, idActividad: 0, tareas: []}]);
+    handleOpen();    
   }
 
   const handleAddTareas = () => {  
 
     let tarea = {
-      idTarea: 0, 
-      idProyecto: null,
+      idTarea: 0,       
       descripcion: descripcionTarea,
+      idActividad: 0,
+      idResponsable: selectedResponsable,
       fechaInicio: inicioTarea,
       fechaFinal: finTarea,
-      idResponsable: selectedResponsable,   
-      idEstado: 1
+      idEstado: 1,
+      fechaCreacion: new Date(),
+      responsableLabel: responsableLabel
     }
 
-    actividades[actividadIdx].tareas.push(tarea);
-    setIsModalOpen(prev => !prev);
-    //setActividades(prev => [...prev, {nombre: actividad, idActividad: 0, tareas: []}]);
+    projectData.actividades[actividadIdx].tareas.push(tarea);
+
+    setIsModalOpen(prev => !prev);    
   }
 
+  console.log('projectData', projectData);
   /**/
 
   //handles
@@ -160,39 +152,12 @@ export default function TaksForm(props) {
     setResponsables(resp);
   }
 
-
   useEffect(() =>{
     getResponsablesd();
   }, [])
 
   return (
     <>
-      {/* <div className={classes.toolbar}>
-        <Typography variant="h5" component="h2" color="primary">
-          Actividades      
-        </Typography>
-        {!props.disabled ? (
-          <Button
-            onClick={handleOpen}
-            variant="contained"
-            color="primary"
-            startIcon={<AddIcon />}
-          >
-            NUEVA ACTIVIDAD
-          </Button>
-        ) : (
-          <></>
-        )}
-      </div> */}
-
-      {/* <div style={{ height: "50vh", width: "100%" }}>
-        <div style={{ display: "flex", height: "100%" }}>
-          <div style={{ flexGrow: 1 }}>
-            <TableTask lista={taksList} handleRemoveTask={handleRemoveTask} />
-          </div>
-        </div>
-      </div> */}
-
       <form>
         <div className="row">
           <div className="col-sm-12">
@@ -222,10 +187,10 @@ export default function TaksForm(props) {
 
       <ul>
         {
-          actividades.map(({nombre, tareas}, idx) =>{
+          projectData.actividades.map(({descripcion, tareas}, idx) =>{
             return (
               <li>
-                {nombre}{" "}
+                {descripcion}{" "}
                 <Button
                   onClick={() => {
                     handleShowModal(idx);

@@ -21,11 +21,9 @@ import DistritosSelect from "../controls/DistritosSelect";
 import SeccionSelect from "../controls/SeccionSelect";
 import BarrioSelect from "../controls/BarrioSelect";
 import AliadosForm from "./AliadosForm";
-import DonantesForm from "./DonantesForm";
-
-import AliadosSelect from "../controls/AliadosSelect";
-import DonanteSelect from "../controls/DonanteSelect";
 import RangoBeneficiarios from "../controls/RangoBeneficiarios";
+
+import Select2 from 'react-select'
 
 //mui
 import Typography from "@mui/material/Typography";
@@ -49,12 +47,18 @@ import TerritoriosImpactadosBarrios from "../controls/TerritoriosImpactadosBarri
 import { getAliados } from "../../services/aliadosServices";
 import { getDonantes } from "../../services/donantesServices";
 
+const options = [
+  { value: 1, label: 'Santo Domingo' },
+  { value: 2, label: 'La vega' },
+  { value: 3, label: 'Bonao' }
+]
+
 const challengesImpacted = [
-  { text: "Educación", value: "Educación" },
-  { text: "Salud", value: "Salud" },
-  { text: "Saneamiento", value: "Saneamiento" },
-  { text: "Juventud", value: "Juventud" },
-  { text: "Otros", value: "Otros" },
+  { value: "Educación", label: "Educación" },
+  { value: "Salud", label: "Salud" },
+  { value: "Saneamiento", label: "Saneamiento" },
+  { value: "Juventud", label: "Juventud" },
+  { value: "Otros", label: "Otros" },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -90,10 +94,9 @@ export default function ProjectForm(props) {
   const [donantesList, setDonantesList] = useState([]);
   //beneficiarios
   const [rangoList, setRangoList] = useState([]);
-  //duracion
-  const [dias, setDias] = useState(0);
-  const [meses, setMeses] = useState(0);
-  const [anos, setAnos] = useState(0);
+  const [rangoSelected, setRangoSelected] = useState([]);
+
+
   //modals
   const [isModalOpenAliados, setIsModalOpenAliados] = useState(false);
   const [isModalOpenDonantes, setIsModalOpenDonantes] = useState(false);
@@ -127,7 +130,7 @@ export default function ProjectForm(props) {
 
   const getBeneficiaries = async () => {
     const resp = await getTipoBeneficiarios();    
-    resp.unshift({ IdTipo: -99, nombre: "--- Crear Nuevo ---" });
+    //resp.unshift({ IdTipo: -99, nombre: "--- Crear Nuevo ---" });
     setBeneficiarieType(resp);
   };
 
@@ -149,24 +152,19 @@ export default function ProjectForm(props) {
   };
 
   const handleChangeBeneficiaries = (e) => {
-    setIsModalOpenAliados(true);
+    //setIsModalOpenAliados(true);
   };
 
   
   const handleChangeRangeBenef = (e) => {
-    setIsModalOpenAliados(true);
+    //setIsModalOpenAliados(true);
   };
 
-  const handleChangeAliados = (e) => {
-    setIsModalOpenAliados(true);
-  };
-
-  const handleChangeDonantes = (e) => {};
 
   useEffect(() => {
     getProvinced();
     getBeneficiaries();
-    getAliadosList();
+    //getAliadosList();
     //getDonantesList();
     getRangoBeneficiarios();
   }, []);
@@ -176,11 +174,14 @@ export default function ProjectForm(props) {
     getDistricts(1);
   }, [provincesIDs]);
 
+
   return (
     <>
       <Typography mt={2} mb={3} variant="h5" component="h1" color="primary">
-        Datos Generales
+        Datos Generales        
       </Typography>
+    
+    
 
       <form>
         <div className="row">
@@ -280,16 +281,15 @@ export default function ProjectForm(props) {
               </div>
 
               <RangoBeneficiarios
-                rango={rangoList}
-                disabled={props.disabled}
-                handleChangeRangeBenef={handleChangeRangeBenef}
+                rango={rangoList}               
+                disabled={props.disabled}                
               />
 
-              <AliadosSelect
+              {/* <AliadosSelect
                 aliados={aliadosList}
                 disabled={props.disabled}
                 handleChangeAliados={handleChangeAliados}
-              />
+              /> */}
 
               {/* <DonantesForm
                 donantes={donantesList}
@@ -359,8 +359,7 @@ export default function ProjectForm(props) {
               <div className={classes.toolbar}>
                 <SelectBeneficiaries
                   beneficiaries={beneficiarieType}
-                  disabled={props.disabled}
-                  handleChangeBeneficiaries={handleChangeBeneficiaries}
+                  disabled={props.disabled}                  
                 />
 
                 <TextField
@@ -375,8 +374,13 @@ export default function ProjectForm(props) {
                     marginBottom: "16px",
                     marginLeft: "16px",
                   }}
-                  value={countBeneficiare}
-                  onChange={({ target }) => setCountBeneficiare(target.value)}
+                  value={projectData.cantidadBeneficiarios}
+                  onChange={({ target }) =>
+                    setProjectData({
+                      ...projectData,
+                      cantidadBeneficiarios: target.value,
+                    })
+                  }
                 />
               </div>
 
@@ -410,10 +414,7 @@ export default function ProjectForm(props) {
 
           <div className="col-sm-12">
             <div style={{ width: "100%" }}>
-              <AliadosForm
-                isModalOpenAliados={isModalOpenAliados}
-                setIsModalOpenAliados={setIsModalOpenAliados}
-              />
+           
 
               <Accordion>
                 <AccordionSummary
@@ -470,6 +471,23 @@ export default function ProjectForm(props) {
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
+                  <Typography>Aliados</Typography>
+                </AccordionSummary>
+                <AccordionDetails>                 
+                <AliadosForm
+                  isModalOpenAliados={isModalOpenAliados}
+                  setIsModalOpenAliados={setIsModalOpenAliados}
+                />
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion>
+                <AccordionSummary
+                  style={{ backgroundColor: "red" }}
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
                   <Typography>Duración</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
@@ -485,8 +503,13 @@ export default function ProjectForm(props) {
                       marginBottom: "16px",
                       marginLeft: "16px",
                     }}
-                    value={dias}
-                    onChange={({ target }) => setDias(target.value)}
+                    value={projectData.dias}
+                    onChange={({ target }) =>
+                      setProjectData({
+                        ...projectData,
+                        dias: target.value,
+                      })
+                    }
                   />
 
                   <TextField
@@ -501,8 +524,13 @@ export default function ProjectForm(props) {
                       marginBottom: "16px",
                       marginLeft: "16px",
                     }}
-                    value={meses}
-                    onChange={({ target }) => setMeses(target.value)}
+                    value={projectData.meses}
+                    onChange={({ target }) =>
+                      setProjectData({
+                        ...projectData,
+                        meses: target.value,
+                      })
+                    }
                   />
 
                   <TextField
@@ -517,8 +545,13 @@ export default function ProjectForm(props) {
                       marginBottom: "16px",
                       marginLeft: "16px",
                     }}
-                    value={anos}
-                    onChange={({ target }) => setAnos(target.value)}
+                    value={projectData.anos}
+                    onChange={({ target }) =>
+                    setProjectData({
+                      ...projectData,
+                      anos: target.value,
+                    })
+                  }
                   />
                 </AccordionDetails>
               </Accordion>

@@ -25,12 +25,11 @@ import DonantesForm from "./DonantesForm";
 
 //context
 import { ProjectContext } from '../../context/ProjectContext'
-import { wait } from '@testing-library/user-event/dist/utils';
 
 const tipoPresupuesto = [
-  {text: 'Económico', value: 'D' },
-  {text: 'Especie', value: 'E' },
-  {text: 'Trabajo Colaborativo', value: 'TC' }
+  {text: 'Económico', value: 1 },
+  {text: 'Especie', value: 2 },
+  {text: 'Trabajo Colaborativo', value: 3 }
 ]
 
 const moneyType = [
@@ -109,37 +108,7 @@ export default function BudgetForm(props) {
         </AccordionSummary>
         <AccordionDetails>
           <div className="w-100">
-            <div className="row">
-              {/* <div className="w-50">
-                <FormControl style={{ marginBottom: 20 }} {...props}>
-                  <FormLabel id="demo-radio-buttons-group-label">
-                    Moneda
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="demo-form-control-label-placement"
-                    name="position"
-                    defaultValue={projectData.tipoMoneda}
-                  >
-                    {moneyType.map((x) => {
-                      return (
-                        <FormControlLabel
-                          title={x.title}
-                          value={x.value}
-                          control={<Radio />}
-                          label={x.text}
-                          onChange={({ target }) =>
-                            setProjectData({
-                              ...projectData,
-                              tipoMoneda: target.value,
-                            })
-                          }
-                        />
-                      );
-                    })}
-                  </RadioGroup>
-                </FormControl>
-              </div> */}
+            <div className="row">            
 
               <div className="w-50">
                 <FormControl style={{ marginBottom: 20 }} {...props}>
@@ -150,7 +119,7 @@ export default function BudgetForm(props) {
                     row
                     aria-labelledby="demo-form-control-label-placement"
                     name="position"
-                    defaultValue={projectData.idTipoPresupuesto}
+                    defaultValue={projectData.donante.idDonacionClasificacion}
                   >
                     {tipoPresupuesto.map((x) => {
                       return (
@@ -160,11 +129,14 @@ export default function BudgetForm(props) {
                           control={<Radio />}
                           label={x.text}
                           onChange={({ target }) =>
-                            setProjectData({
-                              ...projectData,
-                              idTipoPresupuesto: target.value,
-                            })
-                          }
+                          setProjectData(
+                            (prev) =>
+                              (prev = {
+                                ...prev,
+                                donante: { ...prev.donante, idDonacionClasificacion: target.value },
+                              })
+                          )
+                        }
                         />
                       );
                     })}
@@ -177,14 +149,17 @@ export default function BudgetForm(props) {
               <TextField
                 {...props}
                 label="Monto Presupuestario DOP"
-                value={projectData.rangoPresupuestado}
                 sx={{ width: "100%", marginBottom: "16px" }}
+                value={projectData.donante.monto1}
                 onChange={({ target }) =>
-                  setProjectData({
-                    ...projectData,
-                    rangoPresupuestado: target.value,
-                  })
-                }
+                setProjectData(
+                  (prev) =>
+                    (prev = {
+                      ...prev,
+                      donante: { ...prev.donante, monto1: target.value },
+                    })
+                )
+              }
                 name="numberformat"
                 id="formatted-numberformat-input"
                 InputProps={{
@@ -197,14 +172,17 @@ export default function BudgetForm(props) {
               <TextField
                 {...props}
                 label="Monto Presupuestario USD"
-                value={projectData.rangoPresupuestado}
                 sx={{ width: "100%", marginBottom: "16px" }}
+                value={projectData.donante.monto2}
                 onChange={({ target }) =>
-                  setProjectData({
-                    ...projectData,
-                    rangoPresupuestado: target.value,
-                  })
-                }
+                setProjectData(
+                  (prev) =>
+                    (prev = {
+                      ...prev,
+                      donante: { ...prev.donante, monto2: target.value },
+                    })
+                )
+              }
                 name="numberformat"
                 id="formatted-numberformat-input"
                 InputProps={{

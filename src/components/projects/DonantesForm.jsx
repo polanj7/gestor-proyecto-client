@@ -1,27 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 //mui
-import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-
-//icons
-import DoneAllIcon from "@mui/icons-material/DoneAll";
-import CloseIcon from "@mui/icons-material/Close";
-
 import NumberFormat from 'react-number-format'; 
-
-//modal
-import Modal from "react-bootstrap/Modal";
 
 //services
 import {  
-  getDonantesClasificacion,
-  createDonantes,
+  getDonantesClasificacion 
 } from "../../services/donantesServices";
 
 //component
-import ClasificacionAliadosSelect from "../controls/ClasificacionAliadosSelect";
+import ClasificacionDonantesSelect from "../controls/ClasificacionDonantessSelect";
+
+//context
+import { ProjectContext } from "../../context/ProjectContext";
 
 const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(
   props,
@@ -47,43 +39,21 @@ const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(
   );
 });
 
-export default function DonantesForm({
-  isModalOpenDonantes,
-  setIsModalOpenDonantes,
-}) {
-  /*datos form*/
-  const [nombre, setNombre] = useState("");
-  const [identificacion, setIdentificacion] = useState("");
-  const [idClasificacion, setIdClasificacion] = useState(0);
-  const [donaciondop, setDonaciondop] = useState(0);
-  const [donacionusd, setDonacionusd] = useState(0);
-  const [direccion, setDireccion] = useState("");
-  const [informacion, setInformacion] = useState("");
+export default function DonantesForm() {
+  const { projectData, setProjectData } = useContext(ProjectContext);
 
-  const[clasificacionDonantesList, setClasificacionDonantesList] = useState([]);
-
-  const handleAddDonante= () =>{
-
-  }
-
-  const handleChangeClasificacionDonantes =()=>{
-    
-  }
-
-
-  const handleClose = () =>{
-    setIsModalOpenDonantes(false);
-  }
+  const [clasificacionDonantesList, setClasificacionDonantesList] = useState(
+    []
+  );
 
   const getClasificacion = async () => {
     let resp = await getDonantesClasificacion();
     setClasificacionDonantesList(resp);
-  }
+  };
 
-  useEffect(() =>{
+  useEffect(() => {
     getClasificacion();
-  }, [])
-
+  }, []);
 
   return (
     <div>
@@ -94,235 +64,149 @@ export default function DonantesForm({
               <TextField
                 required
                 label="Nombre"
-                // variant="standard"
                 placeholder="Nombre"
                 sx={{ width: "100%", marginBottom: "16px" }}
-                value={nombre}
-                onChange={({ target }) => setNombre(target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="col-sm-12">
-            <div className="form-group">
-              <TextField
-                required
-                label="Identificación"
-                // variant="standard"
-                placeholder="Identificación"
-                sx={{ width: "100%", marginBottom: "16px" }}
-                value={identificacion}
-                onChange={({ target }) => setIdentificacion(target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="col-sm-12">
-            <div className="form-group">
-              <TextField
-                label="Donación DOP"
-                value={donaciondop}
-                sx={{ width: "100%", marginBottom: "16px" }}
-                name="numberformat"
-                id="formatted-numberformat-input"
-                InputProps={{
-                  inputComponent: NumberFormatCustom,
-                }}
-                // variant="standard"
-                onChange={({ target }) => setDonaciondop(target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="col-sm-12">
-            <div className="form-group">
-              <TextField
-                label="Donación USD"
-                value={donacionusd}
-                sx={{ width: "100%", marginBottom: "16px" }}
-                name="numberformat"
-                id="formatted-numberformat-input"
-                InputProps={{
-                  inputComponent: NumberFormatCustom,
-                }}
-                // variant="standard"
-                onChange={({ target }) => setDonacionusd(target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="col-sm-12">
-            <div className="form-group">
-              <TextField
-                required
-                label="Dirección"
-                // variant="standard"
-                placeholder="Dirección"
-                sx={{ width: "100%", marginBottom: "16px" }}
-                multiline
-                rows={2}
-                value={direccion}
-                onChange={({ target }) => setDireccion(target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="col-sm-12">
-            <div className="form-group">
-              <ClasificacionAliadosSelect
-                clasificacionAliados={clasificacionDonantesList}
-                clasificacionDonantesList={setClasificacionDonantesList}
-                handleChangeClasificacionDonantes={
-                  handleChangeClasificacionDonantes
+                value={projectData.donante.nombre}
+                onChange={({ target }) =>
+                  setProjectData(
+                    (prev) =>
+                      (prev = {
+                        ...prev,
+                        donante: { ...prev.donante, nombre: target.value },
+                      })
+                  )
                 }
               />
             </div>
           </div>
 
-          <div className="col-sm-12">
+          <div className="col-sm-6">
+            <div className="form-group">
+              <TextField
+                required
+                label="Identificación"
+                placeholder="Identificación"
+                sx={{ width: "100%", marginBottom: "16px" }}
+                value={projectData.donante.identificacion}
+                onChange={({ target }) =>
+                  setProjectData(
+                    (prev) =>
+                      (prev = {
+                        ...prev,
+                        donante: {
+                          ...prev.donante,
+                          identificacion: target.value,
+                        },
+                      })
+                  )
+                }
+              />
+            </div>
+          </div>
+
+          <div className="col-sm-6">
+            <div className="form-group">
+              <ClasificacionDonantesSelect
+                clasificacionDonantes={clasificacionDonantesList}
+              />
+            </div>
+          </div>
+
+          <div className="col-sm-6">
+            <div className="form-group">
+              <TextField
+                label="Donación DOP"
+                sx={{ width: "100%", marginBottom: "16px" }}
+                name="numberformat"
+                id="formatted-numberformat-input"
+                InputProps={{
+                  inputComponent: NumberFormatCustom,
+                }}
+                value={projectData.donante.monto1}
+                onChange={({ target }) =>
+                  setProjectData(
+                    (prev) =>
+                      (prev = {
+                        ...prev,
+                        donante: { ...prev.donante, monto1: target.value },
+                      })
+                  )
+                }
+              />
+            </div>
+          </div>
+
+          <div className="col-sm-6">
+            <div className="form-group">
+              <TextField
+                label="Donación USD"
+                sx={{ width: "100%", marginBottom: "16px" }}
+                name="numberformat"
+                id="formatted-numberformat-input"
+                InputProps={{
+                  inputComponent: NumberFormatCustom,
+                }}
+                value={projectData.donante.monto2}
+                onChange={({ target }) =>
+                  setProjectData(
+                    (prev) =>
+                      (prev = {
+                        ...prev,
+                        donante: { ...prev.donante, monto2: target.value },
+                      })
+                  )
+                }
+              />
+            </div>
+          </div>
+
+          <div className="col-sm-6">
+            <div className="form-group">
+              <TextField
+                required
+                label="Dirección"
+                placeholder="Dirección"
+                sx={{ width: "100%", marginBottom: "16px" }}
+                multiline
+                rows={3}
+                value={projectData.donante.direccion}
+                onChange={({ target }) =>
+                  setProjectData(
+                    (prev) =>
+                      (prev = {
+                        ...prev,
+                        donante: { ...prev.donante, direccion: target.value },
+                      })
+                  )
+                }
+              />
+            </div>
+          </div>
+
+          <div className="col-sm-6">
             <div className="form-group">
               <TextField
                 required
                 label="Información"
-                // variant="standard"
                 placeholder="Información"
                 sx={{ width: "100%", marginBottom: "16px" }}
                 multiline
                 rows={3}
-                value={informacion}
-                onChange={({ target }) => setInformacion(target.value)}
+                value={projectData.donante.informacion}
+                onChange={({ target }) =>
+                  setProjectData(
+                    (prev) =>
+                      (prev = {
+                        ...prev,
+                        donante: { ...prev.donante, informacion: target.value },
+                      })
+                  )
+                }
               />
             </div>
           </div>
         </div>
       </form>
-
-      {/* <Modal
-        show={isModalOpenDonantes}
-        onHide={handleClose}
-        style={{ marginTop: 100 }}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <Typography variant="h6" component="h2" color="primary">
-              Creación de Aliado
-            </Typography>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <form>
-            <div className="row">
-              <div className="col-sm-12">
-                <div className="form-group">
-                  <TextField
-                    required
-                    label="Nombre"
-                    // variant="standard"
-                    placeholder="Nombre"
-                    sx={{ width: "100%", marginBottom: "16px" }}
-                    value={nombre}
-                    onChange={({ target }) => setNombre(target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="col-sm-12">
-                <div className="form-group">
-                  <TextField
-                    required
-                    label="Identificación"
-                    // variant="standard"
-                    placeholder="Identificación"
-                    sx={{ width: "100%", marginBottom: "16px" }}
-                    value={identificacion}
-                    onChange={({ target }) => setIdentificacion(target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="col-sm-12">
-                <div className="form-group">
-                  <TextField
-                    label="donacion"
-                    value={donacion}
-                    sx={{ width: "100%", marginBottom: "16px" }}
-                    name="numberformat"
-                    id="formatted-numberformat-input"
-                    InputProps={{
-                      inputComponent: NumberFormatCustom,
-                    }}
-                    // variant="standard"
-                    onChange={({ target }) => setDonacion(target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="col-sm-12">
-                <div className="form-group">
-                  <TextField
-                    required
-                    label="Dirección"
-                    // variant="standard"
-                    placeholder="Dirección"
-                    sx={{ width: "100%", marginBottom: "16px" }}
-                    multiline
-                    rows={2}
-                    value={direccion}
-                    onChange={({ target }) => setDireccion(target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="col-sm-12">
-                <div className="form-group">
-                  <ClasificacionAliadosSelect
-                    clasificacionDonantesList={setClasificacionDonantesList}
-                    handleChangeClasificacionDonantes={
-                      handleChangeClasificacionDonantes
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="col-sm-12">
-                <div className="form-group">
-                  <TextField
-                    required
-                    label="Información"
-                    // variant="standard"
-                    placeholder="Información"
-                    sx={{ width: "100%", marginBottom: "16px" }}
-                    multiline
-                    rows={3}
-                    value={informacion}
-                    onChange={({ target }) => setInformacion(target.value)}
-                  />
-                </div>
-              </div>
-            </div>
-          </form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="contained"
-            color="warning"
-            onClick={handleClose}
-            endIcon={<CloseIcon />}
-            sx={{ mr: 1 }}
-          >
-            Cancelar
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleAddDonante}
-            endIcon={<DoneAllIcon />}
-            sx={{ mr: 1 }}
-          >
-            Guardar
-          </Button>
-        </Modal.Footer>
-      </Modal> */}
     </div>
   );
 }
