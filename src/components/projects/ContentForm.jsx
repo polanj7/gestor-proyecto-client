@@ -57,306 +57,104 @@ export default function ContentForm() {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const[projectData, setProjectData] = useState({    
-      idProyecto: 0,
-      codigo: null,
-      nombre: "",
-      descripcion: "",
-      objetivoGeneral: "",
-      objetivoEspecifico: "",
-      resultados: "",
-      fechaInicio: new Date(),
-      fechaFinal: new Date(),
-      idRangoBeneficiario: 1, //select --done
-      cantidadBeneficiarios: 0,
-      anos: 0,
-      meses: 0,
-      dias: 0,
-      idRangoPresupuestario: 1, //select --done
-      montoPresupuestarioDOP: 0,
-      montoPresupuestarioUSD: 0,      
-      idGerente: 0,
-      isDelete: false,
-      fechaCreacion: new Date(),
-      aliado: {
-        idAliado: 0,
-        nombre: "",
-        identificacion: "",
-        idClasificacion: 1, //select --done
-        direccion: "",
-        informacion: ""
-      },
-      donante: {
-        idDonante: 0,
-        idProyecto: 0,
-        nombre: "",
-        identificacion: "",
-        idClasificacion: 1, //select --done
-        idDonacionClasificacion: 1,
-        monto1: 0,
-        monto2: 0,
-        donacion: 0,
-        direccion: "",
-        informacion: ""
-      },
-      desafiosProyectos: [
-        // {
-        //   idDesafioProyecto: 0,
-        //   idProyecto: 0,
-        //   idDesafio: 0
-        // }
-      ],
-      documentosProyectos: [
-        // {
-        //   idDocumento: 0,
-        //   idProyecto: 0,
-        //   idTarea: 0,
-        //   contenido: string,
-        //   fecha: new Date(),
-        //   nombreArchivo: string,
-        //   ext: string,
-        //   url: string,
-        //   size: 0,
-        //   file: string
-        // }
-      ],
-      lugaresImplementaciones: [
-        // {
-        //   idImplementacion: 0,
-        //   idProyecto: 0,
-        //   idProvincia: 0
-        // }
-      ],
-      actividades: [
-        //{
-          // idActividad: 0,
-          // descripcion: null,
-          // idProyecto: 0,
-          // orden: 0,
-          // tareas: [
-            // {
-            //   idTarea: 0,
-            //   descripcion: null,
-            //   idActividad: 0,
-            //   idResponsable: 0,
-            //   fechaInicio: new Date(),
-            //   fechaFinal: new Date(),
-            //   idEstado: 0,
-            //   fechaCreacion: new Date()
-            // }
-        //   ]
-        // }
-      ],
-      tiposBeneficiarioProyectos: [
-        // {
-        //   idTipoBeneficiarioProyecto: 0,
-        //   idTipo: 0,
-        //   idProyecto: 0
-        // }
-      ]
-      
-  });
-
-  /*
-
-  {
-  idProyecto: 0,
-  codigo: "string",
-  nombre: "string",
-  descripcion: string,
-  objetivoGeneral: string,
-  objetivoEspecifico: string,
-  resultados: string,
-  fechaInicio: 2022-04-06T03:57:34.602Z,
-  fechaFinal: 2022-04-06T03:57:34.602Z,
-  idRangoBeneficiario: 0,
-  cantidadBeneficiarios: 0,
-  anos: 0,
-  meses: 0,
-  dias: 0,
-  idRangoPresupuestario: 0,
-  montoPresupuestarioDOP: 0,
-  montoPresupuestarioUSD: 0,
-  tipoMoneda: string,
-  idGerente: 0,
-  isDelete: true,
-  fechaCreacion: 2022-04-06T03:57:34.602Z,
-  aliado: {
-    idAliado: 0,
-    nombre: string,
-    identificacion: string,
-    idClasificacion: 0,
-    direccion: string,
-    informacion: string
-  },
-  donante: {
-    idDonante: 0,
+  const [projectData, setProjectData] = useState({
     idProyecto: 0,
-    nombre: string,
-    identificacion: string,
-    idClasificacion: 0,
-    idDonacionClasificacion: 0,
-    monto1: 0,
-    monto2: 0,
-    donacion: 0,
-    direccion: string,
-    informacion: string
-  },
-  desafiosProyectos: [
-    {
+    codigo: null,
+    nombre: "",
+    descripcion: "",
+    objetivoGeneral: "",
+    objetivoEspecifico: "",
+    resultados: "",
+    fechaInicio: new Date(),
+    fechaFinal: new Date(),
+    idRangoBeneficiario: 1, //select --done
+    cantidadBeneficiarios: 0,
+    anos: 0,
+    meses: 0,
+    dias: 0,
+    idRangoPresupuestario: 1, //select --done
+    montoPresupuestarioDOP: 0,
+    montoPresupuestarioUSD: 0,
+    idGerente: 0,
+    isDelete: false,
+    fechaCreacion: new Date(),
+    aliado: {
+      idAliado: 0,
+      nombre: "",
+      identificacion: "",
+      idClasificacion: 1, //select --done
+      direccion: "",
+      informacion: "",
+    },
+    donante: {
+      idDonante: 0,
+      idProyecto: 0,
+      nombre: "",
+      identificacion: "",
+      idClasificacion: 1, //select --done
+      idDonacionClasificacion: 1,
+      monto1: 0,
+      monto2: 0,
+      donacion: 0,
+      direccion: "",
+      informacion: "",
+    },
+    desafiosProyecto: {
       idDesafioProyecto: 0,
       idProyecto: 0,
-      idDesafio: 0
-    }
-  ],
-  documentosProyectos: [
-    {
-      idDocumento: 0,
-      idProyecto: 0,
-      idTarea: 0,
-      contenido: string,
-      fecha: 2022-04-06T03:57:34.602Z,
-      nombreArchivo: string,
-      ext: string,
-      url: string,
-      size: 0,
-      file: string
-    }
-  ],
-  lugaresImplementaciones: [
-    {
+      idDesafio: 0,
+    },
+    documentosProyectos: [
+      // {
+      //   idDocumento: 0,
+      //   idProyecto: 0,
+      //   idTarea: 0,
+      //   contenido: string,
+      //   fecha: new Date(),
+      //   nombreArchivo: string,
+      //   ext: string,
+      //   url: string,
+      //   size: 0,
+      //   file: string
+      // }
+    ],
+    lugaresImplementacione: {
       idImplementacion: 0,
       idProyecto: 0,
-      idProvincia: 0
-    }
-  ],
-  actividades: [
-    {
-      idActividad: 0,
-      descripcion: string,
-      idProyecto: 0,
-      orden: 0,
-      tareas: [
-        {
-          idTarea: 0,
-          descripcion: string,
-          idActividad: 0,
-          idResponsable: 0,
-          fechaInicio: 2022-04-06T03:57:34.602Z,
-          fechaFinal: 2022-04-06T03:57:34.602Z,
-          idEstado: 0,
-          fechaCreacion: 2022-04-06T03:57:34.602Z
-        }
-      ]
-    }
-  ],
-  tiposBeneficiarioProyectos: [
-    {
+      idProvincia: 0,
+      idMunicipio: 0,
+      idDistrito: 0,
+      idSeccion: 0,
+      idBarrio: 0
+    },
+    actividades: [
+      //{
+      // idActividad: 0,
+      // descripcion: null,
+      // idProyecto: 0,
+      // orden: 0,
+      // tareas: [
+      // {
+      //   idTarea: 0,
+      //   descripcion: null,
+      //   idActividad: 0,
+      //   idResponsable: 0,
+      //   fechaInicio: new Date(),
+      //   fechaFinal: new Date(),
+      //   idEstado: 0,
+      //   fechaCreacion: new Date()
+      // }
+      //   ]
+      // }
+    ],
+    tiposBeneficiarioProyecto: {
       idTipoBeneficiarioProyecto: 0,
       idTipo: 0,
       idProyecto: 0
-    }
-  ]
-}
+    },
+  });
   
-  */
-
-  /*
-  
-  {
-  "idProyecto": 0,
-  "codigo": "",
-  "nombre": "",
-  "descripcion": "",
-  "objetivoGeneral": "",
-  "objetivoEspecifico": "",
-  "resultados": "",
-  "fechaInicio": "2022-03-23T03:48:29.894Z",
-  "fechaFinal": "2022-03-23T03:48:29.894Z",
-  "idRangoBeneficiario": 1, //Select
-  "cantidadBeneficiarios": 0,
-  "idDonante": 1,
-  "idAliado": 1, //Select
-  "anos": 0,
-  "meses": 0,
-  "dias": 0,
-  "idRangoPresupuestario": 0,
-  "montoPresupuestario": 0,
-  "tipoMoneda": "string",
-  "idGerente": 0,
-  "isDelete": true,
-  "fechaCreacion": "2022-03-23T03:48:29.894Z",
-  "desafiosProyectos": [],
-  "documentosProyectos": [],
-  "lugaresImplementaciones": [],
-  "actividades": [],
-  "tiposBeneficiarioProyectos": []
-}
-  */
-
-  /*
-  {
-  "idProyecto": 0,
-  "codigo": "string",
-  "nombre": "string",
-  "descripcion": "string",
-  "fechaInicio": "2022-02-25T19:07:24.703Z",
-  "fechaFinal": "2022-02-25T19:07:24.703Z",
-  "idTipoBeneficiario": "string",
-  "datosBeneficiario": "string",
-  "idTipoPresupuesto": "string",
-  "rangoPresupuestado": 0,
-  "descripcionEspecie": "string",
-  "desafiosProyectos": [
-    {
-      "idDesafioProyecto": 0,
-      "idProyecto": 0,
-      "idDesafio": 0
-    }
-  ],
-  "documentosProyectos": [
-    {
-      "idDocumento": 0,
-      "idProyecto": 0,
-      "idTarea": 0,
-      "contenido": "string",
-      "fecha": "2022-02-25T19:07:24.703Z",
-      "nombreArchivo": "string",
-      "ext": "string",
-      "url": "string"
-    }
-  ],
-  "lugaresImplementaciones": [
-    {
-      "idImplementacion": 0,
-      "idProyecto": 0,
-      "idProvincia": 0
-    }
-  ],
-  "tareas": [
-    {
-      "idTarea": 0,
-      "descripcion": "string",
-      "idProyecto": 0,
-      "fechaInicio": "2022-02-25T19:07:24.703Z",
-      "fechaFinal": "2022-02-25T19:07:24.703Z",
-      "idEstado": 0
-    }
-  ],
-  "territoriosImpactados": [
-    {
-      "idImpacto": 0,
-      "idProyecto": 0,
-      "idMunicipio": 0,
-      "idBarrio": 0
-    }
-  ]
-}
-  
-  */
-  
-  const[disabled, setDisabled] = useState(true)
-
+  const[disabled, setDisabled] = useState(true);
 
   const providerProject = useMemo(
     () => ({ projectData, setProjectData }),

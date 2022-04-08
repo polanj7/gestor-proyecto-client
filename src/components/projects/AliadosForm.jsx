@@ -163,26 +163,7 @@ export default function AliadosForm({isModalOpenAliados, setIsModalOpenAliados})
             </div>
           </div>
         </div>
-      </form>
-
-      <Button
-        variant="contained"
-        color="warning"
-        onClick={handleClose}
-        endIcon={<CloseIcon />}
-        sx={{ mr: 1 }}
-      >
-        Cancelar
-      </Button>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleAddAliado}
-        endIcon={<DoneAllIcon />}
-        sx={{ mr: 1 }}
-      >
-        Guardar
-      </Button>
+      </form>    
     </div>
   );
 }

@@ -27,33 +27,24 @@ const MenuProps = {
   },
 };
 
-export default function SelectMunicipality({municipality, disabled}) { 
+export default function SelectMunicipality({municipality, disabled, municipiosIDs, setMunicipiosIDs}) { 
 
 
   const {projectData, setProjectData} = useContext(ProjectContext);
   const [personName, setPersonName] = React.useState([]);
 
-  const handleChange = (event) => {
-    console.log('event111', event)
-    const {
-      target: { value },
-    } = event;
-    setPersonName(typeof value === 'string' ? value.split(',') : value);
+  const handleChange = async(event) => {
+    const { target } = event;
+    setMunicipiosIDs(target.value);
+    setProjectData(
+      (prev) =>
+        (prev = {
+          ...prev,
+          lugaresImplementacione: { ...prev.lugaresImplementacione, idMunicipio: target.value },
+        })
+    )
+  }; 
 
-    //Datos temporales
-    let dataFinal = [
-      {
-        idImpacto: 0,
-        idProyecto: 0,
-        idMunicipio: 1,
-        idBarrio: 1
-      },
-    ];
-
-
-    
-    setProjectData({...projectData, territoriosImpactados: dataFinal})
-  };
 
   const headerList = ({nombre: nombreProv}, {nombre: nombreMun}) =>{
    return <ListSubheader key={nombreMun}>
@@ -69,31 +60,50 @@ export default function SelectMunicipality({municipality, disabled}) {
     // setProvincesIDs(newIDs);   
   }
 
-  useEffect(() =>{
-    // municipality.map(x=>{
-    //   x.label = x.nombre
-    //   x.value = x.idMunicipio
-    // })
+  // useEffect(() =>{
+  //     if (projectData.idProyecto > 0){
+  //     setPersonName(['CERRO DE LOS CACHEOS'])
+  //   }
 
-    if (projectData.idProyecto > 0){
-      setPersonName(['CERRO DE LOS CACHEOS'])
-    }
-
-  }, [projectData.idProyecto])
+  // }, [projectData.idProyecto])
     
   return (
     <>
-      <FormControl
-        // variant="standard"
-        style={{ width: "100%", marginBottom: "20px" }}
-      >
+
+      <FormControl /*variant="standard"*/ sx={{ width: "100%" }}>
+        <InputLabel id="demo-simple-select-standard-label">
+        Municipios
+        </InputLabel>
+        <Select
+          disabled={disabled}
+          value={projectData.lugaresImplementacione.idMunicipio}
+          onChange={handleChange}
+          label="Municipios"
+          sx={{
+            marginBottom: "16px",
+          }}
+        >
+          {municipality.length > 0 ? (
+            municipality.map(({ idMunicipio, nombre }) => {
+              return (
+                <MenuItem key={idMunicipio} value={idMunicipio}>
+                  {nombre}
+                </MenuItem>
+              );
+            })
+          ) : (
+            <></>
+          )}
+        </Select>
+      </FormControl>
+     
         {/* <SelectReact
           options={municipality}
           onChange={handleChangeSelect}
           isMulti
         /> */}
 
-        <InputLabel id="selectImplementacion">
+        {/* <InputLabel id="selectImplementacion">
           Municipios
         </InputLabel>
         <Select
@@ -115,7 +125,7 @@ export default function SelectMunicipality({municipality, disabled}) {
                 );               
           })}
         </Select>
-      </FormControl>
+      </FormControl> */}
     </>
   );
 }

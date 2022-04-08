@@ -10,6 +10,7 @@ import {
   getBarrios,
 } from "../../services/territoriesServices";
 import { getBeneficiarios, getRangeBeneficiarios, getTipoBeneficiarios } from "../../services/beneficiariosServices";
+import { getResponsables } from '../../services/usersServices'
 
 //components
 import SelectBeneficiaries from "../controls/SelectBeneficiaries";
@@ -22,6 +23,7 @@ import SeccionSelect from "../controls/SeccionSelect";
 import BarrioSelect from "../controls/BarrioSelect";
 import AliadosForm from "./AliadosForm";
 import RangoBeneficiarios from "../controls/RangoBeneficiarios";
+import GerenteSelect from "../controls/GerenteSelect";
 
 import Select2 from 'react-select'
 
@@ -54,11 +56,11 @@ const options = [
 ]
 
 const challengesImpacted = [
-  { value: "Educación", label: "Educación" },
-  { value: "Salud", label: "Salud" },
-  { value: "Saneamiento", label: "Saneamiento" },
-  { value: "Juventud", label: "Juventud" },
-  { value: "Otros", label: "Otros" },
+  { idDesafio: 1, nombre: "Educación" },
+  { idDesafio: 2, nombre: "Salud" },
+  { idDesafio: 3, nombre: "Saneamiento" },
+  { idDesafio: 4, nombre: "Juventud" },
+  { idDesafio: 5, nombre: "Otros" },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -95,7 +97,8 @@ export default function ProjectForm(props) {
   //beneficiarios
   const [rangoList, setRangoList] = useState([]);
   const [rangoSelected, setRangoSelected] = useState([]);
-
+  //gerente
+  const[responsables, setResponsables] = useState([]);
 
   //modals
   const [isModalOpenAliados, setIsModalOpenAliados] = useState(false);
@@ -105,7 +108,10 @@ export default function ProjectForm(props) {
 
   const getProvinced = async () => {
     const resp = await getProvincias();
-    setProvinces(resp);
+    let newData = resp.map((x) =>{
+        return {...x, label: x.nombre, value: x.idPovincia}
+    });
+    setProvinces(newData);
   };
 
   const getMunicipalityd = async (ids) => {
@@ -151,37 +157,45 @@ export default function ProjectForm(props) {
     setRangoList(resp);
   };
 
+  const getResponsablesd = async () =>{
+    const resp = await getResponsables();
+    setResponsables(resp);
+  }
+
   const handleChangeBeneficiaries = (e) => {
     //setIsModalOpenAliados(true);
   };
-
   
   const handleChangeRangeBenef = (e) => {
     //setIsModalOpenAliados(true);
   };
 
-
   useEffect(() => {
     getProvinced();
     getBeneficiaries();
-    //getAliadosList();
-    //getDonantesList();
     getRangoBeneficiarios();
+    getResponsablesd();
   }, []);
 
   useEffect(() => {
-    getMunicipalityd(provincesIDs);
-    getDistricts(1);
-  }, [provincesIDs]);
+    getMunicipalityd(projectData.lugaresImplementacione.idProvincia);  
+    getDistricts(projectData.lugaresImplementacione.idMunicipio);
+    getSeccion(projectData.lugaresImplementacione.idDistrito);
+    getBarrioss(projectData.lugaresImplementacione.idSeccion);
+  }, [projectData.lugaresImplementacione]);
 
+  // useEffect(() => {
+  //   getMunicipalityd(provincesIDs);  
+  //   getDistricts(municipiosIDs);
+  //   getSeccion(distritosIDs);
+  //   getBarrioss(seccionesIDs);
+  // }, [provincesIDs,municipiosIDs,distritosIDs,seccionesIDs]);
 
   return (
     <>
       <Typography mt={2} mb={3} variant="h5" component="h1" color="primary">
-        Datos Generales        
+        Datos Generales
       </Typography>
-    
-    
 
       <form>
         <div className="row">
@@ -280,10 +294,7 @@ export default function ProjectForm(props) {
                 />
               </div>
 
-              <RangoBeneficiarios
-                rango={rangoList}               
-                disabled={props.disabled}                
-              />
+              <RangoBeneficiarios rango={rangoList} disabled={props.disabled} />
 
               {/* <AliadosSelect
                 aliados={aliadosList}
@@ -359,7 +370,7 @@ export default function ProjectForm(props) {
               <div className={classes.toolbar}>
                 <SelectBeneficiaries
                   beneficiaries={beneficiarieType}
-                  disabled={props.disabled}                  
+                  disabled={props.disabled}
                 />
 
                 <TextField
@@ -384,48 +395,37 @@ export default function ProjectForm(props) {
                 />
               </div>
 
-              {/* <TextField
-                {...props}
-                required
-                id="outlined-required"
-                label="Detalles los beneficiarios"
-                variant="standard"
-                placeholder="Detalles los beneficiarios"
-                sx={{ width: "100%", marginBottom: "16px" }}
-                value={projectData.datosBeneficiario}
-                onChange={({ target }) =>
-                  setProjectData({
-                    ...projectData,
-                    datosBeneficiario: target.value,
-                  })
-                }
-                multiline
-                rows={4}
-              /> */}
-            </div>
-          </div>
+              <div className={classes.toolbar}>
+              
+                  <SelectChallenges
+                    challenges={challengesImpacted}
+                    disabled={props.disabled}
+                  />
+               
 
-          <div className="form-group">
-            <SelectChallenges
-              challenges={challengesImpacted}
-              disabled={props.disabled}
-            />
+                  <GerenteSelect
+                    responsables={responsables}
+                    disabled={props.disabled}
+                  />
+                
+                
+              </div>
+            </div>
           </div>
 
           <div className="col-sm-12">
             <div style={{ width: "100%" }}>
-           
-
               <Accordion>
                 <AccordionSummary
-                  style={{ backgroundColor: "red" }}
-                  expandIcon={<ExpandMoreIcon />}
+                  style={{ backgroundColor: "#083240", color: "#fff"  }}
+                  expandIcon={<ExpandMoreIcon style={{color: "#fff"}} />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
-                  <Typography>Territorios</Typography>
+                  <Typography>Lugar Implementación</Typography>
                 </AccordionSummary>
-                <AccordionDetails>
+                <AccordionDetails style={{paddingTop: "16px"}}>
+                  
                   <div className="form-group">
                     <SelectProvinces
                       provinces={provinces}
@@ -441,6 +441,8 @@ export default function ProjectForm(props) {
                     <SelectMunicipality
                       municipality={municipality}
                       disabled={props.disabled}
+                      municipiosIDs={municipiosIDs}
+                      setMunicipiosIDs={setMunicipiosIDs}
                     />
                   </div>
 
@@ -448,6 +450,8 @@ export default function ProjectForm(props) {
                     <DistritosSelect
                       districts={districts}
                       disabled={props.disabled}
+                      distritosIDs={distritosIDs}
+                      setDistritosIDs={setDistritosIDs}
                     />
                   </div>
 
@@ -455,42 +459,49 @@ export default function ProjectForm(props) {
                     <SeccionSelect
                       seccion={seccion}
                       disabled={props.disabled}
+                      seccionesIDs={seccionesIDs}
+                      setSeccionesIDs={setSeccionesIDs}
                     />
                   </div>
 
                   <div className="form-group">
-                    <BarrioSelect barrios={barrios} disabled={props.disabled} />
+                    <BarrioSelect
+                      barrios={barrios}
+                      disabled={props.disabled}
+                      barriosIDs={barriosIDs}
+                      setBarriosIDs={setBarriosIDs}
+                    />
                   </div>
                 </AccordionDetails>
               </Accordion>
 
               <Accordion>
                 <AccordionSummary
-                  style={{ backgroundColor: "red" }}
-                  expandIcon={<ExpandMoreIcon />}
+                  style={{ backgroundColor: "#083240", color: "#fff"  }}
+                  expandIcon={<ExpandMoreIcon style={{color: "#fff"}} />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
                   <Typography>Aliados</Typography>
                 </AccordionSummary>
-                <AccordionDetails>                 
-                <AliadosForm
-                  isModalOpenAliados={isModalOpenAliados}
-                  setIsModalOpenAliados={setIsModalOpenAliados}
-                />
+                <AccordionDetails style={{paddingTop: "16px"}}>
+                  <AliadosForm
+                    isModalOpenAliados={isModalOpenAliados}
+                    setIsModalOpenAliados={setIsModalOpenAliados}
+                  />
                 </AccordionDetails>
               </Accordion>
 
               <Accordion>
                 <AccordionSummary
-                  style={{ backgroundColor: "red" }}
-                  expandIcon={<ExpandMoreIcon />}
+                  style={{ backgroundColor: "#083240", color: "#fff" }}
+                  expandIcon={<ExpandMoreIcon style={{color: "#fff"}} />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
                   <Typography>Duración</Typography>
                 </AccordionSummary>
-                <AccordionDetails>
+                <AccordionDetails style={{paddingTop: "16px"}}>
                   <TextField
                     {...props}
                     required
@@ -547,16 +558,14 @@ export default function ProjectForm(props) {
                     }}
                     value={projectData.anos}
                     onChange={({ target }) =>
-                    setProjectData({
-                      ...projectData,
-                      anos: target.value,
-                    })
-                  }
+                      setProjectData({
+                        ...projectData,
+                        anos: target.value,
+                      })
+                    }
                   />
                 </AccordionDetails>
               </Accordion>
-
-   
             </div>
           </div>
         </div>

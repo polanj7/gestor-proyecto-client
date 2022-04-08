@@ -26,28 +26,9 @@ const MenuProps = {
 
 export default function SelectChallenges({challenges, disabled}) {
   const { projectData, setProjectData } = useContext(ProjectContext);
-  const [personName, setPersonName] = React.useState([]);
 
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-
-    setPersonName(typeof value === "string" ? value.split(",") : value);
-
-    let data = {
-        text: typeof value === "string" ? value.split(",") : value,
-      id: 123,
-    };
-
-    setProjectData({ ...projectData, lugaresImplementacioneSDs: data });
-    //setProjectData({...projectData, tareas: [...projectData.tareas, tareass]})
-  };
-
-  const handleTest =(e) => {
-    
+  const handleDataSelect =(e) => {    
     let newArray = [];
-
     e.map(({value}) => {
       newArray.push({
         idDesafioProyecto: 0,
@@ -55,31 +36,51 @@ export default function SelectChallenges({challenges, disabled}) {
         idDesafio: value
       }); 
     })
-
-    setProjectData(prev => prev = {...prev, desafiosProyectos: newArray});
-    
-
-    console.log(projectData)
-
-    // //desafiosProyectos
-    // projectData.desafiosProyectos.push({
-      
-    // });
-    // setProjectData(prev =>Array.isArray(e) ? e.map(({label}) => label) : []);
+    setProjectData(prev => prev = {...prev, desafiosProyecto: newArray});    
   }
- 
-  useEffect(() =>{
 
-    if (projectData.idProyecto > 0){
-      setPersonName(['Salud']);
-    }
-
-  }, [projectData.idProyecto])
-
-  const[test, setTest] =useState([]);
+  const handleChange = async(event) => {
+    const { target } = event;
+    setProjectData(
+      (prev) =>
+        (prev = {
+          ...prev,
+          desafiosProyecto: { ...prev.desafiosProyecto, idDesafio: target.value },
+        })
+    )
+  }; 
 
   return (
     <>
+
+      <FormControl /*variant="standard"*/ sx={{ width: "49%" }}>
+        <InputLabel id="demo-simple-select-standard-label">
+          Desafios
+        </InputLabel>
+        <Select
+          disabled={disabled}
+          value={projectData.desafiosProyecto.idDesafio}
+          onChange={handleChange}
+          label="Desafios"
+          sx={{
+            marginBottom: "16px",
+          }}
+        >
+          {challenges.length > 0 ? (
+            challenges.map(({ idDesafio, nombre }) => {
+              return (
+                <MenuItem key={idDesafio} value={idDesafio}>
+                  {nombre}
+                </MenuItem>
+              );
+            })
+          ) : (
+            <></>
+          )}
+        </Select>
+      </FormControl>
+
+
       {/* <FormControl
         // variant="standard"
         style={{ width: "100%", marginBottom: "20px" }}
@@ -107,10 +108,15 @@ export default function SelectChallenges({challenges, disabled}) {
           ))}
         </Select> */}
 
-        
       {/* </FormControl>  */}
-
-      <Select2 isMulti options={challenges} onChange={handleTest}></Select2>
+      {/* <p>Desafios</p>
+      <Select2
+        isMulti
+        options={challenges}
+        onChange={handleDataSelect}
+        // value={[{label: "Salud", value: "Salud"}, {label: "Saluds", value: "Saluds"}]}
+        style={{ width: "100%", marginBottom: "20px" }}
+      /> */}
     </>
   );
 }

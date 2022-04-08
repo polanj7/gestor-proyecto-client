@@ -18,18 +18,54 @@ const MenuProps = {
   },
 };
 
-export default function SelectResponsable({responsables,responsable, setResponsable, disabled}) { 
+export default function SelectResponsable({responsables,responsable, setResponsable, setResponsableLabel, disabled}) { 
+
+
+  const handleChange = async(event) => {
+    console.log('event', event)
+    const { target } = event;
+    //let name = responsables.fin(target.value).nombre
+    setResponsable(target.value);
+    //setResponsableLabel(name);   
+  }; 
 
   return (
     <>
-      <FormControl  style={{ width: "100%", marginBottom: "20px" }}>
+      <FormControl /*variant="standard"*/ sx={{ width: "100%" }}>
+        <InputLabel id="demo-simple-select-standard-label">
+          Responsable
+        </InputLabel>
+        <Select
+          disabled={disabled}
+          value={responsable}
+          onChange={handleChange}
+          label="Responsable"
+          sx={{
+            marginBottom: "16px",
+          }}
+        >
+          {responsables.length > 0 ? (
+            responsables.map(({ idUsuario ,nombre, apellido }) => {
+              return (
+                <MenuItem key={idUsuario} value={idUsuario}>
+                  {`${nombre} ${apellido}`}
+                </MenuItem>
+              );
+            })
+          ) : (
+            <></>
+          )}
+        </Select>
+      </FormControl>
+
+      {/* <FormControl  style={{ width: "100%", marginBottom: "20px" }}>
         <InputLabel id="selectImplementacion">Responsable</InputLabel>
         <Select
           disabled={disabled}
           required  
           label ="Responsable"          
           value={responsable}
-          onChange={({target}) => setResponsable(target?.value)}          
+          onChange={handleChange}          
           MenuProps={MenuProps}
         >
           {responsables.map(({ idUsuario ,nombre, apellido  }) => (
@@ -43,7 +79,7 @@ export default function SelectResponsable({responsables,responsable, setResponsa
             </MenuItem>
           ))}
         </Select>
-      </FormControl>      
+      </FormControl>       */}
     </>
   );
 }

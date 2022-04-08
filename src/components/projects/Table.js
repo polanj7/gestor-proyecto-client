@@ -86,6 +86,8 @@ export default function Table({projects}) {
     { field: "idProyecto", headerName: "ID", width: 1, headerClassName: "super-app-theme--header"},
     { field: "codigo", headerName: "Codigo", width: 200 },
     { field: "nombre", headerName: "Nombre", width: 450 },
+    { field: "objetivoGeneral", headerName: "Objetivo General", width: 200 },
+    { field: "objetivoEspecifico", headerName: "Objetivo Especifico", width: 200 },
     {
       field: "fechaInicio",
       headerName: "Inicio",
@@ -100,47 +102,47 @@ export default function Table({projects}) {
       type: "date",
       renderCell: (params) => <Moment format="DD/MM/YYYY">{params.value}</Moment>,
     },
-    {
-      field: "cantidadTareas",
-      headerName: "Cantidad de Tareas",
-      align: "center",
-      width: 200,
-      renderCell: (params) => (
-        <strong>          
-          <Button
-            disabled={params.row.isDelete}
-            variant="outlined"
-            color="primary"
-            size="small"
-            style={{ width: 10, marginLeft: 16 }}
-            onClick={() => {handleOpenModalTaks(params.id)}}
-            endIcon={params.value > 0 ? <VisibilityOutlinedIcon title="Ver Tareas" /> : <VisibilityOffIcon title="Sin tareas" /> }
-          >            
-            {params.value}
-          </Button>          
-        </strong>
+    // {
+    //   field: "cantidadTareas",
+    //   headerName: "Cantidad de Tareas",
+    //   align: "center",
+    //   width: 200,
+    //   renderCell: (params) => (
+    //     <strong>          
+    //       <Button
+    //         disabled={params.row.isDelete}
+    //         variant="outlined"
+    //         color="primary"
+    //         size="small"
+    //         style={{ width: 10, marginLeft: 16 }}
+    //         onClick={() => {handleOpenModalTaks(params.id)}}
+    //         endIcon={params.value > 0 ? <VisibilityOutlinedIcon title="Ver Tareas" /> : <VisibilityOffIcon title="Sin tareas" /> }
+    //       >            
+    //         {params.value}
+    //       </Button>          
+    //     </strong>
         
-      ),
-    },
-    {
-      field: "cantidadTareasCompletadas",
-      headerName: "Tareas Ejecutadas",
-      align: "center",
-      width: 200,
-      renderCell: (params) => (
-        <strong>
-          {/* {params.value} */}
-          <Button
-            variant="outlined"
-            color="warning"
-            size="small"
-            style={{ width: 100 }}
-          >
-            {params.value}%
-          </Button>
-        </strong>
-      ),
-    },
+    //   ),
+    // },
+    // {
+    //   field: "cantidadTareasCompletadas",
+    //   headerName: "Tareas Ejecutadas",
+    //   align: "center",
+    //   width: 200,
+    //   renderCell: (params) => (
+    //     <strong>
+    //       {/* {params.value} */}
+    //       <Button
+    //         variant="outlined"
+    //         color="warning"
+    //         size="small"
+    //         style={{ width: 100 }}
+    //       >
+    //         {params.value}%
+    //       </Button>
+    //     </strong>
+    //   ),
+    // },
     {
       field: "actions",
       type: "actions",
@@ -163,14 +165,7 @@ export default function Table({projects}) {
             label="Editar"
             onClick={() => handleEditProject(id)}
             color="primary"
-          />,
-          <GridActionsCellItem
-            title="Fase de Diseño"
-            icon={<DesignServicesIcon />}
-            label="Fase de Diseño"
-            onClick={() => handleEditProject(id)} 
-            color="primary"
-          />,     
+          />,           
           <GridActionsCellItem
             disabled={row.isDelete}
             title="Eliminar"
@@ -197,12 +192,8 @@ export default function Table({projects}) {
         columns={columns}
         pageSize={10}
         sx={{
-          boxShadow: 3,
-          border: 1,
-          borderColor: "primary.light",
-          "& .MuiDataGrid-cell:hover": {
-            color: "secundary.light",
-          },
+          boxShadow: 3       
+         
         }}
       />
 

@@ -27,33 +27,23 @@ const MenuProps = {
   },
 };
 
-export default function DistritosSelect({districts, disabled}) { 
+export default function DistritosSelect({districts, disabled, distritosIDs, setDistritosIDs}) { 
 
 
   const {projectData, setProjectData} = useContext(ProjectContext);
   const [personName, setPersonName] = React.useState([]);
 
-  const handleChange = (event) => {
-    console.log('event111', event)
-    const {
-      target: { value },
-    } = event;
-    setPersonName(typeof value === 'string' ? value.split(',') : value);
-
-    //Datos temporales
-    let dataFinal = [
-      {
-        idImpacto: 0,
-        idProyecto: 0,
-        idMunicipio: 1,
-        idBarrio: 1
-      },
-    ];
-
-
-    
-    setProjectData({...projectData, territoriosImpactados: dataFinal})
-  };
+  const handleChange = async(event) => {
+    const { target } = event;
+    setDistritosIDs(target.value);
+    setProjectData(
+      (prev) =>
+        (prev = {
+          ...prev,
+          lugaresImplementacione: { ...prev.lugaresImplementacione, idDistrito: target.value },
+        })
+    )
+  }; 
 
   const headerList = ({nombre: nombreProv}, {nombre: nombreMun}) =>{
    return <ListSubheader key={nombreMun}>
@@ -64,8 +54,36 @@ export default function DistritosSelect({districts, disabled}) {
     
   return (
     <>
-      <FormControl
-        // variant="standard"
+
+
+  <FormControl /*variant="standard"*/ sx={{ width: "100%" }}>
+        <InputLabel id="demo-simple-select-standard-label">
+          Distritos Municipales
+        </InputLabel>
+        <Select
+          disabled={disabled}
+          value={projectData.lugaresImplementacione.idDistrito}
+          onChange={handleChange}
+          label="Distritos Municipales"
+          sx={{
+            marginBottom: "16px",
+          }}
+        >
+          {districts.length > 0 ? (
+            districts.map(({ idDistrito, nombre }) => {
+              return (
+                <MenuItem key={idDistrito} value={idDistrito}>
+                  {nombre}
+                </MenuItem>
+              );
+            })
+          ) : (
+            <></>
+          )}
+        </Select>
+      </FormControl>
+
+      {/* <FormControl        
         style={{ width: "100%", marginBottom: "20px" }}
       >
         <InputLabel id="selectImplementacion">
@@ -89,7 +107,7 @@ export default function DistritosSelect({districts, disabled}) {
             </MenuItem>)
           })}
         </Select>
-      </FormControl>
+      </FormControl> */}
     </>
   );
 }

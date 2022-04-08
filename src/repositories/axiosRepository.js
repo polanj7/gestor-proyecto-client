@@ -44,6 +44,10 @@ export const singin = async (endPoint, data) => {
     return resp.data;
 }
 
+export const forgotPass = async (endPoint, usuario) => {   
+    await authAxios.put(`${baeeURL}/${endPoint}/${usuario}`);    
+}
+
 
 export const uploadFile = async (data) => {
     console.log("uploadFile", data);

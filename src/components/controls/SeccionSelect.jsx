@@ -27,33 +27,13 @@ const MenuProps = {
   },
 };
 
-export default function SeccionSelect({seccion, disabled}) { 
+export default function SeccionSelect({seccion, disabled, seccionesIDs,setSeccionesIDs}) { 
 
 
   const {projectData, setProjectData} = useContext(ProjectContext);
   const [personName, setPersonName] = React.useState([]);
 
-  const handleChange = (event) => {
-    console.log('event111', event)
-    const {
-      target: { value },
-    } = event;
-    setPersonName(typeof value === 'string' ? value.split(',') : value);
 
-    //Datos temporales
-    let dataFinal = [
-      {
-        idImpacto: 0,
-        idProyecto: 0,
-        idMunicipio: 1,
-        idBarrio: 1
-      },
-    ];
-
-
-    
-    setProjectData({...projectData, territoriosImpactados: dataFinal})
-  };
 
   const headerList = ({nombre: nombreProv}, {nombre: nombreMun}) =>{
    return <ListSubheader key={nombreMun}>
@@ -61,33 +41,45 @@ export default function SeccionSelect({seccion, disabled}) {
     </ListSubheader>
   }
 
+  const handleChange = async(event) => {
+    const { target } = event;
+    setSeccionesIDs(target.value);
+    setProjectData(
+      (prev) =>
+        (prev = {
+          ...prev,
+          lugaresImplementacione: { ...prev.lugaresImplementacione, idSeccion: target.value },
+        })
+    )
+  }; 
+
     
   return (
     <>
-      <FormControl
-        // variant="standard"
-        style={{ width: "100%", marginBottom: "20px" }}
-      >
-        <InputLabel id="selectImplementacion">
-            Secciones
+      <FormControl /*variant="standard"*/ sx={{ width: "100%" }}>
+        <InputLabel id="demo-simple-select-standard-label">
+          Secciones
         </InputLabel>
         <Select
           disabled={disabled}
-          required
-          label="Secciones"
-          multiple
-          value={personName}
+          value={projectData.lugaresImplementacione.idSeccion}
           onChange={handleChange}
-          renderValue={(selected) => selected.join(", ")}
-          MenuProps={MenuProps}
+          label="Secciones"
+          sx={{
+            marginBottom: "16px",
+          }}
         >
-         {seccion.map(({idSeccion, nombre}) => {
-            return(
-            <MenuItem key={idSeccion} value={nombre}>
-              <Checkbox checked={personName.indexOf(nombre) > -1} />
-              <ListItemText primary={`${nombre}`} />
-            </MenuItem>)
-          })}
+          {seccion.length > 0 ? (
+            seccion.map(({ idSeccion, nombre }) => {
+              return (
+                <MenuItem key={idSeccion} value={idSeccion}>
+                  {nombre}
+                </MenuItem>
+              );
+            })
+          ) : (
+            <></>
+          )}
         </Select>
       </FormControl>
     </>

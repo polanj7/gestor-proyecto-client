@@ -1,7 +1,7 @@
 import React, {useState, useContext, useEffect, useCallback} from 'react';
 
 //services
-import { getFiles, addFiles } from '../../services/filesServices'
+import { getFiles, addFiles, downloadFile } from '../../services/filesServices'
 
 //mui
 import Grid from '@mui/material/Grid';
@@ -77,6 +77,12 @@ export default function FileForm(props) {
     setProjectData(prev => prev = {...prev, documentosProyectos: [...prev.documentosProyectos]});  
   }
 
+
+  const handleDownloadFile = (file) => {   
+    downloadFile(file.idDocumento);
+  }
+
+
   return (
     <div className="container">
       
@@ -107,7 +113,7 @@ export default function FileForm(props) {
             </Typography>
             <List>
               {projectData.documentosProyectos?.map((f, idx) => {
-                return <FilesList key={idx} file={f} removeFile={handleRemoveFile} />;
+                return <FilesList key={idx} file={f} removeFile={handleRemoveFile} downloadFile={handleDownloadFile} />;
               })}
             </List>
           </Grid>

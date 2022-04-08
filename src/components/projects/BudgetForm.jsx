@@ -85,31 +85,30 @@ export default function BudgetForm(props) {
       <hr />
       <Accordion>
         <AccordionSummary
-          style={{ backgroundColor: "red" }}
-          expandIcon={<ExpandMoreIcon />}
+          style={{ backgroundColor: "#083240", color: "#fff" }}
+          expandIcon={<ExpandMoreIcon style={{ color: "#fff" }} />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
           <Typography>Donante</Typography>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails style={{paddingTop: "16px"}}>
           <DonantesForm />
         </AccordionDetails>
       </Accordion>
 
       <Accordion>
         <AccordionSummary
-          style={{ backgroundColor: "red" }}
-          expandIcon={<ExpandMoreIcon />}
+          style={{ backgroundColor: "#083240", color: "#fff" }}
+          expandIcon={<ExpandMoreIcon style={{ color: "#fff" }} />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
           <Typography>Presupuesto</Typography>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails style={{paddingTop: "16px"}}>
           <div className="w-100">
-            <div className="row">            
-
+            <div className="row">
               <div className="w-50">
                 <FormControl style={{ marginBottom: 20 }} {...props}>
                   <FormLabel id="demo-radio-buttons-group-label">
@@ -129,14 +128,17 @@ export default function BudgetForm(props) {
                           control={<Radio />}
                           label={x.text}
                           onChange={({ target }) =>
-                          setProjectData(
-                            (prev) =>
-                              (prev = {
-                                ...prev,
-                                donante: { ...prev.donante, idDonacionClasificacion: target.value },
-                              })
-                          )
-                        }
+                            setProjectData(
+                              (prev) =>
+                                (prev = {
+                                  ...prev,
+                                  donante: {
+                                    ...prev.donante,
+                                    idDonacionClasificacion: target.value,
+                                  },
+                                })
+                            )
+                          }
                         />
                       );
                     })}
@@ -152,14 +154,14 @@ export default function BudgetForm(props) {
                 sx={{ width: "100%", marginBottom: "16px" }}
                 value={projectData.donante.monto1}
                 onChange={({ target }) =>
-                setProjectData(
-                  (prev) =>
-                    (prev = {
-                      ...prev,
-                      donante: { ...prev.donante, monto1: target.value },
-                    })
-                )
-              }
+                  setProjectData(
+                    (prev) =>
+                      (prev = {
+                        ...prev,
+                        donante: { ...prev.donante, monto1: target.value },
+                      })
+                  )
+                }
                 name="numberformat"
                 id="formatted-numberformat-input"
                 InputProps={{
@@ -175,14 +177,14 @@ export default function BudgetForm(props) {
                 sx={{ width: "100%", marginBottom: "16px" }}
                 value={projectData.donante.monto2}
                 onChange={({ target }) =>
-                setProjectData(
-                  (prev) =>
-                    (prev = {
-                      ...prev,
-                      donante: { ...prev.donante, monto2: target.value },
-                    })
-                )
-              }
+                  setProjectData(
+                    (prev) =>
+                      (prev = {
+                        ...prev,
+                        donante: { ...prev.donante, monto2: target.value },
+                      })
+                  )
+                }
                 name="numberformat"
                 id="formatted-numberformat-input"
                 InputProps={{

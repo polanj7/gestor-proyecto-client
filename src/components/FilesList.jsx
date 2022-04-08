@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import FileCopy from '@mui/icons-material/AttachFile';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 
 export default function FilesList(props) {
   
@@ -30,10 +31,24 @@ export default function FilesList(props) {
       <ListItem
         secondaryAction={
           <>
+            {props.file.idDocumento > 0 && (
+              <IconButton
+                edge="end"
+                aria-label="download"
+                onClick={(e) => {
+                  props.downloadFile(props.file);
+                }}
+              >
+                <ArrowCircleDownIcon color="primary" />
+              </IconButton>
+            )}
+
             <IconButton
               edge="end"
               aria-label="delete"
-              onClick={(e) => {props.removeFile(props.file)}}
+              onClick={(e) => {
+                props.removeFile(props.file);
+              }}
             >
               <DeleteIcon color="error" />
             </IconButton>

@@ -21,6 +21,7 @@ import {
 import { UserContext } from './context/UserContext';
 import { ParameterContext } from './context/ParameterContext'
 import UsuariosForm from './components/mantenimientos/UsuariosForm';
+import UsuariosList from './components/mantenimientos/UsuariosList';
 
 
 
@@ -75,8 +76,9 @@ export default function App() {
                 <Route path=":id/readonly" element={<ContentForm />} />
               </Route>
 
+              <Route path="/mantenimiento/usuarios" element={<Main><UsuariosList /></Main>} />
               <Route path="/mantenimiento/usuario" element={<Main><UsuariosForm /></Main>} />
-
+              <Route path="/mantenimiento/usuario/edit/:id" element={<Main><UsuariosForm /></Main>} />
 
               <Route path="/sign-in" element={<SignIn />} />
               <Route path="/Dashboard" element={<Dashboard />} />

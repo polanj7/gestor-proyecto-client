@@ -11,6 +11,8 @@ import SelectReact from 'react-select';
 //context
 import { ProjectContext } from '../../context/ProjectContext'
 
+import Select2 from 'react-select'
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -21,8 +23,6 @@ const MenuProps = {
     },
   },
 };
-
-
 
 const style = {
   control: base => ({
@@ -41,28 +41,15 @@ export default function SelectProvinces({provinces, disabled, provincesIDs, setP
   const [test, setTest] = useState('');
  
   const handleChange = async(event) => {
-    const {
-      target: { value }, 
-    } = event;
-
-    // console.log('nombres', nombres);
-    // setSeletedData(nombres.length > 0 ? [nombres.join(',')]: [nombres[0]]);
-
-    console.log('change', value)
-
-    setProvincesIDs(value);
-    setSeletedData(typeof value === 'string' ? value.split(',') : value); 
-
-    // //Datos temporales
-    // let dataFinal = [
-    //   {
-    //     idImplementacion: 0,
-    //     idProyecto: 0,
-    //     idProvincia: 2,
-    //   },
-    // ];
-
-    //setProjectData({...projectData, lugaresImplementaciones: dataFinal})
+    const { target } = event;
+    setProvincesIDs(target.value);
+    setProjectData(
+      (prev) =>
+        (prev = {
+          ...prev,
+          lugaresImplementacione: { ...prev.lugaresImplementacione, idProvincia: target.value },
+        })
+    )
   };  
 
   const handleChangeSelect =(prov) =>{
@@ -73,30 +60,61 @@ export default function SelectProvinces({provinces, disabled, provincesIDs, setP
     setProvincesIDs(newIDs);   
   }  
 
-
-   useEffect(async() =>{
-
-     if (idTest > 0) {
-       setSeletedData((prev) => (prev = ["AZUA"]));
-       //testExec();
-     }
-
-     //PROV --> AZUA
-     //BARRIO --> CERRO DE LOS CACHEOS
-   }, [projectData.idProyecto])
+  const handleDataSelect =(e) => {    
+    let newArray = [];
+    e.map(({value}) => {
+      newArray.push({
+        idDesafioProyecto: 0,
+        idProyecto: 0,
+        idDesafio: value
+      }); 
+    })
+    setProjectData(prev => prev = {...prev, desafiosProyectos: newArray});    
+  }
+  
 
   return (
-  
     <>
-      <FormControl
+      <FormControl /*variant="standard"*/ sx={{ width: "100%" }}>
+        <InputLabel id="demo-simple-select-standard-label">
+        Provincias
+        </InputLabel>
+        <Select
+          disabled={disabled}
+          value={projectData.lugaresImplementacione.idProvincia}
+          onChange={handleChange}
+          label="Provincias"
+          sx={{
+            marginBottom: "16px",
+          }}
+        >
+          {provinces.length > 0 ? (
+            provinces.map(({ idProvincia, nombre }) => {
+              return (
+                <MenuItem key={idProvincia} value={idProvincia}>
+                  {nombre}
+                </MenuItem>
+              );
+            })
+          ) : (
+            <></>
+          )}
+        </Select>
+      </FormControl>
+
+      {/* <p>Provincias</p>
+      <Select2
+        isMulti
+        options={provinces}
+        onChange={handleDataSelect}
+        // value={[{label: "Salud", value: "Salud"}, {label: "Saluds", value: "Saluds"}]}
+        style={{ width: "100%", marginBottom: "20px" }}
+      /> */}
+
+      {/* <FormControl
         // variant="standard"
         style={{ width: "100%", marginBottom: "20px" }}
-      >
-        {/* <SelectReact
-          options={provinces}
-          onChange={handleChangeSelect}
-          isMulti
-        /> */}
+      >     
         <InputLabel id="selectImplementacion">Provincias</InputLabel>
         <Select
           disabled={disabled}
@@ -115,7 +133,7 @@ export default function SelectProvinces({provinces, disabled, provincesIDs, setP
             </MenuItem>
           ))}
         </Select>
-      </FormControl>
+      </FormControl> */}
     </>
   );
 }

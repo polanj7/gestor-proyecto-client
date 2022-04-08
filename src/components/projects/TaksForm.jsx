@@ -11,6 +11,16 @@ import TextField from '@mui/material/TextField';
 import DatePicker from '@mui/lab/DatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+
 //mui table
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -24,6 +34,9 @@ import Paper from '@mui/material/Paper';
 import AddIcon from '@mui/icons-material/Add';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import CloseIcon from '@mui/icons-material/Close';
+import FolderIcon from '@mui/icons-material/Folder';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 
 //context
 import { ProjectContext } from '../../context/ProjectContext';
@@ -75,18 +88,26 @@ export default function TaksForm(props) {
       tareas: []
     }
 
-    setProjectData((prev) =>
+    setProjectData(
+      (prev) =>
         (prev = {
           ...prev,
-          actividades: [...prev.actividades,  newActividad],
+          actividades: [...prev.actividades, newActividad],
         })
-    )
+    );
+
+    setActividad('');
    
   }
 
   const handleShowModal= (idx) => {       
     setActividadIdx(idx);
     handleOpen();    
+  }
+
+  const handleRemoveActividad= (idx) => {       
+    projectData.actividades.splice(idx, 1); 
+    setProjectData(prev => prev = {...prev, actividades: [...prev.actividades]});
   }
 
   const handleAddTareas = () => {  
@@ -108,8 +129,11 @@ export default function TaksForm(props) {
     setIsModalOpen(prev => !prev);    
   }
 
-  console.log('projectData', projectData);
-  /**/
+  const handleRemoveTarea = (idx1, idx2) => {      
+
+    projectData.actividades[idx1].tareas.splice(idx2, 1);
+    setProjectData(prev => prev = {...prev, actividades: [...prev.actividades]});
+  }
 
   //handles
   const handleClose = () =>{
@@ -167,7 +191,7 @@ export default function TaksForm(props) {
                   required
                   label="Actividad"
                   placeholder="Actividad"
-                  sx={{ width: "50%", marginBottom: "16px" }}
+                  sx={{ width: "50%" }}
                   value={actividad}
                   onChange={({ target }) => setActividad(target.value)}
                 />
@@ -175,9 +199,10 @@ export default function TaksForm(props) {
                   onClick={handleAddActividades}
                   variant="contained"
                   color="primary"
+                  sx={{ height: "55px", marginLeft: "12px" }}
                   startIcon={<AddIcon />}
                 >
-                  AGREGAR ACTIVIDAD
+                  AGREGAR
                 </Button>
               </div>
             </div>
@@ -185,7 +210,120 @@ export default function TaksForm(props) {
         </div>
       </form>
 
-      <ul>
+      <br />
+
+      <Box sx={{ flexGrow: 1, maxWidth: 752 }}>
+        <Grid item xs={12} md={12}>
+          <List dense={true}>
+            {
+                projectData.actividades?.map(({descripcion, tareas}, idx1) =>{
+                    return (
+                      <>
+                        <ListItem
+                          secondaryAction={
+                            <>
+                              <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                onClick={() => {
+                                  handleShowModal(idx1);
+                                }}
+                              >
+                                <AddIcon />
+                              </IconButton>
+
+                              <IconButton
+                                edge="end"
+                                aria-label="delete"
+                                onClick={() => {
+                                  handleRemoveActividad(idx1);
+                                }}
+                              >
+                                <DeleteIcon style={{color: "red"}} />
+                              </IconButton>
+                            </>
+                          }
+                        >
+                          <ListItemAvatar>
+                            <Avatar>
+                              <FormatListBulletedIcon style={{color: "#ed6c02"}} />
+                            </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText primary={descripcion} />
+                        </ListItem>
+
+                        <TableContainer component={Paper}>
+                          <Table
+                            sx={{ minWidth: 650 }}
+                            aria-label="simple table"
+                          >
+                            <TableHead>
+                              <TableRow>
+                                <TableCell>Descripción</TableCell>
+                                <TableCell align="right">Responsable</TableCell>
+                                <TableCell align="right">Inicio</TableCell>
+                                <TableCell align="right">Fin</TableCell>
+                                <TableCell align="right">Acciones</TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {tareas.map((row, idx2) => (
+                                <TableRow
+                                  key={idx2}
+                                  sx={{
+                                    "&:last-child td, &:last-child th": {
+                                      border: 0,
+                                    },
+                                  }}
+                                >
+                                  <TableCell component="th" scope="row">
+                                    {row.descripcion}
+                                  </TableCell>
+                                  <TableCell align="right">
+                                    respondable name
+                                  </TableCell>
+                                  <TableCell align="right">
+                                    <Moment format="DD/MM/YYYY">
+                                      {row.fechaInicio}
+                                    </Moment>
+                                  </TableCell>
+                                  <TableCell align="right">
+                                    <Moment format="DD/MM/YYYY">
+                                      {row.fechaFinal}
+                                    </Moment>
+                                  </TableCell>
+
+                                  <TableCell align="right">
+                                    <Button
+                                      aria-label="delete"
+                                      onClick={() => {
+                                        handleRemoveTarea(idx1, idx2);
+                                      }}
+                                      endIcon={<DeleteIcon style={{color: "red"}} />}
+                                    >                                    
+                                    </Button>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                        <br />
+                      </>
+                    );
+                })
+            }        
+
+
+
+
+          </List>
+
+          
+        </Grid>
+      </Box>
+
+      {/* <ul>
         {
           projectData.actividades.map(({descripcion, tareas}, idx) =>{
             return (
@@ -207,7 +345,7 @@ export default function TaksForm(props) {
                     <TableHead>
                       <TableRow>
                         <TableCell>Descripción</TableCell>
-                        {/* <TableCell align="right">Responsable</TableCell> */}
+                        <TableCell align="right">Responsable</TableCell> 
                         <TableCell align="right">Inicio</TableCell>
                         <TableCell align="right">Fin</TableCell>                       
                       </TableRow>
@@ -234,7 +372,7 @@ export default function TaksForm(props) {
             );
           })
         }
-      </ul>
+      </ul> */}
 
       <Modal show={isModalOpen} onHide={handleClose} style={{ marginTop: 100 }}>
         <Modal.Header closeButton>
@@ -309,6 +447,7 @@ export default function TaksForm(props) {
                       responsables={responsables}
                       responsable={selectedResponsable}
                       setResponsable={setSelectedResponsable}
+                      setResponsableLabel={setResponsableLabel}
                       disabled={props.disabled}
                     />
                   </div>

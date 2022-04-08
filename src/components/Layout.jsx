@@ -26,6 +26,7 @@ import { Menu } from "@mui/icons-material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
 import AutoAwesomeMosaicIcon from '@mui/icons-material/AutoAwesomeMosaic';
+import GroupIcon from '@mui/icons-material/Group';
 
 import logo from "../image/logo.png";
 
@@ -39,7 +40,6 @@ import { Link, useNavigate  } from "react-router-dom";
 /*cookies*/
 import Cookies from 'js-cookie'
 
-import themes from "./themesConfig";
 
 const drawerWidth = 240;
 
@@ -62,8 +62,8 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 const menuLinks = [
-  { text: "Proyectos", to: "/project", icon: <AutoAwesomeMosaicIcon /> },
-  { text: "Mantenimiento", to: "/mantenimiento/usuario", icon: <AutoAwesomeMosaicIcon /> }
+  { text: "Proyectos", to: "/project", icon: <AutoAwesomeMosaicIcon style={{color: "#ed6c02"}} /> },
+  { text: "Usuarios", to: "/mantenimiento/usuarios", icon: <GroupIcon style={{color: "#ed6c02"}} /> }
 ];
 
 const openedMixin = (theme) => ({
@@ -192,7 +192,7 @@ export default function Layout({ children }) {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       {/* /*Header*/}
-      <AppBar position="fixed" open={open} color="primary">
+      <AppBar position="fixed" open={open} style={{backgroundColor: "#083240"}} >
         <Toolbar>
           {/*Boton del menu */}
           <IconButton

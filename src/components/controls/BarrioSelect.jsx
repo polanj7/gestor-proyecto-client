@@ -33,27 +33,7 @@ export default function BarrioSelect({barrios, disabled}) {
   const {projectData, setProjectData} = useContext(ProjectContext);
   const [personName, setPersonName] = React.useState([]);
 
-  const handleChange = (event) => {
-    console.log('event111', event)
-    const {
-      target: { value },
-    } = event;
-    setPersonName(typeof value === 'string' ? value.split(',') : value);
-
-    //Datos temporales
-    let dataFinal = [
-      {
-        idImpacto: 0,
-        idProyecto: 0,
-        idMunicipio: 1,
-        idBarrio: 1
-      },
-    ];
-
-
-    
-    setProjectData({...projectData, territoriosImpactados: dataFinal})
-  };
+  
 
   const headerList = ({nombre: nombreProv}, {nombre: nombreMun}) =>{
    return <ListSubheader key={nombreMun}>
@@ -61,34 +41,44 @@ export default function BarrioSelect({barrios, disabled}) {
     </ListSubheader>
   }
 
+  const handleChange = async(event) => {
+    const { target } = event;
+    //setProvincesIDs(target.value);
+    setProjectData(
+      (prev) =>
+        (prev = {
+          ...prev,
+          lugaresImplementacione: { ...prev.lugaresImplementacione, idBarrio: target.value },
+        })
+    )
+  };  
     
   return (
     <>
-      <FormControl
-        // variant="standard"
-        style={{ width: "100%", marginBottom: "20px" }}
-      >
-        <InputLabel id="selectImplementacion">
-            Barrios / Parajes
+       <FormControl /*variant="standard"*/ sx={{ width: "100%" }}>
+        <InputLabel id="demo-simple-select-standard-label">
+         Barrios / Parajes
         </InputLabel>
         <Select
           disabled={disabled}
-          required
-          label="Barrios / Parajes"
-          multiple
-          value={personName}
+          value={projectData.lugaresImplementacione.idBarrio}
           onChange={handleChange}
-          renderValue={(selected) => selected.join(", ")}
-          MenuProps={MenuProps}
+          label="Barrios / Parajes"
+          sx={{
+            marginBottom: "16px",
+          }}
         >
-         {barrios.map(({idBarrio, nombre}) => {
-            return(
-            <MenuItem key={idBarrio} value={nombre}>
-              <Checkbox checked={personName.indexOf(nombre) > -1} />
-              <ListItemText primary={`${nombre}`} />
-            </MenuItem>)
-          })}
-          })}
+          {barrios.length > 0 ? (
+            barrios.map(({ idBarrio, nombre }) => {
+              return (
+                <MenuItem key={idBarrio} value={idBarrio}>
+                  {nombre}
+                </MenuItem>
+              );
+            })
+          ) : (
+            <></>
+          )}
         </Select>
       </FormControl>
     </>

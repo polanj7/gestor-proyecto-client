@@ -124,7 +124,8 @@ export default function SignIn() {
           <Typography
             component="h3"
             variant="h6"
-            sx={{ color: "primary.dark", textAlign: "center" }}
+            sx={{ textAlign: "center" }}
+            style={{color: "#083240"}}
           >
             <strong>TORRE DE CONTROL</strong>
           </Typography>

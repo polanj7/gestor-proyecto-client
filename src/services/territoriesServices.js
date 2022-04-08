@@ -24,33 +24,31 @@ export const getProvincias = async () => {
 };
 
 export const getMunicipios = async (idsProvincia) => {
-   let newIds = []
+   let newIds = [];
 
-   newIds.push("idsProvincia=3")
-
-   for(let i = 0; i < idsProvincia.length; i++){
-      newIds.push(`idsProvincia=${idsProvincia[i]}`)
-   }
-
+   newIds.push("idsProvincia="+idsProvincia);
+  //  for(let i = 0; i < idsProvincia.length; i++){
+  //     newIds.push(`idsProvincia=${idsProvincia[i]}`)
+  //  }
   let url = `Municipios?${newIds.join('&')}`;
   const data = await get(url);
   return data;
 };
 
 export const getDistritos = async (IdMunicipio) => {
-  let url = `DistritosMunicipales?idsMunicipio=${1}`;
+  let url = `DistritosMunicipales?idsMunicipio=${IdMunicipio}`;
   const data = await get(url);
   return data;
 };
 
 export const getSecciones = async (IdDistrito) => {
-  let url = `Secciones?idsDistrito=${1}`;
+  let url = `Secciones?idsDistrito=${IdDistrito}`;
   const data = await get(url);
   return data;
 };
 
 export const getBarrios = async (IdSeccion) => {
-  let url = `Barrios?idsSeccion=${1}`;
+  let url = `Barrios?idsSeccion=${IdSeccion}`;
   const data = await get(url);
   return data;
 };

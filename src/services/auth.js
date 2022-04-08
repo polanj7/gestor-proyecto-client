@@ -1,4 +1,4 @@
-import { singin } from '../repositories/axiosRepository'
+import { singin, forgotPass } from '../repositories/axiosRepository'
 
 import Cookies from 'js-cookie'
 
@@ -16,6 +16,10 @@ export const signIn = async (user, pass) => {
         clave: pass
     });    
     return resp;
+}  
+
+export const forgotPassword = async (user) => {
+    await forgotPass(`Login`, user);  
 }  
 
 

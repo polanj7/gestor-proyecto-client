@@ -11,6 +11,8 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 
+import {forgotPassword} from '../../services/auth'
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -18,8 +20,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function ForgotDialog() {
   const [open, setOpen] = useState(false);
+  const [usuario, setUsuario] = useState('');
 
   const handleClosed = async () => {
+    forgotPassword(usuario);
     setOpen(false);
   };
 
@@ -45,23 +49,24 @@ export default function ForgotDialog() {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle sx={{ color: "primary.dark" }}>
-          {"Recuperaciónd de contraseña"}
+          {"Recuperación de contraseña"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Puedes digitar el usuario o correo para recuperar la misma. Se le estará enviando una contraseña temporal al correo registrado en la plataforma.
+            Puedes digitar el usuario para recuperar la misma. Se le estará enviando una contraseña temporal al correo registrado en la plataforma.
           </DialogContentText>
           <TextField
             margin="normal"
             required
             fullWidth
             id="user"
-            label="Usuario / Correo"
+            label="Usuario"
             name="user"
             autoComplete="user"
             autoFocus
             variant="outlined"
-            //onChange={({ target }) => setUsern(target.value)}
+            value={usuario}
+            onChange={({ target }) => setUsuario(target.value)}
           />
         </DialogContent>
         <DialogActions>

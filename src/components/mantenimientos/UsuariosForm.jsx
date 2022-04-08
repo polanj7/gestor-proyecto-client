@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 
 //Services
-import { getResponsables } from '../../services/usersServices'
+import { getResponsables, addUsuario, getUsuario, editUsuario } from '../../services/usersServices'
 
 //mui
 import Button from '@mui/material/Button';
@@ -19,6 +19,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+
+import { useNavigate, useParams } from 'react-router-dom';
 
 //icons
 import AddIcon from '@mui/icons-material/Add';
@@ -38,16 +40,63 @@ import Moment from 'react-moment';
 
 export default function UsuariosForm() {
 
+  const params = useParams();
 
+  const navigate = useNavigate(); 
+  const[idUsuario, setIdUsuario] = useState(0);
   const[nombre, setNombre] = useState('');
   const[apellido, setApellido] = useState('');
   const[correo, setCorreo] = useState('');
   const[usuario, setUsuario] = useState('');
 
+  const createUser = async () =>{
+
+    await addUsuario({
+      nombre,
+      apellido,
+      correo,
+      usuario
+    });
+
+    redirect("/mantenimiento/usuarios");
+  }
+
+  const updateUser = async () => {
+
+    await editUsuario({
+      idUsuario,
+      nombre,
+      apellido,
+      correo,
+      usuario
+    });
+
+    redirect("/mantenimiento/usuarios");
+  }
+
+  const redirect =(to) =>{   
+    navigate(to);
+  }
+
+  const getEditUsuario = async () =>{
+    let resp = await getUsuario(params.id);
+    setIdUsuario(resp.idUsuario);
+    setNombre(resp.nombre);
+    setApellido(resp.apellido);
+    setCorreo(resp.correo);
+    setUsuario(resp.usuario);
+  }
+
+  useEffect(() => {   
+    getEditUsuario();
+  }, [params.id])
 
   return (
-    <Paper style={{ margin: 1, padding: 20 }} elevation={3}>
-      <div className="container">
+    <div className="container">
+      <Typography variant="h5" component="h2" style={{ color: "#083240" }}>
+        Usuario
+      </Typography>
+      <Paper style={{ margin: 1, padding: 20 }} elevation={3}>
         <form>
           <div className="row">
             <div className="col-sm-12">
@@ -114,20 +163,21 @@ export default function UsuariosForm() {
         <Button
           variant="contained"
           color="primary"
-          //onClick={handleNext}
+          onClick={() => { params.id > 0 ? updateUser() : createUser() }}
           //endIcon={<ArrowCircleRightIcon />}
         >
           GUARDAR
         </Button>
+
         <Button
           variant="contained"
-          color="primary"
+          color="error"
           //onClick={handleNext}
           //endIcon={<ArrowCircleRightIcon />}
         >
           cancelar
         </Button>
-      </div>
-    </Paper>
+      </Paper>
+    </div>
   );
 }
