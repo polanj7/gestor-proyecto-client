@@ -10,20 +10,20 @@ import {
   getBarrios,
 } from "../../services/territoriesServices";
 import { getBeneficiarios, getRangeBeneficiarios, getTipoBeneficiarios } from "../../services/beneficiariosServices";
-import { getResponsables } from '../../services/usersServices'
+
 
 //components
 import SelectBeneficiaries from "../controls/SelectBeneficiaries";
 import SelectChallenges from "../controls/SelectChallenges";
-
 import SelectProvinces from "../controls/SelectProvinces";
 import SelectMunicipality from "../controls/SelectMunicipality";
 import DistritosSelect from "../controls/DistritosSelect";
 import SeccionSelect from "../controls/SeccionSelect";
 import BarrioSelect from "../controls/BarrioSelect";
+import DonantesForm from "./DonantesForm";
 import AliadosForm from "./AliadosForm";
 import RangoBeneficiarios from "../controls/RangoBeneficiarios";
-import GerenteSelect from "../controls/GerenteSelect";
+
 
 import Select2 from 'react-select'
 
@@ -49,12 +49,6 @@ import TerritoriosImpactadosBarrios from "../controls/TerritoriosImpactadosBarri
 import { getAliados } from "../../services/aliadosServices";
 import { getDonantes } from "../../services/donantesServices";
 
-const options = [
-  { value: 1, label: 'Santo Domingo' },
-  { value: 2, label: 'La vega' },
-  { value: 3, label: 'Bonao' }
-]
-
 const challengesImpacted = [
   { idDesafio: 1, nombre: "Educación" },
   { idDesafio: 2, nombre: "Salud" },
@@ -71,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "8px",
   },
 }));
+
 export default function ProjectForm(props) {
   const classes = useStyles();
   const { projectData, setProjectData } = useContext(ProjectContext);
@@ -97,8 +92,7 @@ export default function ProjectForm(props) {
   //beneficiarios
   const [rangoList, setRangoList] = useState([]);
   const [rangoSelected, setRangoSelected] = useState([]);
-  //gerente
-  const[responsables, setResponsables] = useState([]);
+
 
   //modals
   const [isModalOpenAliados, setIsModalOpenAliados] = useState(false);
@@ -157,11 +151,6 @@ export default function ProjectForm(props) {
     setRangoList(resp);
   };
 
-  const getResponsablesd = async () =>{
-    const resp = await getResponsables();
-    setResponsables(resp);
-  }
-
   const handleChangeBeneficiaries = (e) => {
     //setIsModalOpenAliados(true);
   };
@@ -174,7 +163,6 @@ export default function ProjectForm(props) {
     getProvinced();
     getBeneficiaries();
     getRangoBeneficiarios();
-    getResponsablesd();
   }, []);
 
   useEffect(() => {
@@ -209,7 +197,7 @@ export default function ProjectForm(props) {
                 label="Nombre"
                 // variant="standard"
                 placeholder="Nombre del Proyecto"
-                sx={{ width: "100%", marginBottom: "16px" }}
+                sx={{ width: "100%",   }}
                 value={projectData.nombre}
                 onChange={({ target }) =>
                   setProjectData({ ...projectData, nombre: target.value })
@@ -224,7 +212,7 @@ export default function ProjectForm(props) {
                   label="Descripción"
                   // variant="standard"
                   placeholder="Descipción Proyecto"
-                  sx={{ width: "49%", marginBottom: "16px" }}
+                  sx={{ width: "48%",   }}
                   value={projectData.descripcion}
                   onChange={({ target }) =>
                     setProjectData({
@@ -235,18 +223,20 @@ export default function ProjectForm(props) {
                   multiline
                   rows={2}
                 />
+
                 <TextField
                   {...props}
                   required
                   id="objetivoGeneral"
-                  label="Resultados Esperados"
-                  placeholder="Resultados Esperados"
-                  sx={{ width: "49%", marginBottom: "16px" }}
-                  value={projectData.resultados}
+                  label="Objetivo General"
+                  // variant="standard"
+                  placeholder="Objetivo General"
+                  sx={{ width: "49%",   }}
+                  value={projectData.objetivoGeneral}
                   onChange={({ target }) =>
                     setProjectData({
                       ...projectData,
-                      resultados: target.value,
+                      objetivoGeneral: target.value,
                     })
                   }
                   multiline
@@ -258,16 +248,16 @@ export default function ProjectForm(props) {
                 <TextField
                   {...props}
                   required
-                  id="objetivoGeneral"
-                  label="Objetivo General"
+                  id="objetivoEspecifico"
+                  label="Objetivo Especifico"
                   // variant="standard"
-                  placeholder="Objetivo General"
-                  sx={{ width: "49%", marginBottom: "16px" }}
-                  value={projectData.objetivoGeneral}
+                  placeholder="Objetivo Especifico"
+                  sx={{ width: "49%", fontSize: "10px" }}
+                  value={projectData.objetivoEspecifico}
                   onChange={({ target }) =>
                     setProjectData({
                       ...projectData,
-                      objetivoGeneral: target.value,
+                      objetivoEspecifico: target.value,
                     })
                   }
                   multiline
@@ -277,16 +267,15 @@ export default function ProjectForm(props) {
                 <TextField
                   {...props}
                   required
-                  id="objetivoEspecifico"
-                  label="Objetivo Especifico"
-                  // variant="standard"
-                  placeholder="Objetivo Especifico"
-                  sx={{ width: "49%", marginBottom: "16px", fontSize: "10px" }}
-                  value={projectData.objetivoEspecifico}
+                  id="objetivoGeneral"
+                  label="Resultados Esperados"
+                  placeholder="Resultados Esperados"
+                  sx={{ width: "49%",   }}
+                  value={projectData.resultados}
                   onChange={({ target }) =>
                     setProjectData({
                       ...projectData,
-                      objetivoEspecifico: target.value,
+                      resultados: target.value,
                     })
                   }
                   multiline
@@ -328,7 +317,7 @@ export default function ProjectForm(props) {
                         {...params}
                         label="Inicio"
                         variant="standard"
-                        sx={{ width: "50%", marginBottom: "16px" }}
+                        sx={{ width: "50%",   }}
                       />
                     )}
                   />
@@ -353,7 +342,7 @@ export default function ProjectForm(props) {
                         variant="standard"
                         sx={{
                           width: "49%",
-                          marginBottom: "16px",
+                           ,
                           marginLeft: "16px",
                         }}
                       />
@@ -368,11 +357,6 @@ export default function ProjectForm(props) {
               /> */}
 
               <div className={classes.toolbar}>
-                <SelectBeneficiaries
-                  beneficiaries={beneficiarieType}
-                  disabled={props.disabled}
-                />
-
                 <TextField
                   {...props}
                   required
@@ -381,9 +365,8 @@ export default function ProjectForm(props) {
                   placeholder="Cantidad de Beneficiarios"
                   type="number"
                   sx={{
-                    width: "50%",
-                    marginBottom: "16px",
-                    marginLeft: "16px",
+                    width: "50%",                     
+                    marginRight: "16px",
                   }}
                   value={projectData.cantidadBeneficiarios}
                   onChange={({ target }) =>
@@ -393,21 +376,18 @@ export default function ProjectForm(props) {
                     })
                   }
                 />
+                <SelectBeneficiaries
+                  beneficiaries={beneficiarieType}
+                  disabled={props.disabled}
+                />
               </div>
 
               <div className={classes.toolbar}>
-              
-                  <SelectChallenges
-                    challenges={challengesImpacted}
-                    disabled={props.disabled}
-                  />
-               
+                <SelectChallenges
+                  challenges={challengesImpacted}
+                  disabled={props.disabled}
+                />
 
-                  <GerenteSelect
-                    responsables={responsables}
-                    disabled={props.disabled}
-                  />
-                
                 
               </div>
             </div>
@@ -417,15 +397,14 @@ export default function ProjectForm(props) {
             <div style={{ width: "100%" }}>
               <Accordion>
                 <AccordionSummary
-                  style={{ backgroundColor: "#083240", color: "#fff"  }}
-                  expandIcon={<ExpandMoreIcon style={{color: "#fff"}} />}
+                  style={{ backgroundColor: "#083240", color: "#fff" }}
+                  expandIcon={<ExpandMoreIcon style={{ color: "#fff" }} />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
                   <Typography>Lugar Implementación</Typography>
                 </AccordionSummary>
-                <AccordionDetails style={{paddingTop: "16px"}}>
-                  
+                <AccordionDetails style={{ paddingTop: "16px" }}>
                   <div className="form-group">
                     <SelectProvinces
                       provinces={provinces}
@@ -477,14 +456,28 @@ export default function ProjectForm(props) {
 
               <Accordion>
                 <AccordionSummary
-                  style={{ backgroundColor: "#083240", color: "#fff"  }}
-                  expandIcon={<ExpandMoreIcon style={{color: "#fff"}} />}
+                  style={{ backgroundColor: "#083240", color: "#fff" }}
+                  expandIcon={<ExpandMoreIcon style={{ color: "#fff" }} />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
-                  <Typography>Aliados</Typography>
+                  <Typography>Donante</Typography>
                 </AccordionSummary>
-                <AccordionDetails style={{paddingTop: "16px"}}>
+                <AccordionDetails style={{ paddingTop: "16px" }}>
+                  <DonantesForm />
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion>
+                <AccordionSummary
+                  style={{ backgroundColor: "#083240", color: "#fff" }}
+                  expandIcon={<ExpandMoreIcon style={{ color: "#fff" }} />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography>Aliado</Typography>
+                </AccordionSummary>
+                <AccordionDetails style={{ paddingTop: "16px" }}>
                   <AliadosForm
                     isModalOpenAliados={isModalOpenAliados}
                     setIsModalOpenAliados={setIsModalOpenAliados}
@@ -495,34 +488,32 @@ export default function ProjectForm(props) {
               <Accordion>
                 <AccordionSummary
                   style={{ backgroundColor: "#083240", color: "#fff" }}
-                  expandIcon={<ExpandMoreIcon style={{color: "#fff"}} />}
+                  expandIcon={<ExpandMoreIcon style={{ color: "#fff" }} />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
                   <Typography>Duración</Typography>
                 </AccordionSummary>
-                <AccordionDetails style={{paddingTop: "16px"}}>
+                <AccordionDetails style={{ paddingTop: "16px" }}>
                   <TextField
                     {...props}
                     required
                     id="outlined-required"
-                    label="Dias"
-                    placeholder="Dias"
+                    label="Años"
+                    placeholder="Años"
                     type="number"
                     sx={{
-                      width: "50%",
-                      marginBottom: "16px",
+                      width: "50%",                       
                       marginLeft: "16px",
                     }}
-                    value={projectData.dias}
+                    value={projectData.anos}
                     onChange={({ target }) =>
                       setProjectData({
                         ...projectData,
-                        dias: target.value,
+                        anos: target.value,
                       })
                     }
                   />
-
                   <TextField
                     {...props}
                     required
@@ -531,8 +522,7 @@ export default function ProjectForm(props) {
                     placeholder="Meses"
                     type="number"
                     sx={{
-                      width: "50%",
-                      marginBottom: "16px",
+                      width: "50%",                       
                       marginLeft: "16px",
                     }}
                     value={projectData.meses}
@@ -548,19 +538,18 @@ export default function ProjectForm(props) {
                     {...props}
                     required
                     id="outlined-required"
-                    label="Años"
-                    placeholder="Años"
+                    label="Dias"
+                    placeholder="Dias"
                     type="number"
                     sx={{
-                      width: "50%",
-                      marginBottom: "16px",
+                      width: "50%",                       
                       marginLeft: "16px",
                     }}
-                    value={projectData.anos}
+                    value={projectData.dias}
                     onChange={({ target }) =>
                       setProjectData({
                         ...projectData,
-                        anos: target.value,
+                        dias: target.value,
                       })
                     }
                   />

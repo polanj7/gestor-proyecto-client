@@ -41,8 +41,8 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://www.grupoasaic.org" target="_blank" >
-        www.grupoasaic.org
+      <Link color="inherit" href="https://www.evolution-foundation.org" target="_blank" >
+        https://www.evolution-foundation.org
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -94,7 +94,6 @@ export default function SignIn() {
       <Container
         component="main"
         maxWidth="xs"
-        maxWidth="sm"
         sx={{ bgColor: "primary.main", width: "500px", height: "400px" }}
       >
         <CssBaseline />
@@ -119,7 +118,7 @@ export default function SignIn() {
               marginBottom: 0,
             }}
           >
-            <img width="200px" src={logo} alt="logo asic" loading="lazy" />
+            <img width="250px" src={logo} alt="logo asic" loading="lazy" />
           </Box>
           <Typography
             component="h3"

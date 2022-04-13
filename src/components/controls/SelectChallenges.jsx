@@ -61,10 +61,7 @@ export default function SelectChallenges({challenges, disabled}) {
           disabled={disabled}
           value={projectData.desafiosProyecto.idDesafio}
           onChange={handleChange}
-          label="Desafios"
-          sx={{
-            marginBottom: "16px",
-          }}
+          label="Desafios"        
         >
           {challenges.length > 0 ? (
             challenges.map(({ idDesafio, nombre }) => {

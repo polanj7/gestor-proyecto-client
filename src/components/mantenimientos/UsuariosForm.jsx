@@ -163,6 +163,7 @@ export default function UsuariosForm() {
         <Button
           variant="contained"
           color="primary"
+          style={{marginRight: "10px"}}
           onClick={() => { params.id > 0 ? updateUser() : createUser() }}
           //endIcon={<ArrowCircleRightIcon />}
         >

@@ -84,21 +84,21 @@ export default function Table({projects}) {
 
   const columns = [
     { field: "idProyecto", headerName: "ID", width: 1, headerClassName: "super-app-theme--header"},
-    { field: "codigo", headerName: "Codigo", width: 200 },
-    { field: "nombre", headerName: "Nombre", width: 450 },
-    { field: "objetivoGeneral", headerName: "Objetivo General", width: 200 },
-    { field: "objetivoEspecifico", headerName: "Objetivo Especifico", width: 200 },
+    { field: "codigo", headerName: "Codigo", width: 250 },
+    { field: "nombre", headerName: "Nombre", width: 500 },
+    // { field: "objetivoGeneral", headerName: "Objetivo General", width: 200 },
+    // { field: "objetivoEspecifico", headerName: "Objetivo Especifico", width: 200 },
     {
       field: "fechaInicio",
       headerName: "Inicio",
-      width: 130,
+      width: 150,
       type: "date",
       renderCell: (params) => <Moment format="DD/MM/YYYY">{params.value}</Moment>,
     },
     {
       field: "fechaFinal",
       headerName: "Final",
-      width: 130,
+      width: 150,
       type: "date",
       renderCell: (params) => <Moment format="DD/MM/YYYY">{params.value}</Moment>,
     },

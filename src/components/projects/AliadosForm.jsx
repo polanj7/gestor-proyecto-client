@@ -144,8 +144,8 @@ export default function AliadosForm({isModalOpenAliados, setIsModalOpenAliados})
             <div className="form-group">
               <TextField
                 required
-                label="Información"
-                placeholder="Información"
+                label="Información de Contacto"
+                placeholder="Información de Contacto"
                 sx={{ width: "100%", marginBottom: "16px" }}
                 multiline
                 rows={3}

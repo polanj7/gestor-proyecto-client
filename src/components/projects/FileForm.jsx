@@ -1,7 +1,10 @@
 import React, {useState, useContext, useEffect, useCallback} from 'react';
 
+import GerenteSelect from "../controls/GerenteSelect";
+
 //services
 import { getFiles, addFiles, downloadFile } from '../../services/filesServices'
+import { getResponsables } from '../../services/usersServices'
 
 //mui
 import Grid from '@mui/material/Grid';
@@ -32,6 +35,9 @@ export default function FileForm(props) {
       "url": "string"
   */
   const {projectData, setProjectData} = useContext(ProjectContext);
+
+    //gerente
+    const[responsables, setResponsables] = useState([]);
 
   const onDrop = useCallback(acceptedFiles => { 
   
@@ -77,20 +83,31 @@ export default function FileForm(props) {
     setProjectData(prev => prev = {...prev, documentosProyectos: [...prev.documentosProyectos]});  
   }
 
-
   const handleDownloadFile = (file) => {   
-    downloadFile(file.idDocumento);
+    downloadFile(file);
   }
+
+  const getResponsablesd = async () =>{
+    const resp = await getResponsables();
+    setResponsables(resp);
+  }
+
+
+  useEffect(() =>{
+    getResponsablesd();
+  }, [])
 
 
   return (
     <div className="container">
       
-      {
-        !props.disabled ? <DragnDrop getRootProps={getRootProps} getInputProps={getInputProps} /> : <></>
-      }
-      
+      <GerenteSelect responsables={responsables} disabled={props.disabled} />
 
+      {!props.disabled ? (
+        <DragnDrop getRootProps={getRootProps} getInputProps={getInputProps} />
+      ) : (
+        <></>
+      )}
       <Box
         sx={{ flexGrow: 1 }}
         style={{
@@ -101,19 +118,28 @@ export default function FileForm(props) {
         }}
       >
         <Grid container spacing={2}>
-          <Grid item xs={12} md={12}>        
+          <Grid item xs={12} md={12}>
             <Typography
-              component='label'
-              variant='subtile2'
+              component="label"
+              variant="subtile2"
               sx={{
-                color: "primary.dark"
-              }}           
+                color: "primary.dark",
+              }}
             >
-              {projectData.documentosProyectos.length > 0 ? projectData.documentosProyectos.length + " documento(s)" : ""}
+              {projectData.documentosProyectos.length > 0
+                ? projectData.documentosProyectos.length + " documento(s)"
+                : ""}
             </Typography>
             <List>
               {projectData.documentosProyectos?.map((f, idx) => {
-                return <FilesList key={idx} file={f} removeFile={handleRemoveFile} downloadFile={handleDownloadFile} />;
+                return (
+                  <FilesList
+                    key={idx}
+                    file={f}
+                    removeFile={handleRemoveFile}
+                    downloadFile={handleDownloadFile}
+                  />
+                );
               })}
             </List>
           </Grid>

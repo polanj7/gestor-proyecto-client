@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 //services
 import { getProjects } from '../../services/projectsServices';
+import { getUsuarios, getUsuario } from '../../services/usersServices';
 
 /*MUI*/
 import Button from '@mui/material/Button';
@@ -39,19 +40,31 @@ export default function Index() {
   // });
 
   const [projects, setProjects] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const testget = async () =>{
     let resp = await getProjects();
-    console.log('resp...123', resp)
+
+    //--Nombre gerente
+    resp.forEach(element => {
+      let nombreGerente = getGerente(element.idGerente)
+      element.gerente = nombreGerente;
+    });
+
     setProjects(resp);
   }
 
+  const getGerente = (id) =>{
+     return getUsuario(id).then(x => {
+      return `${x.nombre} ${x.apellido}`;
+    });
+  }
+  
   useEffect(() =>{
     testget();
   }, [])
 
-  console.log('projects', projects)
 
   if(isLoading){
     return (

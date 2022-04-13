@@ -40,8 +40,8 @@ import ValidationForm from './ValidationForm';
 
 const steps = [
   "Datos Generales",
-  "Propuesta Economica / Donante",
   "Propuesta operativa",
+  "Propuesta Economica",
   "Gestion Interna",
   "Resumen",
 ];
@@ -78,6 +78,7 @@ export default function ContentForm() {
     idGerente: 0,
     isDelete: false,
     fechaCreacion: new Date(),
+    documentosFisicos: [],
     aliado: {
       idAliado: 0,
       nombre: "",
@@ -87,17 +88,23 @@ export default function ContentForm() {
       informacion: "",
     },
     donante: {
-      idDonante: 0,
-      idProyecto: 0,
-      nombre: "",
-      identificacion: "",
-      idClasificacion: 1, //select --done
-      idDonacionClasificacion: 1,
-      monto1: 0,
-      monto2: 0,
-      donacion: 0,
-      direccion: "",
-      informacion: "",
+    idDonante: 0,
+    idProyecto: 0,
+    nombre: "",
+    identificacion: "",
+    idClasificacion: 0,
+    direccion: "",
+    informacion: "",
+    donaciones: [
+      // {
+      //   idDonacion: 0,
+      //   idDonante: 0,
+      //   idClasificacion: 0,
+      //   montoDOP: 0,
+      //   montoUSD: 0,
+      //   descripcion: "string"
+      // }
+    ]
     },
     desafiosProyecto: {
       idDesafioProyecto: 0,
@@ -143,6 +150,15 @@ export default function ContentForm() {
       //   fechaFinal: new Date(),
       //   idEstado: 0,
       //   fechaCreacion: new Date()
+      // meta,
+      // periodo,
+      // meses,
+      // dias,
+      // montoPresupuestarioDOP,
+      // montoPresupuestarioUSD,
+      // resultado,
+      // posiblesRiesgos,
+      // accionMitigacion
       // }
       //   ]
       // }
@@ -278,9 +294,9 @@ export default function ContentForm() {
               {activeStep === 0 ? (
                 <ProjectForm disabled={disabled} />
               ) : activeStep === 1 ? (
-                <BudgetForm disabled={disabled} />
-              ) : activeStep === 2 ? (
                 <TaksForm disabled={disabled} />
+                ) : activeStep === 2 ? (
+                <BudgetForm disabled={disabled} />
               ) : activeStep === 3 ? (
                 <FileForm disabled={disabled} />
               ): activeStep === 4 ? (

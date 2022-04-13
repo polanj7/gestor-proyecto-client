@@ -23,10 +23,7 @@ export default function RangoBeneficiarios({rango, disabled}) {
           onChange={({ target }) =>
            setProjectData({ ...projectData, idRangoBeneficiario: target.value })
           }      
-          label="Rango de Beneficiarios"   
-          sx={{           
-            marginBottom: "16px"           
-          }}
+          label="Rango de Beneficiarios"            
         >
           {rango.length > 0 ? (
             rango.map(({ idRango, nombre }) => {

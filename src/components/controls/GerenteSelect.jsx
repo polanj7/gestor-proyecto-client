@@ -25,7 +25,7 @@ export default function GerenteSelect({responsables, disabled}) {
 
   return (
     <>
-      <FormControl sx={{ width: "49%" }}>
+      <FormControl sx={{ width: "100%" }}>
         <InputLabel>
           Gerente Proyecto
         </InputLabel>

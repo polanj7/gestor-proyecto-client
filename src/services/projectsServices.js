@@ -7,7 +7,7 @@ export const getProjectByID = async (id) => {
 
 export const getProjects= async () => {
    const resp = await get(`Proyectos`);   
-   const dataTransform = await resp.map(({idProyecto, codigo, nombre, descripcion, fechaInicio, fechaFinal, isDelete}) => {
+   const dataTransform = await resp.map(({idProyecto, codigo, nombre, descripcion, fechaInicio, fechaFinal, isDelete, idGerente}) => {
       return {
         idProyecto,
         id: idProyecto,
@@ -19,6 +19,7 @@ export const getProjects= async () => {
         cantidadTareas: 0,
         cantidadTareasCompletadas: 0,
         isDelete,
+        idGerente
       };
    });
 
